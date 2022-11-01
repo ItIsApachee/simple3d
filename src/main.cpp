@@ -10,7 +10,6 @@ int main() {
         std::cerr << "glfw initialization failed" << std::endl;
         return 1;
     }
-
     glfwSetErrorCallback(error_callback);
 
     GLFWwindow* window = glfwCreateWindow(640, 480, "My title", nullptr, nullptr);
