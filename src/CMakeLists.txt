@@ -4,7 +4,6 @@ FetchContent_Declare(
     glfw
     GIT_REPOSITORY https://github.com/glfw/glfw.git
     GIT_TAG 3.3.8
-    # SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/
 )
 
 FetchContent_GetProperties(glfw)
