@@ -18,6 +18,8 @@ add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR})
 
 find_package(OpenGL REQUIRED)
 
+include_directories(../thirdparty)
+
 add_executable(app main.cpp)
 target_link_libraries(app glfw)
 target_link_libraries(app OpenGL::GL)
