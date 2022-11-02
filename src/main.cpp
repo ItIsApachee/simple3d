@@ -31,6 +31,7 @@ int main() {
         std::cerr << "glad: loading gles2 failed" << std::endl;
         return 3;
     }
+    std::cout << "successfuly loaded GLES2 v" << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl;
 
     gl.Viewport(0, 0, 640, 480);
 
