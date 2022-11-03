@@ -1,5 +1,6 @@
 #include <iostream>
 #include <thread>
+#include <chrono>
 #include <cmath>
 #include <GLFW/glfw3.h>
 
@@ -11,6 +12,7 @@ void error_callback(int error, const char* description) {
 }
 
 void render(GLFWwindow* window) {
+    auto start = std::chrono::high_resolution_clock::now();
     glfwMakeContextCurrent(window);
 
     GladGLES2Context gl;
@@ -21,17 +23,20 @@ void render(GLFWwindow* window) {
     }
     std::cout << "successfuly loaded GLES2 v" << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl;
 
-    float v = 0.0f;
     const float PI = acos(-1.0);
 
     gl.Viewport(0, 0, 640, 480);
 
+    float v = 0;
     while (!glfwWindowShouldClose(window)) {
-        gl.ClearColor((sin(v)+1.)/(2*PI), 0.0f, 0.0f, 1.0f);
-        gl.Clear(GL_COLOR_BUFFER_BIT);
-        glfwSwapBuffers(window);
+        auto elapsed = (std::chrono::high_resolution_clock::now() - start).count();
+        v = elapsed / 1e9;
+        std::cout << v << std::endl;
 
-        v += 0.1f;
+        gl.ClearColor((sin(v*2*PI)+1.)/(2*PI), 0.0f, 0.0f, 1.0f);
+        gl.Clear(GL_COLOR_BUFFER_BIT);
+        gl.Flush();
+        // glfwSwapBuffers(window);
     }
 }
 
@@ -45,6 +50,9 @@ int main() {
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+
+    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
+
     GLFWwindow* window = glfwCreateWindow(640, 480, "My title", nullptr, nullptr);
     if (!window) {
         std::cerr << "window creation failed" << std::endl;
