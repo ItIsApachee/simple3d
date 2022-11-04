@@ -3,6 +3,7 @@
 #include <chrono>
 #include <cmath>
 #include <GLFW/glfw3.h>
+#include <windows.h>
 
 #define GLAD_GLES2_IMPLEMENTATION
 #include <glad/gles2.h>
@@ -35,8 +36,8 @@ void render(GLFWwindow* window) {
 
         gl.ClearColor((sin(v*2*PI)+1.)/(2*PI), 0.0f, 0.0f, 1.0f);
         gl.Clear(GL_COLOR_BUFFER_BIT);
-        gl.Flush();
-        // glfwSwapBuffers(window);
+        // gl.Flush();
+        glfwSwapBuffers(window);
     }
 }
 
@@ -47,12 +48,16 @@ int main() {
     }
     glfwSetErrorCallback(error_callback);
 
+    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
-    glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
+    // doesn't work with ANGLE for some reason
+    // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
 
+    SetErrorMode(0);
     GLFWwindow* window = glfwCreateWindow(640, 480, "My title", nullptr, nullptr);
     if (!window) {
         std::cerr << "window creation failed" << std::endl;
