@@ -26,7 +26,7 @@ target_compile_definitions(
 )
 
 # Library setup
-add_library(simple3d STATIC)
+add_library(simple3d STATIC simple3d.cc)
 target_include_directories(simple3d PUBLIC ${CMAKE_SOURCE_DIR}/include)
 # not sure if it should be public
 target_include_directories(simple3d PRIVATE ${CMAKE_SOURCE_DIR}/thirdparty)
