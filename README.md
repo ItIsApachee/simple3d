@@ -1,5 +1,7 @@
 # Simple3d
-This library aims to be a simple tool to let you visualise simple 3D primitives.
+This library aims to be a simple tool to let you visualise simple 3D primitives. 
+To provide maximum flexibility the library is using ANGLE (https://github.com/google/angle)
+as graphics backend.
 
 ## Development.
 Coding standard - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
@@ -10,6 +12,11 @@ Coding standard - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
 3. ImGui support (?)
 4. Texture manager
 5. Tools for optimizing visualisation of massive amounts of data.
+
+## Dependencies.
+- GLAD (https://github.com/Dav1dde/glad)
+- GLFW (https://www.glfw.org/).
+- ANGLE (https://github.com/google/angle).
 
 ## TODO:
 ### Overall.
