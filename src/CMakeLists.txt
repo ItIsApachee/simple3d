@@ -26,7 +26,7 @@ target_compile_definitions(
 )
 
 # Library setup
-add_library(simple3d STATIC simple3d.cc)
+add_library(simple3d STATIC simple3d.cc context/context.cc)
 
 target_link_libraries(simple3d PUBLIC glfw)
 
