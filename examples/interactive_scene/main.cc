@@ -1,95 +1,95 @@
-#include <iostream>
-#include <thread>
-#include <chrono>
-#include <vector>
-#include <cmath>
-#include <windows.h>
+// #include <iostream>
+// #include <thread>
+// #include <chrono>
+// #include <vector>
+// #include <cmath>
+// #include <windows.h>
 
-#define GLAD_GLES2_IMPLEMENTATION
-#include <glad/gles2.h>
+// #define GLAD_GLES2_IMPLEMENTATION
+// #include <glad/gles2.h>
 
-#include <GLFW/glfw3.h>
+// #include <GLFW/glfw3.h>
 
-void error_callback(int error, const char* description) {
-    std::cerr << "glfw error: " << error << " with message \"" << description << "\"" << std::endl;
-}
+// void error_callback(int error, const char* description) {
+//     std::cerr << "glfw error: " << error << " with message \"" << description << "\"" << std::endl;
+// }
 
-void render(GLFWwindow* window) {
-    constexpr int FPS_SAMPLES = 200;
-    auto start = std::chrono::high_resolution_clock::now();
-    std::vector<decltype(start)> fps_samples(FPS_SAMPLES, start);
+// void render(GLFWwindow* window) {
+//     constexpr int FPS_SAMPLES = 200;
+//     auto start = std::chrono::high_resolution_clock::now();
+//     std::vector<decltype(start)> fps_samples(FPS_SAMPLES, start);
 
-    glfwMakeContextCurrent(window);
+//     glfwMakeContextCurrent(window);
 
-    GladGLES2Context gl;
-    int version = gladLoadGLES2Context(&gl, glfwGetProcAddress);
-    if (version == 0) {
-        std::cerr << "glad: loading gles2 failed" << std::endl;
-        return;
-    }
-    std::cout << "successfuly loaded GLES2 v" << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl;
+//     GladGLES2Context gl;
+//     int version = gladLoadGLES2Context(&gl, glfwGetProcAddress);
+//     if (version == 0) {
+//         std::cerr << "glad: loading gles2 failed" << std::endl;
+//         return;
+//     }
+//     std::cout << "successfuly loaded GLES2 v" << GLAD_VERSION_MAJOR(version) << "." << GLAD_VERSION_MINOR(version) << std::endl;
 
-    const float PI = acos(-1.0);
+//     const float PI = acos(-1.0);
 
-    // FIXME: this function may only be called from main thread
-    // glfwGetFramebufferSize(window, &display_w, &display_h);
-    gl.Viewport(0, 0, 2560, 1440);
+//     // FIXME: this function may only be called from main thread
+//     // glfwGetFramebufferSize(window, &display_w, &display_h);
+//     gl.Viewport(0, 0, 2560, 1440);
 
-    float v = 0;
-    int cnt = 0;
-    // FIXME: should syncronize calls to this function (data race)
-    while (!glfwWindowShouldClose(window)) {
-        cnt = (cnt + 1) % FPS_SAMPLES;
-        auto now = std::chrono::high_resolution_clock::now();
+//     float v = 0;
+//     int cnt = 0;
+//     // FIXME: should syncronize calls to this function (data race)
+//     while (!glfwWindowShouldClose(window)) {
+//         cnt = (cnt + 1) % FPS_SAMPLES;
+//         auto now = std::chrono::high_resolution_clock::now();
 
-        int took = (now - fps_samples[cnt]).count();
-        fps_samples[cnt] = now;
-        std::cout << "FPS: " << (FPS_SAMPLES / (took / 1e9)) << std::endl;
+//         int took = (now - fps_samples[cnt]).count();
+//         fps_samples[cnt] = now;
+//         std::cout << "FPS: " << (FPS_SAMPLES / (took / 1e9)) << std::endl;
 
-        auto elapsed = (now - start).count();
-        v = elapsed / 1e9;
+//         auto elapsed = (now - start).count();
+//         v = elapsed / 1e9;
 
-        gl.ClearColor((sin(v*2*PI)+1.)/2, 0.0f, 0.0f, 1.0f);
-        gl.Clear(GL_COLOR_BUFFER_BIT);
-        // gl.Flush();
-        glfwSwapBuffers(window);
-    }
-}
+//         gl.ClearColor((sin(v*2*PI)+1.)/2, 0.0f, 0.0f, 1.0f);
+//         gl.Clear(GL_COLOR_BUFFER_BIT);
+//         // gl.Flush();
+//         glfwSwapBuffers(window);
+//     }
+// }
 
 int main() {
-    if (!glfwInit()) {
-        std::cerr << "glfw initialization failed" << std::endl;
-        return 1;
-    }
-    glfwSetErrorCallback(error_callback);
+    // if (!glfwInit()) {
+    //     std::cerr << "glfw initialization failed" << std::endl;
+    //     return 1;
+    // }
+    // glfwSetErrorCallback(error_callback);
 
-    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+    // glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    // glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
-    // doesn't work with ANGLE for some reason
-    // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
+    // // doesn't work with ANGLE for some reason
+    // // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
 
-    GLFWwindow* window = glfwCreateWindow(500, 500, "My title", nullptr, nullptr);
-    if (!window) {
-        std::cerr << "window creation failed" << std::endl;
-        return 2;
-    }
+    // GLFWwindow* window = glfwCreateWindow(500, 500, "My title", nullptr, nullptr);
+    // if (!window) {
+    //     std::cerr << "window creation failed" << std::endl;
+    //     return 2;
+    // }
 
-    glfwSetWindowAspectRatio(window, 16, 9);
+    // glfwSetWindowAspectRatio(window, 16, 9);
 
-    std::thread render_thread(render, window);
+    // std::thread render_thread(render, window);
 
-    while (!glfwWindowShouldClose(window)) {
-        glfwWaitEvents();
-    }
+    // while (!glfwWindowShouldClose(window)) {
+    //     glfwWaitEvents();
+    // }
 
-    render_thread.join();
+    // render_thread.join();
 
-    glfwDestroyWindow(window);
-    glfwTerminate();
+    // glfwDestroyWindow(window);
+    // glfwTerminate();
 
     return 0;
 }
