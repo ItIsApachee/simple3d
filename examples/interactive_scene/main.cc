@@ -1,3 +1,4 @@
+#include <simple3d/context/context.h>
 // #include <iostream>
 // #include <thread>
 // #include <chrono>
@@ -57,6 +58,14 @@
 // }
 
 int main() {
+    using namespace Simple3D;
+    MainLoop::GetInstance().Init();
+
+    auto window = WindowBuilder().Title("test").Build();
+
+    MainLoop::GetInstance().Start();
+
+    MainLoop::GetInstance().Destroy();
     // if (!glfwInit()) {
     //     std::cerr << "glfw initialization failed" << std::endl;
     //     return 1;
