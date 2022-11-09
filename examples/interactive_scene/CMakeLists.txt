@@ -16,7 +16,16 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR})
 
-include_directories(../thirdparty)
+set(SIMPLE3D_EGL_LIBRARY "libEGL_ANGLE.dll" CACHE STRING "path to EGL library for GLFW")
+set(SIMPLE3D_GLESv2_LIBRARY "libGLESv2_ANGLE.dll" CACHE STRING "path to GLESv2 library for GLFW")
+target_compile_definitions(
+    glfw
+    PRIVATE _GLFW_EGL_LIBRARY="${SIMPLE3D_EGL_LIBRARY}"
+    PRIVATE _GLFW_GLESV2_LIBRARY="${SIMPLE3D_GLESv2_LIBRARY}"
+)
 
 add_executable(app main.cpp)
-target_link_libraries(app glfw)
+target_link_libraries(app PUBLIC glfw)
+
+# GLAD header
+target_include_directories(app PUBLIC ${CMAKE_SOURCE_DIR}/thirdparty)
