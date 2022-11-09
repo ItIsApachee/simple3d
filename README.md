@@ -8,7 +8,7 @@ C++ namespace - Simpl3D.
 Coding standard - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
 
 ## Components.
-1. Objects related to 3D rendering.
+1. (graphics) Objects related to 3D rendering.
 2. (context) Window manager: creating windows, GLES contexts, main loop, etc.
 3. ImGui support (?)
 4. Texture manager
