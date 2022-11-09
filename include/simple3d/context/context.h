@@ -22,7 +22,7 @@ public:
     Error Start();
     void Destroy();
 private:
-    MainLoop();
+    explicit MainLoop();
 };
 
 }

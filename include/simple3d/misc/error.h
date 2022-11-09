@@ -18,7 +18,7 @@ public:
         return Error(ErrorType::kOk);
     }
 
-    Error(ErrorType type = ErrorType::kUnknown, std::string description = ""): type{type}, description{description} {}
+    explicit Error(ErrorType type = ErrorType::kUnknown, std::string description = ""): type{type}, description{description} {}
     Error(const Error&) = default;
     Error(Error&&) = default;
     Error& operator=(const Error&) = default;
