@@ -1,1 +1,1 @@
-#include <Simple3D/simple3d.h>
+#include <simple3d/simple3d.h>
