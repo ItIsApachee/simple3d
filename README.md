@@ -2,6 +2,7 @@
 This library aims to be a simple tool to let you visualise simple 3D primitives. 
 To provide maximum flexibility the library is using ANGLE (https://github.com/google/angle)
 as graphics backend.
+C++ namespace - simpl3d.
 
 ## Development.
 Coding standard - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
