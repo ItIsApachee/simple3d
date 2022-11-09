@@ -15,6 +15,7 @@ Coding standard - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
 ### Overall.
 - [ ] Create CMake config of library
 - [ ] Organize components in folders.
+- [ ] Create documentation (doxygen).
 
 ### 1. Objects related to 3D rendering.
 - [ ] Create basic API/interface of library:
