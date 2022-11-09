@@ -1,19 +1,24 @@
 #include <iostream>
 #include <thread>
 #include <chrono>
+#include <vector>
 #include <cmath>
-#include <GLFW/glfw3.h>
 #include <windows.h>
 
 #define GLAD_GLES2_IMPLEMENTATION
 #include <glad/gles2.h>
+
+#include <GLFW/glfw3.h>
 
 void error_callback(int error, const char* description) {
     std::cerr << "glfw error: " << error << " with message \"" << description << "\"" << std::endl;
 }
 
 void render(GLFWwindow* window) {
+    constexpr int FPS_SAMPLES = 200;
     auto start = std::chrono::high_resolution_clock::now();
+    std::vector<decltype(start)> fps_samples(FPS_SAMPLES, start);
+
     glfwMakeContextCurrent(window);
 
     GladGLES2Context gl;
@@ -26,15 +31,25 @@ void render(GLFWwindow* window) {
 
     const float PI = acos(-1.0);
 
-    gl.Viewport(0, 0, 640, 480);
+    // FIXME: this function may only be called from main thread
+    // glfwGetFramebufferSize(window, &display_w, &display_h);
+    gl.Viewport(0, 0, 2560, 1440);
 
     float v = 0;
+    int cnt = 0;
+    // FIXME: should syncronize calls to this function (data race)
     while (!glfwWindowShouldClose(window)) {
-        auto elapsed = (std::chrono::high_resolution_clock::now() - start).count();
-        v = elapsed / 1e9;
-        std::cout << v << std::endl;
+        cnt = (cnt + 1) % FPS_SAMPLES;
+        auto now = std::chrono::high_resolution_clock::now();
 
-        gl.ClearColor((sin(v*2*PI)+1.)/(2*PI), 0.0f, 0.0f, 1.0f);
+        int took = (now - fps_samples[cnt]).count();
+        fps_samples[cnt] = now;
+        std::cout << "FPS: " << (FPS_SAMPLES / (took / 1e9)) << std::endl;
+
+        auto elapsed = (now - start).count();
+        v = elapsed / 1e9;
+
+        gl.ClearColor((sin(v*2*PI)+1.)/2, 0.0f, 0.0f, 1.0f);
         gl.Clear(GL_COLOR_BUFFER_BIT);
         // gl.Flush();
         glfwSwapBuffers(window);
@@ -57,19 +72,24 @@ int main() {
     // doesn't work with ANGLE for some reason
     // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
 
-    SetErrorMode(0);
-    GLFWwindow* window = glfwCreateWindow(640, 480, "My title", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(500, 500, "My title", nullptr, nullptr);
     if (!window) {
         std::cerr << "window creation failed" << std::endl;
         return 2;
     }
 
+    glfwSetWindowAspectRatio(window, 16, 9);
+
     std::thread render_thread(render, window);
-    render_thread.detach();
 
     while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
+        glfwWaitEvents();
     }
+
+    render_thread.join();
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
 
     return 0;
 }
