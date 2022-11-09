@@ -8,7 +8,7 @@ Coding standard - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
 
 ## Components.
 1. Objects related to 3D rendering.
-2. (ContextManager) Window manager: creating windows, GLES contexts, main loop, etc.
+2. (context) Window manager: creating windows, GLES contexts, main loop, etc.
 3. ImGui support (?)
 4. Texture manager
 5. Tools for optimizing visualisation of massive amounts of data.
