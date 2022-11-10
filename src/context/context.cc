@@ -1,5 +1,6 @@
 #include <simple3d/context/context.h>
 
+#include <iostream>
 #include <string>
 #include <memory>
 
@@ -16,11 +17,16 @@ MainLoop& MainLoop::GetInstance() {
     return main_loop;
 }
 
+static void error_callback(int code, const char* description) {
+    std::cerr << "GLFW error: 0x" << std::hex << code << ": " << description << std::endl;
+}
+
 Error MainLoop::Init() {
     int glfw_init_error = glfwInit();
     if (glfw_init_error == GLFW_FALSE) {
         return Error(ErrorType::kInitFailed, "glfw initialization failed");
     }
+    glfwSetErrorCallback(error_callback);
 
     // TODO: setup callbacks: errors, inputs, etc.
 
