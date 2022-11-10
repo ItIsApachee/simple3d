@@ -5,6 +5,7 @@
 #include <optional>
 
 #include <glad/gles2.h>
+#include <glm/mat4x4.hpp>
 
 #include <simple3d/types.h>
 #include <simple3d/misc/error.h>
@@ -35,6 +36,8 @@ public:
     bool IsValid() const;
     void Delete(GladGLES2Context* gl);
     // TODO: consider adding methods to modify uniforms
+
+    Error SetUniformMat4fv(GladGLES2Context* gl, const std::string& name, const glm::mat4& matrix);
 private:
     unsigned int shader_id_{0};
 };

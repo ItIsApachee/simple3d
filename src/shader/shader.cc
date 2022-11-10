@@ -6,6 +6,8 @@
 #include <utility>
 
 #include <glad/gles2.h>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <simple3d/misc/error.h>
 
@@ -125,6 +127,18 @@ void Shader::Delete(GladGLES2Context* gl) {
         gl->DeleteProgram(shader_id_);
         shader_id_ = 0;
     }
+}
+
+Error Shader::SetUniformMat4fv(GladGLES2Context* gl, const std::string& name, const glm::mat4& matrix) {
+    int location = gl->GetUniformLocation(shader_id_, name.c_str());
+    if (location == -1) {
+        std::string desc = "uniform not found, name=\"";
+        desc += name;
+        desc += "\"";
+        return Error(ErrorType::kUniformNotFound, desc);
+    }
+    gl->UniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+    return Error(ErrorType::kOk);
 }
 
 
