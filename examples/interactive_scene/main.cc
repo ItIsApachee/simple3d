@@ -1,4 +1,4 @@
-#include <simple3d/context/context.h>
+#include <simple3d/simple3d.h>
 // #include <iostream>
 // #include <thread>
 // #include <chrono>
@@ -62,6 +62,7 @@ int main() {
     MainLoop::GetInstance().Init();
 
     auto window = WindowBuilder().Title("test").Build();
+    auto scene = Scene::Create(window);
 
     MainLoop::GetInstance().Start();
 
