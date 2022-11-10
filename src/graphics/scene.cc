@@ -40,9 +40,6 @@ void render_scene(std::shared_ptr<Scene> scene) {
         -0.5f,  0.5f, 0.0f   // top left 
     };
 
-    int success;
-    char info_log[512];
-
     unsigned int vbo = 0;
     gl.GenBuffers(1, &vbo);
     gl.BindBuffer(GL_ARRAY_BUFFER, vbo);
