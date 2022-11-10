@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <simple3d/simple3d.h>
 // #include <iostream>
 // #include <thread>
@@ -59,13 +61,20 @@
 
 int main() {
     using namespace Simple3D;
-    MainLoop::GetInstance().Init();
+    auto init_error = MainLoop::GetInstance().Init();
+    if (!init_error.IsOk()) {
+        std::cerr << "init_error: " << init_error.description << std::endl;
+        return -1;
+    }
 
     auto window = WindowBuilder().Title("test").Build();
     auto scene = Scene::Create();
     scene->SetContext(window);
 
-    MainLoop::GetInstance().Start();
+    auto loop_error = MainLoop::GetInstance().Start();
+    if (!loop_error.IsOk()) {
+        std::cerr << "loop_error: " << loop_error.description << std::endl;
+    }
 
     MainLoop::GetInstance().Destroy();
     // if (!glfwInit()) {
