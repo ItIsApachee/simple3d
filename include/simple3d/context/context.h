@@ -11,6 +11,8 @@
 
 namespace Simple3D {
 
+
+
 class MainLoop;
 class Window;
 class WindowBuilder;
@@ -77,6 +79,8 @@ public:
 private:
     std::string title_{};
 };
+
+
 
 }
 
