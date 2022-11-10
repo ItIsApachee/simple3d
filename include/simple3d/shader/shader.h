@@ -6,6 +6,7 @@
 
 #include <glad/gles2.h>
 
+#include <simple3d/types.h>
 #include <simple3d/misc/error.h>
 
 namespace Simple3D {

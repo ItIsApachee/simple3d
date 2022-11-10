@@ -7,15 +7,12 @@
 
 #include <GLFW/glfw3.h>
 
+#include <simple3d/types.h>
 #include <simple3d/misc/error.h>
 
 namespace Simple3D {
 
 
-
-class MainLoop;
-class Window;
-class WindowBuilder;
 
 // Singleton for managing windows, inputs, etc.
 // TODO: add customization, e.g. use native GLES

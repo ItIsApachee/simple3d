@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include <simple3d/types.h>
+
 namespace Simple3D {
 
 enum class ErrorType : int {

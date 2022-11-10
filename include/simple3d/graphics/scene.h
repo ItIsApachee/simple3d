@@ -5,6 +5,7 @@
 #include <memory>
 #include <atomic>
 
+#include <simple3d/types.h>
 #include <simple3d/context/context.h>
 
 namespace Simple3D {
