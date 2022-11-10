@@ -26,7 +26,10 @@ target_compile_definitions(
 )
 
 # Library setup
-add_library(simple3d STATIC simple3d.cc context/context.cc)
+set(simple3d_SOURCES simple3d.cc)
+set(simple3d_SOURCES ${simple3d_SOURCES} context/context.cc)
+set(simple3d_SOURCES ${simple3d_SOURCES} graphics/scene.cc)
+add_library(simple3d STATIC ${simple3d_SOURCES})
 
 target_link_libraries(simple3d PUBLIC glfw)
 
