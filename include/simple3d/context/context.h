@@ -40,7 +40,6 @@ private:
 };
 
 // class representing window, and its GLES context
-// FIXME: conceptually it should inherit std::enable_shared_from_this<Window>
 class Window : public std::enable_shared_from_this<Window> {
 public:
     friend WindowBuilder;
