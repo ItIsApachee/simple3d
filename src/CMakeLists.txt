@@ -17,8 +17,10 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(${glfw_SOURCE_DIR} ${glfw_BINARY_DIR})
 
-set(SIMPLE3D_EGL_LIBRARY "libEGL_ANGLE.dll" CACHE STRING "path to EGL library for GLFW")
-set(SIMPLE3D_GLESv2_LIBRARY "libGLESv2_ANGLE.dll" CACHE STRING "path to GLESv2 library for GLFW")
+# Remove FORCE (present for debug purpose)
+# FIXME: ANGLE relies on libGLESv2.dll (this exact filename), but libGLESv2_ANGLE.dll seems more appropriate
+set(SIMPLE3D_EGL_LIBRARY "libEGL_ANGLE.dll" CACHE STRING "path to EGL library for GLFW" FORCE)
+set(SIMPLE3D_GLESv2_LIBRARY "libGLESv2.dll" CACHE STRING "path to GLESv2 library for GLFW" FORCE)
 target_compile_definitions(
     glfw
     PRIVATE _GLFW_EGL_LIBRARY="${SIMPLE3D_EGL_LIBRARY}"
