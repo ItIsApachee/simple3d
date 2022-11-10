@@ -9,6 +9,9 @@
 
 #include <glad/gles2.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <simple3d/shader/shader.h>
 #include <simple3d/shader/shader_source.h>
@@ -81,9 +84,13 @@ void render_scene(std::shared_ptr<Scene> scene) {
         auto now = std::chrono::high_resolution_clock::now();
         auto elapsed = (now - start).count();
         float v = elapsed / (float)1e9 * 10;
-        v = (sin(v)+1.)/2.0;
+        v = (float)(sin(v/2.)+1.)/(float)2.0;
 
-        gl.ClearColor(v, v, v, 1.0f);
+        glm::mat4 transform = glm::mat4(1.0f);
+        transform = glm::rotate(transform, (float)(v*2.*glm::pi<float>()), glm::vec3(0., 0., 1.));
+        shader_program.SetUniformMat4fv(&gl, "transform", transform);
+
+        gl.ClearColor(0., 0., 0., 1.0f);
         gl.Clear(GL_COLOR_BUFFER_BIT);
 
         // gl.UseProgram(shader_program);
