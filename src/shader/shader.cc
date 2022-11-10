@@ -104,6 +104,7 @@ Shader ShaderBuilder::Build(GladGLES2Context* gl_, Error& error) {
     gl.DeleteShader(fragment_shader);
 
     result.shader_id_ = shader_program;
+    error = Error(ErrorType::kOk);
     return result;
 }
 
