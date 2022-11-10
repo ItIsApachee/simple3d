@@ -62,7 +62,8 @@ int main() {
     MainLoop::GetInstance().Init();
 
     auto window = WindowBuilder().Title("test").Build();
-    auto scene = Scene::Create(window);
+    auto scene = Scene::Create();
+    scene->SetContext(window);
 
     MainLoop::GetInstance().Start();
 
