@@ -12,6 +12,7 @@
 #include <GLFW/glfw3.h>
 
 #include <simple3d/shader/shader.h>
+#include <simple3d/shader/shader_source.h>
 
 namespace Simple3D {
 
@@ -47,23 +48,7 @@ void render_scene(std::shared_ptr<Scene> scene) {
     gl.BindBuffer(GL_ARRAY_BUFFER, vbo);
     gl.BufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    constexpr char* vertex_shader_source = R"vertex_shader(#version 310 es
-        layout (location = 0) in vec3 aPos;
-
-        void main() {
-            gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-        }
-    )vertex_shader";
-    constexpr char* fragment_shader_source = R"fragment_shader(#version 310 es
-        precision highp float;
-        out vec4 FragColor;
-
-        void main() {
-            FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-        } 
-    )fragment_shader";
-
-    Shader shader_program = ShaderBuilder().VertexShaderSource(vertex_shader_source).FragmentShaderSource(fragment_shader_source).Build(&gl);
+    Shader shader_program = ShaderBuilder().VertexShaderSource(kVertexShader).FragmentShaderSource(kFragmentShader).Build(&gl);
 
     // gl.UseProgram(shader_program);
     // gl.VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
