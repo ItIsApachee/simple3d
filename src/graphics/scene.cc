@@ -4,7 +4,6 @@
 
 #include <iostream>
 #include <memory>
-#include <random>
 #include <utility>
 #include <chrono>
 
@@ -27,53 +26,50 @@ void render_scene(std::shared_ptr<Scene> scene) {
 
     auto start = std::chrono::high_resolution_clock::now();
 
-    std::uniform_real_distribution<float> distrib(0.0f, 1.0f);
-    std::mt19937 rnd(1337);
-    float colors[2] = {
-        distrib(rnd), distrib(rnd)
-    };
+    // float vertices[] = {
+    //     0.5f,  0.5f, 0.0f,  // top right
+    //     0.5f, -0.5f, 0.0f,  // bottom right
+    //     -0.5f, -0.5f, 0.0f,  // bottom left
+    //     -0.5f,  0.5f, 0.0f   // top left 
+    // };
+
+    Error shader_program_error;
+    Shader shader_program = ShaderBuilder().VertexShaderSource(kVertexShader).FragmentShaderSource(kFragmentShader).Build(&gl, shader_program_error);
+    if (!shader_program.IsValid() || !shader_program_error.IsOk()) {
+        std::cerr << "bad shader program: " << shader_program_error.description << std::endl;
+        return;
+    }
 
     float vertices[] = {
-        0.5f,  0.5f, 0.0f,  // top right
-        0.5f, -0.5f, 0.0f,  // bottom right
-        -0.5f, -0.5f, 0.0f,  // bottom left
-        -0.5f,  0.5f, 0.0f   // top left 
-    };
+        // positions         // colors
+        0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
+        -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
+        0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
+    };    
 
+    unsigned int vao = 0;
     unsigned int vbo = 0;
-    gl.GenBuffers(1, &vbo);
-    gl.BindBuffer(GL_ARRAY_BUFFER, vbo);
-    gl.BufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    Shader shader_program = ShaderBuilder().VertexShaderSource(kVertexShader).FragmentShaderSource(kFragmentShader).Build(&gl);
-
-    // gl.UseProgram(shader_program);
-    // gl.VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    // gl.EnableVertexAttribArray(0);
-
-    unsigned int indices[] = {  // note that we start from 0!
-        0, 1, 3,   // first triangle
-        1, 2, 3    // second triangle
-    };
-
-    unsigned int ebo;
-    gl.GenBuffers(1, &ebo);
-
-    unsigned int vao;
     gl.GenVertexArrays(1, &vao);  
-    // ..:: Initialization code (done once (unless your object frequently changes)) :: ..
-    // 1. bind Vertex Array Object
+    gl.GenBuffers(1, &vbo);
+
     gl.BindVertexArray(vao);
-    // 2. copy our vertices array in a buffer for OpenGL to use
     gl.BindBuffer(GL_ARRAY_BUFFER, vbo);
     gl.BufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    gl.BindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    gl.BufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW); 
 
-    // 3. then set our vertex attributes pointers
-    gl.VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-    gl.EnableVertexAttribArray(0);  
+    gl.BindBuffer(GL_ARRAY_BUFFER, vbo);
+    gl.BufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    gl.VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    gl.EnableVertexAttribArray(0);
+    gl.VertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    gl.EnableVertexAttribArray(1);
+    // gl.VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    // gl.EnableVertexAttribArray(0);  
+
+    // gl.VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    // gl.EnableVertexAttribArray(1);  
 
     // ..:: Drawing code (in render loop) :: ..
     // 4. draw the object
@@ -85,15 +81,16 @@ void render_scene(std::shared_ptr<Scene> scene) {
         auto now = std::chrono::high_resolution_clock::now();
         auto elapsed = (now - start).count();
         float v = elapsed / (float)1e9 * 10;
+        v = (sin(v)+1.)/2.0;
 
-        gl.ClearColor(colors[0], colors[1], (sin(v)+1)/2.0f, 1.0f);
+        gl.ClearColor(v, v, v, 1.0f);
         gl.Clear(GL_COLOR_BUFFER_BIT);
 
         // gl.UseProgram(shader_program);
         shader_program.Use(&gl);
         gl.BindVertexArray(vao);
-        // gl.DrawArrays(GL_TRIANGLES, 0, 3);
-        gl.DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); 
+        gl.DrawArrays(GL_TRIANGLES, 0, 3);
+        // // gl.DrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0); 
         gl.BindVertexArray(0);
 
         gl.Flush();
