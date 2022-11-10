@@ -1,0 +1,8 @@
+#ifndef SIMPLE3D_SHADER_SHADER_SOURCE_H
+#define SIMPLE3D_SHADER_SHADER_SOURCE_H
+
+const char* kVertexShader = R"(@SIMPLE3D_SHADER_VERTEX_GLSL@)";
+
+const char* kFragmentShader = R"(@SIMPLE3D_SHADER_FRAGMENT_GLSL@)";
+
+#endif

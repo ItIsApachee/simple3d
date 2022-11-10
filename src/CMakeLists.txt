@@ -40,5 +40,6 @@ target_link_libraries(simple3d PUBLIC glfw)
 target_link_libraries(simple3d PUBLIC glad)
 
 target_include_directories(simple3d PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(simple3d PRIVATE ${CMAKE_BINARY_DIR}/include)
 # not sure if it should be public
 # target_include_directories(simple3d PRIVATE ${CMAKE_SOURCE_DIR}/thirdparty)
