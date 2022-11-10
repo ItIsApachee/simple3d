@@ -57,7 +57,7 @@ private:
     Window& operator=(const Window&) = delete;
     Window& operator=(Window&&) = default;
 
-    GLFWwindow* glfw_window_;
+    GLFWwindow* glfw_window_{nullptr};
 };
 
 class WindowBuilder {
