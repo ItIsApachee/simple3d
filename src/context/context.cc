@@ -69,5 +69,10 @@ WindowBuilder& WindowBuilder::Title(std::string title) {
     return *this;
 }
 
+GLFWwindow* Window::GetGLFWwindow() const {
+    return glfw_window_;
+}
+
+
 
 }

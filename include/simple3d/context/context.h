@@ -45,17 +45,19 @@ class Window {
 public:
     friend WindowBuilder;
 
+    GLFWwindow* GetGLFWwindow() const;
+
     // TODO: define proper destructor
     ~Window() = default;
 private:
-    explicit Window(GLFWwindow* glfw_window): glfw_window{glfw_window} {}
+    explicit Window(GLFWwindow* glfw_window): glfw_window_{glfw_window} {}
     Window(const Window&) = delete;
     Window(Window&&) = default;
 
     Window& operator=(const Window&) = delete;
     Window& operator=(Window&&) = default;
 
-    GLFWwindow* glfw_window;
+    GLFWwindow* glfw_window_;
 };
 
 class WindowBuilder {
