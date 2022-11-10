@@ -11,6 +11,7 @@ enum class ErrorType : int {
     kOk = 0,
     kInitFailed,
     kShaderCompilationFailed,
+    kUniformNotFound,
     kUnknown
 };
 
