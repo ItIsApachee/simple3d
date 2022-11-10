@@ -8,9 +8,10 @@
 #include <utility>
 #include <chrono>
 
-#define GLAD_GLES2_IMPLEMENTATION
 #include <glad/gles2.h>
 #include <GLFW/glfw3.h>
+
+#include <simple3d/shader/shader.h>
 
 namespace Simple3D {
 
@@ -53,18 +54,6 @@ void render_scene(std::shared_ptr<Scene> scene) {
             gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
         }
     )vertex_shader";
-
-    unsigned int vertex_shader = gl.CreateShader(GL_VERTEX_SHADER);
-    gl.ShaderSource(vertex_shader, 1, &vertex_shader_source, nullptr);
-    gl.CompileShader(vertex_shader);
-    // FIXME: check compilation result
-    gl.GetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        gl.GetShaderInfoLog(vertex_shader, 512, nullptr, info_log);
-        std::cerr << "vertex shader compilation failed: " << info_log << std::endl;
-        return;
-    }
-
     constexpr char* fragment_shader_source = R"fragment_shader(#version 310 es
         precision highp float;
         out vec4 FragColor;
@@ -74,29 +63,7 @@ void render_scene(std::shared_ptr<Scene> scene) {
         } 
     )fragment_shader";
 
-    unsigned int fragment_shader = gl.CreateShader(GL_FRAGMENT_SHADER);
-    gl.ShaderSource(fragment_shader, 1, &fragment_shader_source, nullptr);
-    gl.CompileShader(fragment_shader);
-
-    gl.GetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        gl.GetShaderInfoLog(fragment_shader, 512, nullptr, info_log);
-        std::cerr << "fragment shader compilation failed: " << info_log << std::endl;
-        return;
-    }
-
-    unsigned int shader_program = gl.CreateProgram();
-    gl.AttachShader(shader_program, vertex_shader);
-    gl.AttachShader(shader_program, fragment_shader);
-    gl.LinkProgram(shader_program);
-
-    gl.GetProgramiv(shader_program, GL_LINK_STATUS, &success);
-    if (!success) {
-        // gl.GetShaderInfoLog(fragment_shader, 512, nullptr, info_log);
-        gl.GetProgramInfoLog(shader_program, 512, nullptr, info_log);
-        std::cerr << "shader program linkage failed: " << info_log << std::endl;
-        return;
-    }
+    Shader shader_program = ShaderBuilder().VertexShaderSource(vertex_shader_source).FragmentShaderSource(fragment_shader_source).Build(&gl);
 
     // gl.UseProgram(shader_program);
     // gl.VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -140,7 +107,8 @@ void render_scene(std::shared_ptr<Scene> scene) {
         gl.ClearColor(colors[0], colors[1], (sin(v)+1)/2.0f, 1.0f);
         gl.Clear(GL_COLOR_BUFFER_BIT);
 
-        gl.UseProgram(shader_program);
+        // gl.UseProgram(shader_program);
+        shader_program.Use(&gl);
         gl.BindVertexArray(vao);
         // gl.DrawArrays(GL_TRIANGLES, 0, 3);
         gl.DrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0); 

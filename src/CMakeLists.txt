@@ -28,13 +28,17 @@ target_compile_definitions(
 )
 
 # Library setup
+add_subdirectory(shader)
+
 set(simple3d_SOURCES simple3d.cc)
+set(simple3d_SOURCES ${simple3d_SOURCES} shader/shader.cc)
 set(simple3d_SOURCES ${simple3d_SOURCES} context/context.cc)
 set(simple3d_SOURCES ${simple3d_SOURCES} graphics/scene.cc)
 add_library(simple3d STATIC ${simple3d_SOURCES})
 
 target_link_libraries(simple3d PUBLIC glfw)
+target_link_libraries(simple3d PUBLIC glad)
 
 target_include_directories(simple3d PUBLIC ${CMAKE_SOURCE_DIR}/include)
 # not sure if it should be public
-target_include_directories(simple3d PRIVATE ${CMAKE_SOURCE_DIR}/thirdparty)
+# target_include_directories(simple3d PRIVATE ${CMAKE_SOURCE_DIR}/thirdparty)
