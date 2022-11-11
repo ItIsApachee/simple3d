@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 
+#include <glad/gles2.h>
 #include <GLFW/glfw3.h>
 
 #include <simple3d/misc/error.h>
@@ -75,8 +76,21 @@ WindowBuilder& WindowBuilder::Title(std::string title) {
     return *this;
 }
 
-GLFWwindow* Window::GetGLFWwindow() const {
-    return glfw_window_;
+// deprecated
+// GLFWwindow* Window::GetGLFWwindow() const {
+//     return glfw_window_;
+// }
+void Window::SwapBuffers() const {
+    glfwSwapBuffers(glfw_window_);
+}
+
+GladGLES2Context Window::GetGLES2Context() const {
+    GladGLES2Context ctx;
+    glfwMakeContextCurrent(glfw_window_);
+    // version should be GLES 3.1
+    // TODO: consider adding asserts to check the version
+    int version_ = gladLoadGLES2Context(&ctx, glfwGetProcAddress);
+    return ctx;
 }
 
 

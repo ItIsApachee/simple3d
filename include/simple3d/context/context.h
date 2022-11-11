@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 
+#include <glad/gles2.h>
 #include <GLFW/glfw3.h>
 
 #include <simple3d/types.h>
@@ -44,7 +45,10 @@ class Window : public std::enable_shared_from_this<Window> {
 public:
     friend WindowBuilder;
 
-    GLFWwindow* GetGLFWwindow() const;
+    // deprecated
+    // GLFWwindow* GetGLFWwindow() const;
+    void SwapBuffers() const;
+    GladGLES2Context GetGLES2Context() const;
 
     // TODO: define proper destructor
     ~Window() = default;

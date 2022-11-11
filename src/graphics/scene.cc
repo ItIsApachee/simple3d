@@ -8,7 +8,6 @@
 #include <chrono>
 
 #include <glad/gles2.h>
-#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -21,11 +20,7 @@ namespace Simple3D {
 
 
 void render_scene(std::shared_ptr<Scene> scene) {
-    GLFWwindow* glfw_window = scene->window_->GetGLFWwindow();
-    glfwMakeContextCurrent(glfw_window);
-
-    GladGLES2Context gl;
-    int version = gladLoadGLES2Context(&gl, glfwGetProcAddress);
+    GladGLES2Context gl = scene->window_->GetGLES2Context();
 
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -101,9 +96,8 @@ void render_scene(std::shared_ptr<Scene> scene) {
         gl.BindVertexArray(0);
 
         gl.Flush();
-        // someOpenGLFunctionThatDrawsOurTriangle();   
 
-        glfwSwapBuffers(glfw_window);
+        scene->window_->SwapBuffers();
     }
 }
 
