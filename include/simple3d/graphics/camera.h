@@ -1,3 +1,7 @@
+/** \file
+ * \brief Camera manipulation.
+*/
+
 #ifndef SIMPLE3D_GRAPHICS_CAMERA_H
 #define SIMPLE3D_GRAPHICS_CAMERA_H
 

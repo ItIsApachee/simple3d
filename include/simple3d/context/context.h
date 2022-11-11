@@ -1,3 +1,7 @@
+/** \file
+ * \brief Managing windows, inputs, etc.
+*/
+
 #ifndef SIMPLE3D_CONTEXT_CONTEXT_H
 #define SIMPLE3D_CONTEXT_CONTEXT_H
 
@@ -18,6 +22,10 @@ namespace Simple3D {
 // Singleton for managing windows, inputs, etc.
 // TODO: add customization, e.g. use native GLES
 class MainLoop {
+/**
+ * \class MainLoop simple3d/context/context.h
+ * \brief Singleton for managin windows, intputs, etc.
+*/
 public:
     static MainLoop& GetInstance();
 

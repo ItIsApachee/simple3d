@@ -1,3 +1,7 @@
+/** \file
+ * \brief Definition of Simple3D::Scene
+*/
+
 #ifndef SIMPLE3D_GRAPHICS_SCENE_H
 #define SIMPLE3D_GRAPHICS_SCENE_H
 

@@ -1,3 +1,9 @@
+/** \file
+ * \brief ???
+ * No idea why I need this exact header, but
+ * maybe single-header inclusion???
+*/
+
 #ifndef SIMPLE3D_SIMPLE3D_H
 #define SIMPLE3D_SIMPLE3D_H
 

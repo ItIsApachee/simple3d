@@ -1,3 +1,8 @@
+/** \file
+ * \brief ???
+ * No idea why I need this file either.
+*/
+
 #ifndef SIMPLE3D_GRAPHICS_GRAPHICS_H
 #define SIMPLE3D_GRAPHICS_GRAPHICS_H
 

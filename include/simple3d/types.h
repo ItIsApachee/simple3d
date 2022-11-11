@@ -1,3 +1,7 @@
+/** \file
+ * \brief List of all classes declarations.
+*/
+
 #ifndef SIMPLE3D_TYPES_H
 #define SIMPLE3D_TYPES_H
 

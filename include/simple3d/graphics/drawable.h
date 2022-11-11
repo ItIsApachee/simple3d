@@ -1,3 +1,7 @@
+/** \file
+ * \brief Simple3D::Drawable interface.
+*/
+
 #ifndef SIMPLE3D_GRAPHICS_DRAWABLE_H
 #define SIMPLE3D_GRAPHICS_DRAWABLE_H
 

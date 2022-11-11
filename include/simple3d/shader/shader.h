@@ -1,3 +1,7 @@
+/** \file
+ * \brief Managing shaders.
+*/
+
 #ifndef SIMPLE3D_SHADER_SHADER_H
 #define SIMPLE3D_SHADER_SHADER_H
 

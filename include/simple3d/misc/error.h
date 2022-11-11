@@ -1,3 +1,6 @@
+/** \file
+ * \brief Definition of Simple3D::Error, Simple3D::ErrorType
+*/
 #ifndef SIMPLE3D_MISC_ERROR_H
 #define SIMPLE3D_MISC_ERROR_H
 
