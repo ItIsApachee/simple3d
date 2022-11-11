@@ -5,15 +5,20 @@ namespace Simple3D {
 
 
 
+// context
 class MainLoop;
 class Window;
 class WindowBuilder;
+// graphics
 class Scene;
+class Camera;
 class Drawable;
-enum class ErrorType;
-struct Error;
+// shader
 class Shader;
 class ShaderBuilder;
+// misc
+enum class ErrorType;
+struct Error;
 
 
 
