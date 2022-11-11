@@ -50,11 +50,17 @@ set(simple3d_SOURCES ${simple3d_SOURCES} context/context.cc)
 set(simple3d_SOURCES ${simple3d_SOURCES} graphics/scene.cc)
 add_library(simple3d STATIC ${simple3d_SOURCES})
 
-target_link_libraries(simple3d PUBLIC glfw)
-target_link_libraries(simple3d PUBLIC glad)
-target_link_libraries(simple3d PUBLIC glm)
+target_link_libraries(
+    simple3d
+    PUBLIC glfw
+    PUBLIC glad
+    PUBLIC glm
+)
 
-target_include_directories(simple3d PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_include_directories(simple3d PRIVATE ${CMAKE_BINARY_DIR}/include)
-# not sure if it should be public
-# target_include_directories(simple3d PRIVATE ${CMAKE_SOURCE_DIR}/thirdparty)
+target_include_directories(
+    simple3d
+    # use before to avoid collisions
+    BEFORE PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+    PRIVATE ${CMAKE_BINARY_DIR}/include
+    PUBLIC ${CMAKE_SOURCE_DIR}/include
+)
