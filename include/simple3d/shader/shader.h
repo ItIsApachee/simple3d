@@ -1,3 +1,6 @@
+/** \dir
+ * \brief Shader component.
+*/
 /** \file
  * \brief Managing shaders.
 */

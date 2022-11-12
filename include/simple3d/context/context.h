@@ -1,3 +1,7 @@
+/**
+ * \dir
+ * \brief Context component managing IO.
+*/
 /** \file
  * \brief Managing windows, inputs, etc.
 */
