@@ -22,7 +22,7 @@ Coding standard - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
 
 ## TODO:
 ### Overall.
-- [ ] Create CMake config of library
+- [x] Create CMake config of library
 - [ ] Organize components in folders.
 - [ ] Create documentation (doxygen).
 - [ ] Add support for non-desktop devices: Android, IOS.
@@ -44,9 +44,9 @@ Coding standard - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
     - [ ] Misc (additional 3D primitives).
 
 ### 2. Window manager: creating windows, GLES contexts, main loop, etc.
-- [ ] Initialization, and termination.
-- [ ] Main loop.
-- [ ] Window creation.
+- [x] Initialization, and termination.
+- [x] Main loop.
+- [x] Window creation.
 - [ ] Context management.
 
 ### 3. ImGui support (?)
