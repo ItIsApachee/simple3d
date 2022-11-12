@@ -25,11 +25,10 @@ namespace Simple3D {
 
 // Singleton for managing windows, inputs, etc.
 // TODO: add customization, e.g. use native GLES
-class MainLoop {
-/**
- * \class MainLoop simple3d/context/context.h
+/** \class MainLoop simple3d/context/context.h
  * \brief Singleton for managin windows, intputs, etc.
 */
+class MainLoop {
 public:
     static MainLoop& GetInstance();
 
@@ -52,7 +51,9 @@ private:
     std::unordered_set<std::shared_ptr<Window>> windows_;
 };
 
-// class representing window, and its GLES context
+/** \class Window simple3d/context/context.h
+ * \brief Abstraction for creating, and managing windows.
+*/
 class Window : public std::enable_shared_from_this<Window> {
 public:
     friend WindowBuilder;
@@ -75,6 +76,9 @@ private:
     GLFWwindow* glfw_window_{nullptr};
 };
 
+/** \class WindowBuilder simple3d/context/context.h
+ * \brief Helper class for constructing Simple3D::Window.
+*/
 class WindowBuilder {
 public:
     explicit WindowBuilder() = default;

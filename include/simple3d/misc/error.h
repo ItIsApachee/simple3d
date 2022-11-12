@@ -10,6 +10,11 @@
 
 namespace Simple3D {
 
+
+
+/** \enum ErrorType simple3d/misc/error.h
+ * \brief Types of possibles errors.
+*/
 enum class ErrorType : int {
     kOk = 0,
     kInitFailed,
@@ -18,7 +23,9 @@ enum class ErrorType : int {
     kUnknown
 };
 
-// POD Error
+/** \struct Error simple3d/misc/error.h
+ * \brief POD Error for error handling.
+*/
 struct Error {
 public:
     static Error Ok() {

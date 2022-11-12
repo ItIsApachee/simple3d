@@ -16,6 +16,9 @@ namespace Simple3D {
 
 
 
+/** \class Scene simple3d/graphics/scene.h
+ * \brief A container for drawable objects, and cameras.
+*/
 class Scene : public std::enable_shared_from_this<Scene> {
 public:
     friend void render_scene(std::shared_ptr<Scene> scene);

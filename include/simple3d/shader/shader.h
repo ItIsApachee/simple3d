@@ -25,6 +25,9 @@ class Shader;
 class ShaderBuilder;
 
 // TODO: consider adding support for compute shader, or add ComputeShader class
+/** \class Shader simple3d/shader/shader.h
+ * \brief An abstraction over GLES shader.
+*/
 class Shader {
 public:
     friend ShaderBuilder;
@@ -49,6 +52,9 @@ private:
     unsigned int shader_id_{0};
 };
 
+/** \class ShaderBuilder simple3d/shader/shader.h
+ * \brief Helper class for constructing Simple3D::Shader.
+*/
 class ShaderBuilder {
 public:
     ShaderBuilder() = default;

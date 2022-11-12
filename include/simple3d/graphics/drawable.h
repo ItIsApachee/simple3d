@@ -11,6 +11,9 @@ namespace Simple3D {
 
 
 
+/** \interface Drawable simple3d/graphics/drawable.h
+ * \brief Interface for objects, which are drawable on the scene.
+*/
 class Drawable {
 public:
     Drawable() = default;
