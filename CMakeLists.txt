@@ -7,15 +7,21 @@ add_subdirectory(thirdparty)
 add_subdirectory(src)
 add_subdirectory(examples)
 
-set(SIMPLE3D_BUILD_INTERNAL_DOCS YES CACHE STRING "specify whether you need documentation of private API")
-message(${CMAKE_CURRENT_SOURCE_DIR})
 find_package(Doxygen)
 if (DOXYGEN_FOUND)
+    set(SIMPLE3D_BUILD_INTERNAL_DOCS ON CACHE BOOL "specify whether you need documentation of private API")
+    set(SIMPLE3D_DOXYGEN_INPUT "${CMAKE_SOURCE_DIR}/include/simple3d/")
+
+    if (${SIMPLE3D_BUILD_INTERNAL_DOCS})
+        set(SIMPLE3D_DOXYGEN_INPUT ${SIMPLE3D_DOXYGEN_INPUT} "${CMAKE_SOURCE_DIR}/src/")
+    endif()
+
+    list(JOIN SIMPLE3D_DOXYGEN_INPUT " " SIMPLE3D_DOXYGEN_INPUT)
+
     configure_file(
         Doxyfile.in
         ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
     )
-    message("DBG ${CMAKE_CURRENT_BINARY_DIR}")
     add_custom_target(
         doc
         ${DOXYGEN_EXECUTABLE}
