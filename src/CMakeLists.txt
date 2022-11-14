@@ -59,8 +59,8 @@ target_link_libraries(
 
 target_include_directories(
     simple3d
-    # use before to avoid collisions
-    BEFORE PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
+    # use "" to include
+    # BEFORE PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
     PRIVATE ${CMAKE_BINARY_DIR}/include
     PUBLIC ${CMAKE_SOURCE_DIR}/include
 )
