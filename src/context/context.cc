@@ -8,90 +8,76 @@
 #include <GLFW/glfw3.h>
 
 #include <simple3d/misc/error.h>
+#include <simple3d/context/window.h>
 
 namespace Simple3D {
 
 
 
-// MainLoop& MainLoop::GetInstance() {
-//     static MainLoop main_loop = MainLoop();
-//     return main_loop;
-// }
+// FIXME: provide better error handling
+static void error_callback(int code, const char* description) {
+    std::cerr << "GLFW error: 0x" << std::hex << code << ": " << description << std::endl;
+}
 
-// static void error_callback(int code, const char* description) {
-//     std::cerr << "GLFW error: 0x" << std::hex << code << ": " << description << std::endl;
-// }
+Context& Context::GetInstance() {
+    static Context main_loop = Context();
+    return main_loop;
+}
 
-// Error MainLoop::Init() {
-//     int glfw_init_error = glfwInit();
-//     if (glfw_init_error == GLFW_FALSE) {
-//         return Error(ErrorType::kInitFailed, "glfw initialization failed");
-//     }
-//     glfwSetErrorCallback(error_callback);
+Context::Context() {}
 
-//     // TODO: setup callbacks: errors, inputs, etc.
+Error Context::Init() {
+    Context& ctx = GetInstance();
+    if (ctx.is_init) {
+        return Error(ErrorType::kInitFailed, "already initialized");
+    }
+    int glfw_init_error = glfwInit();
+    if (glfw_init_error == GLFW_FALSE) {
+        return Error(ErrorType::kInitFailed, "glfw initialization failed");
+    }
+    glfwSetErrorCallback(error_callback);
 
-//     return Error::Ok();
-// }
+    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 
-// Error MainLoop::Start() {
-//     // TODO: add stop method
-//     while (true) {
-//         glfwPollEvents();
-        
-//         // render windows
-//     }
-// }
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
-// void MainLoop::Destroy() {
-//     glfwTerminate();
-// }
+    // doesn't work with ANGLE for some reason
+    // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
 
-// void MainLoop::AddWindow(std::shared_ptr<Window> window) {
-//     windows_.insert(window);
-// }
+    GLFWwindow* glfw_window = glfwCreateWindow(500, 500, "test (FIXME)", nullptr, nullptr);
+    if (glfw_window == nullptr) {
+        return Error(ErrorType::kInitFailed, "glfw failed to create window");
+    }
 
-// std::shared_ptr<Window> WindowBuilder::Build() {
-//     glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+    ctx.window_ = Window::Create(glfw_window);
 
-//     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-//     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-//     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    // TODO: Load GLES context
+    // TODO: setup callbacks(?): inputs, etc.
 
-//     // doesn't work with ANGLE for some reason
-//     // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
+    ctx.is_init = true;
 
-//     GLFWwindow* glfw_window = glfwCreateWindow(500, 500, title_.c_str(), nullptr, nullptr);
+    return Error::Ok();
+}
 
-//     std::shared_ptr<Window> window;
-//     if (glfw_window != nullptr) {
-//         window.reset(new Window(glfw_window));
-//         MainLoop::GetInstance().AddWindow(window);
-//     }
-//     return window;
-// }
+void Context::Destroy() {
+    Context& ctx = GetInstance();
+    
+    if (ctx.is_init) {
+        ctx.window_->Destroy();
+        glfwTerminate();
+        ctx.is_init = false;
+    }
+}
 
-// WindowBuilder& WindowBuilder::Title(std::string title) {
-//     title_ = title;
-//     return *this;
-// }
+void Context::PollEvents() {
+    glfwPollEvents();
+}
 
-// // deprecated
-// // GLFWwindow* Window::GetGLFWwindow() const {
-// //     return glfw_window_;
-// // }
-// void Window::SwapBuffers() const {
-//     glfwSwapBuffers(glfw_window_);
-// }
-
-// GladGLES2Context Window::GetGLES2Context() const {
-//     GladGLES2Context ctx;
-//     glfwMakeContextCurrent(glfw_window_);
-//     // version should be GLES 3.1
-//     // TODO: consider adding asserts to check the version
-//     int version_ = gladLoadGLES2Context(&ctx, glfwGetProcAddress);
-//     return ctx;
-// }
+std::shared_ptr<Window> Context::GetWindow() {
+    return GetInstance().window_;
+}
 
 
 
