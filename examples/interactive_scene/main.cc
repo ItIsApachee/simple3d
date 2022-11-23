@@ -60,23 +60,25 @@
 // }
 
 int main() {
-    using namespace Simple3D;
-    auto init_error = MainLoop::GetInstance().Init();
-    if (!init_error.IsOk()) {
-        std::cerr << "init_error: " << init_error.description << std::endl;
-        return -1;
-    }
+    // using namespace Simple3D;
+    // auto init_error = MainLoop::GetInstance().Init();
+    // if (!init_error.IsOk()) {
+    //     std::cerr << "init_error: " << init_error.description << std::endl;
+    //     return -1;
+    // }
 
-    auto window = WindowBuilder().Title("test").Build();
-    auto scene = Scene::Create();
-    scene->SetContext(window);
+    // auto window = WindowBuilder().Title("test").Build();
+    // auto scene = Scene::Create();
+    // scene->SetContext(window);
 
-    auto loop_error = MainLoop::GetInstance().Start();
-    if (!loop_error.IsOk()) {
-        std::cerr << "loop_error: " << loop_error.description << std::endl;
-    }
+    // auto loop_error = MainLoop::GetInstance().Start();
+    // if (!loop_error.IsOk()) {
+    //     std::cerr << "loop_error: " << loop_error.description << std::endl;
+    // }
 
-    MainLoop::GetInstance().Destroy();
+    // MainLoop::GetInstance().Destroy();
+
+
     // if (!glfwInit()) {
     //     std::cerr << "glfw initialization failed" << std::endl;
     //     return 1;

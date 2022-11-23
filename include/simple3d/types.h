@@ -10,9 +10,8 @@ namespace Simple3D {
 
 
 // context
-class MainLoop;
+class Context;
 class Window;
-class WindowBuilder;
 // graphics
 class Scene;
 class Camera;

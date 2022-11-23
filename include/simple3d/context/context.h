@@ -23,78 +23,98 @@ namespace Simple3D {
 
 
 
-// Singleton for managing windows, inputs, etc.
-// TODO: add customization, e.g. use native GLES
-/** \class MainLoop simple3d/context/context.h
- * \brief Singleton for managin windows, intputs, etc.
-*/
-class MainLoop {
+class Context {
 public:
-    static MainLoop& GetInstance();
+    static Context& GetInstance();
 
-    MainLoop(const MainLoop&) = delete;
-    MainLoop(MainLoop&&) = delete;
-    MainLoop& operator=(const MainLoop&) = delete;
-    MainLoop& operator=(MainLoop&&) = delete;
+    Context(const Context&) = delete;
+    Context(Context&&) = delete;
+    Context& operator=(const Context&) = delete;
+    Context& operator=(Context&&) = delete;
 
-    ~MainLoop() = default;
+    ~Context() = default;
 
-    Error Init();
-    // only in main thread
-    Error Start();
-    void Destroy();
-
-    void AddWindow(std::shared_ptr<Window> window);
+    // load everything, create window
+    static Error Init();
+    // destroy window, unload everything
+    static void Destroy();
 private:
-    explicit MainLoop() = default;
-
-    std::unordered_set<std::shared_ptr<Window>> windows_;
+    Context();
+    // store Window (but then GetWindow???)
+    // shared_ptr<Window>??? so that there is only one window created, but multiple references
 };
+// // Singleton for managing windows, inputs, etc.
+// // TODO: add customization, e.g. use native GLES
+// /** \class MainLoop simple3d/context/context.h
+//  * \brief Singleton for managin windows, intputs, etc.
+// */
+// class MainLoop {
+// public:
+//     static MainLoop& GetInstance();
 
-/** \class Window simple3d/context/context.h
- * \brief Abstraction for creating, and managing windows.
-*/
-class Window : public std::enable_shared_from_this<Window> {
-public:
-    friend WindowBuilder;
+//     MainLoop(const MainLoop&) = delete;
+//     MainLoop(MainLoop&&) = delete;
+//     MainLoop& operator=(const MainLoop&) = delete;
+//     MainLoop& operator=(MainLoop&&) = delete;
 
-    // deprecated
-    // GLFWwindow* GetGLFWwindow() const;
-    void SwapBuffers() const;
-    GladGLES2Context GetGLES2Context() const;
+//     ~MainLoop() = default;
 
-    // TODO: define proper destructor
-    ~Window() = default;
-private:
-    explicit Window(GLFWwindow* glfw_window): glfw_window_{glfw_window} {}
-    Window(const Window&) = delete;
-    Window(Window&&) = default;
+//     Error Init();
+//     // only in main thread
+//     Error Start();
+//     void Destroy();
 
-    Window& operator=(const Window&) = delete;
-    Window& operator=(Window&&) = default;
+//     void AddWindow(std::shared_ptr<Window> window);
+// private:
+//     explicit MainLoop() = default;
 
-    GLFWwindow* glfw_window_{nullptr};
-};
+//     std::unordered_set<std::shared_ptr<Window>> windows_;
+// };
 
-/** \class WindowBuilder simple3d/context/context.h
- * \brief Helper class for constructing Simple3D::Window.
-*/
-class WindowBuilder {
-public:
-    explicit WindowBuilder() = default;
-    WindowBuilder(const WindowBuilder&) = default;
-    WindowBuilder(WindowBuilder&&) = default;
+// /** \class Window simple3d/context/context.h
+//  * \brief Abstraction for creating, and managing windows.
+// */
+// class Window : public std::enable_shared_from_this<Window> {
+// public:
+//     friend WindowBuilder;
 
-    WindowBuilder& operator=(const WindowBuilder&) = default;
-    WindowBuilder& operator=(WindowBuilder&&) = default;
+//     // deprecated
+//     // GLFWwindow* GetGLFWwindow() const;
+//     void SwapBuffers() const;
+//     GladGLES2Context GetGLES2Context() const;
 
-    ~WindowBuilder() = default;
+//     // TODO: define proper destructor
+//     ~Window() = default;
+// private:
+//     explicit Window(GLFWwindow* glfw_window): glfw_window_{glfw_window} {}
+//     Window(const Window&) = delete;
+//     Window(Window&&) = default;
 
-    std::shared_ptr<Window> Build();
-    WindowBuilder& Title(std::string);
-private:
-    std::string title_{};
-};
+//     Window& operator=(const Window&) = delete;
+//     Window& operator=(Window&&) = default;
+
+//     GLFWwindow* glfw_window_{nullptr};
+// };
+
+// /** \class WindowBuilder simple3d/context/context.h
+//  * \brief Helper class for constructing Simple3D::Window.
+// */
+// class WindowBuilder {
+// public:
+//     explicit WindowBuilder() = default;
+//     WindowBuilder(const WindowBuilder&) = default;
+//     WindowBuilder(WindowBuilder&&) = default;
+
+//     WindowBuilder& operator=(const WindowBuilder&) = default;
+//     WindowBuilder& operator=(WindowBuilder&&) = default;
+
+//     ~WindowBuilder() = default;
+
+//     std::shared_ptr<Window> Build();
+//     WindowBuilder& Title(std::string);
+// private:
+//     std::string title_{};
+// };
 
 
 
