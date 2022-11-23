@@ -54,6 +54,9 @@ Error Context::Init() {
     ctx.window_ = Window::Create(glfw_window);
 
     // TODO: Load GLES context
+    glfwMakeContextCurrent(glfw_window);
+    int version_ = gladLoadGLES2(glfwGetProcAddress); // unused
+
     // TODO: setup callbacks(?): inputs, etc.
 
     ctx.is_init = true;
