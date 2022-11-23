@@ -60,7 +60,11 @@
 // }
 
 int main() {
-    // using namespace Simple3D;
+    using namespace Simple3D;
+    Context::Init();
+    while (true) {
+        Context::PollEvents();
+    }
     // auto init_error = MainLoop::GetInstance().Init();
     // if (!init_error.IsOk()) {
     //     std::cerr << "init_error: " << init_error.description << std::endl;
