@@ -35,12 +35,13 @@ ShaderBuilder& ShaderBuilder::FragmentShaderSource(std::string&& src) {
     return *this;
 }
 
-Shader ShaderBuilder::Build(GladGLES2Context* gl_) {
+Shader ShaderBuilder::Build() {
     Error discarded_error;
-    return Build(gl_, discarded_error);
+    return Build(discarded_error);
 }
 
-Shader ShaderBuilder::Build(GladGLES2Context* gl_, Error& error) {
+Shader ShaderBuilder::Build(Error& error) {
+    // todo: check if context is loaded
     Shader result = Shader();
     if (!vertex_shader_src_) {
         error = Error(ErrorType::kShaderCompilationFailed, "shader compilation failed: no vertex shader");
@@ -51,20 +52,18 @@ Shader ShaderBuilder::Build(GladGLES2Context* gl_, Error& error) {
         return result;
     }
 
-    GladGLES2Context& gl = *gl_;
-
     constexpr int INFO_LOG_MAX_SIZE = 512;
     int success;
     char info_log[INFO_LOG_MAX_SIZE];
 
-    unsigned int vertex_shader = gl.CreateShader(GL_VERTEX_SHADER);
+    unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
     const char* c_vertex_shader_src = vertex_shader_src_->c_str();
-    gl.ShaderSource(vertex_shader, 1, &c_vertex_shader_src, nullptr);
-    gl.CompileShader(vertex_shader);
+    glShaderSource(vertex_shader, 1, &c_vertex_shader_src, nullptr);
+    glCompileShader(vertex_shader);
 
-    gl.GetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
     if (!success) {
-        gl.GetShaderInfoLog(vertex_shader, INFO_LOG_MAX_SIZE, nullptr, info_log);
+        glGetShaderInfoLog(vertex_shader, INFO_LOG_MAX_SIZE, nullptr, info_log);
 
         std::ostringstream error_out;
         error_out << "vertex shader coompilation failed: " << info_log;
@@ -72,14 +71,14 @@ Shader ShaderBuilder::Build(GladGLES2Context* gl_, Error& error) {
         return result;
     }
 
-    unsigned int fragment_shader = gl.CreateShader(GL_FRAGMENT_SHADER);
+    unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
     const char* c_fragment_shader_src = fragment_shader_src_->c_str();
-    gl.ShaderSource(fragment_shader, 1, &c_fragment_shader_src, nullptr);
-    gl.CompileShader(fragment_shader);
+    glShaderSource(fragment_shader, 1, &c_fragment_shader_src, nullptr);
+    glCompileShader(fragment_shader);
 
-    gl.GetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
     if (!success) {
-        gl.GetShaderInfoLog(fragment_shader, INFO_LOG_MAX_SIZE, nullptr, info_log);
+        glGetShaderInfoLog(fragment_shader, INFO_LOG_MAX_SIZE, nullptr, info_log);
 
         std::ostringstream error_out;
         error_out << "vertex shader coompilation failed: " << info_log;
@@ -87,14 +86,14 @@ Shader ShaderBuilder::Build(GladGLES2Context* gl_, Error& error) {
         return result;
     }
 
-    unsigned int shader_program = gl.CreateProgram();
-    gl.AttachShader(shader_program, vertex_shader);
-    gl.AttachShader(shader_program, fragment_shader);
-    gl.LinkProgram(shader_program);
+    unsigned int shader_program = glCreateProgram();
+    glAttachShader(shader_program, vertex_shader);
+    glAttachShader(shader_program, fragment_shader);
+    glLinkProgram(shader_program);
 
-    gl.GetProgramiv(shader_program, GL_LINK_STATUS, &success);
+    glGetProgramiv(shader_program, GL_LINK_STATUS, &success);
     if (!success) {
-        gl.GetProgramInfoLog(shader_program, INFO_LOG_MAX_SIZE, nullptr, info_log);
+        glGetProgramInfoLog(shader_program, INFO_LOG_MAX_SIZE, nullptr, info_log);
 
         std::ostringstream error_out;
         error_out << "vertex shader coompilation failed: " << info_log;
@@ -102,16 +101,16 @@ Shader ShaderBuilder::Build(GladGLES2Context* gl_, Error& error) {
         return result;
     }
 
-    gl.DeleteShader(vertex_shader);
-    gl.DeleteShader(fragment_shader);
+    glDeleteShader(vertex_shader);
+    glDeleteShader(fragment_shader);
 
     result.shader_id_ = shader_program;
     error = Error(ErrorType::kOk);
     return result;
 }
 
-void Shader::Use(GladGLES2Context* gl) const {
-    gl->UseProgram(shader_id_);
+void Shader::Use() const {
+    glUseProgram(shader_id_);
 }
 
 unsigned int Shader::GetID() const {
@@ -122,22 +121,22 @@ bool Shader::IsValid() const {
     return shader_id_ != 0;
 }
 
-void Shader::Delete(GladGLES2Context* gl) {
+void Shader::Delete() {
     if (IsValid()) {
-        gl->DeleteProgram(shader_id_);
+        glDeleteProgram(shader_id_);
         shader_id_ = 0;
     }
 }
 
-Error Shader::SetUniformMat4fv(GladGLES2Context* gl, const std::string& name, const glm::mat4& matrix) {
-    int location = gl->GetUniformLocation(shader_id_, name.c_str());
+Error Shader::SetUniformMat4fv(const std::string& name, const glm::mat4& matrix) {
+    int location = glGetUniformLocation(shader_id_, name.c_str());
     if (location == -1) {
         std::string desc = "uniform not found, name=\"";
         desc += name;
         desc += "\"";
         return Error(ErrorType::kUniformNotFound, desc);
     }
-    gl->UniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
     return Error(ErrorType::kOk);
 }
 

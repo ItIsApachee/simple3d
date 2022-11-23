@@ -41,13 +41,13 @@ public:
 
     ~Shader() = default;
 
-    void Use(GladGLES2Context* gl) const;
+    void Use() const;
     unsigned int GetID() const;
     bool IsValid() const;
-    void Delete(GladGLES2Context* gl);
+    void Delete();
     // TODO: consider adding methods to modify uniforms
 
-    Error SetUniformMat4fv(GladGLES2Context* gl, const std::string& name, const glm::mat4& matrix);
+    Error SetUniformMat4fv(const std::string& name, const glm::mat4& matrix);
 private:
     unsigned int shader_id_{0};
 };
@@ -66,8 +66,8 @@ public:
 
     ~ShaderBuilder() = default;
 
-    Shader Build(GladGLES2Context* gl_);
-    Shader Build(GladGLES2Context* gl_, Error& error);
+    Shader Build();
+    Shader Build(Error& error);
     ShaderBuilder& VertexShaderSource(const std::string& src);
     ShaderBuilder& VertexShaderSource(std::string&& src);
     ShaderBuilder& FragmentShaderSource(const std::string& src);
