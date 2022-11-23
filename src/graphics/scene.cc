@@ -102,9 +102,9 @@ namespace Simple3D {
 //     }
 // }
 
-Scene::Scene() {
+// Scene::Scene() {
     // is_running_.test_and_set();
-}
+// }
 
 // void Scene::SetContext(std::shared_ptr<Window> window) {
 //     if (window_) {
@@ -123,13 +123,6 @@ Scene::Scene() {
 //             render_thread_.join();
 //     }
 // }
-
-std::shared_ptr<Scene> Scene::Create() {
-    auto scene = std::shared_ptr<Scene>(
-        new Scene()
-    );
-    return scene;
-}
 
 
 
