@@ -15,7 +15,7 @@ class Window;
 // graphics
 class Scene;
 class Camera;
-class Drawable;
+
 // shader
 class Shader;
 class ShaderBuilder;
