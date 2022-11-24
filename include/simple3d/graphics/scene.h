@@ -8,7 +8,7 @@
 #include <vector>
 
 #include <simple3d/types.h>
-// #include <simple3d/context/context.h>
+#include <simple3d/graphics/view.h>
 #include <simple3d/graphics/renderer.h>
 
 namespace Simple3D {
@@ -21,6 +21,7 @@ namespace Simple3D {
 */
 class Scene {
 public:
+    friend class View;
     Scene() = default;
     Scene(const Scene&) = delete;
     Scene(Scene&&) = default;

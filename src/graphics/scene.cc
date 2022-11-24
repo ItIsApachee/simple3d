@@ -19,6 +19,11 @@ namespace Simple3D {
 
 
 
+Scene::~Scene() {
+    for (auto& r: renderers_) {
+        r->Destroy(this);
+    }
+}
 // void render_scene(std::shared_ptr<Scene> scene) {
 //     GladGLES2Context gl = scene->window_->GetGLES2Context();
 
