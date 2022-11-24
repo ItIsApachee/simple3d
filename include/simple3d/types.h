@@ -14,8 +14,9 @@ class Context;
 class Window;
 // graphics
 class Scene;
+class IRenderer;
 class Camera;
-
+class View;
 // shader
 class Shader;
 class ShaderBuilder;
