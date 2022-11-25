@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <simple3d/simple3d.h>
+#include <simple3d/graphics/primitive/primitive.h>
 // #include <iostream>
 // #include <thread>
 // #include <chrono>
@@ -61,10 +62,21 @@
 
 int main() {
     using namespace Simple3D;
+
     Context::Init();
+    View view{};
+    Scene scene{};
+    auto test1 = scene.Create<TestPrimitive>();
+    auto test2 = scene.Create<TestPrimitive>(0);
+    int cnt = 0;
     while (true) {
         Context::PollEvents();
+        test1->id = ++cnt;
+        std::cout << "dbg: " << test1->id << std::endl;
+        view.Draw(scene);
     }
+
+
     // auto init_error = MainLoop::GetInstance().Init();
     // if (!init_error.IsOk()) {
     //     std::cerr << "init_error: " << init_error.description << std::endl;
