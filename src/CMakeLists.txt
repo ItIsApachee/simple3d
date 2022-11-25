@@ -47,7 +47,7 @@ add_subdirectory(shader)
 set(simple3d_SOURCES simple3d.cc)
 set(simple3d_SOURCES ${simple3d_SOURCES} shader/shader.cc)
 set(simple3d_SOURCES ${simple3d_SOURCES} context/context.cc context/window.cc)
-set(simple3d_SOURCES ${simple3d_SOURCES} graphics/scene.cc graphics/view.cc graphics/primitive.cc)
+set(simple3d_SOURCES ${simple3d_SOURCES} graphics/scene.cc graphics/view.cc graphics/model.cc)
 add_library(simple3d STATIC ${simple3d_SOURCES})
 
 target_link_libraries(

@@ -1,4 +1,4 @@
-#include <simple3d/graphics/primitive.h>
+#include <simple3d/graphics/model.h>
 
 #include <simple3d/graphics/renderer.h>
 #include <simple3d/graphics/scene.h>
