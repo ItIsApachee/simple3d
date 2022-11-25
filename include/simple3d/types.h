@@ -13,6 +13,8 @@ namespace Simple3D {
 class Context;
 class Window;
 // graphics
+template <class P>
+class Primitive;
 class Scene;
 class IRenderer;
 class Camera;
