@@ -15,28 +15,28 @@ namespace Simple3D {
 
 
 // definition
-template <typename P>
-class Primitive {
+template <typename M>
+class Model {
 public:
-    explicit Primitive(P* p_);
-    Primitive() = delete;
-    Primitive(const Primitive&) = delete;
-    Primitive(Primitive&&) = default;
-    Primitive& operator=(const Primitive&) = delete;
-    Primitive& operator=(Primitive&&) = default;
+    explicit Model(M* p_);
+    Model() = delete;
+    Model(const Model&) = delete;
+    Model(Model&&) = default;
+    Model& operator=(const Model&) = delete;
+    Model& operator=(Model&&) = default;
     // FIXME: add destroying primitive on the scene on desctruction
     // one way to do that:
-    ~Primitive() = default;
+    ~Model() = default;
 
-    P& operator*();
-    const P& operator*() const;
-    P* operator->();
-    const P* operator->() const;
+    M& operator*();
+    const M& operator*() const;
+    M* operator->();
+    const M* operator->() const;
 
     // should all primitives of the same type be associated with some unique id?
     // std::uint64_t Id();
 private:
-    P* primitive_{nullptr};
+    M* model_{nullptr};
     // std::uint64_t id_{0};
 };
 
@@ -74,27 +74,27 @@ public:
 };
 
 // implementation
-template <typename P>
-Primitive<P>::Primitive(P* p_): primitive_{p_} {}
+template <typename M>
+Model<M>::Model(M* p_): model_{p_} {}
 
-template <typename P>
-P& Primitive<P>::operator*() {
-    return *primitive_;
+template <typename M>
+M& Model<M>::operator*() {
+    return *model_;
 }
 
-template <typename P>
-const P& Primitive<P>::operator*() const {
-    return *primitive_;
+template <typename M>
+const M& Model<M>::operator*() const {
+    return *model_;
 }
 
-template <typename P>
-P* Primitive<P>::operator->() {
-    return primitive_;
+template <typename M>
+M* Model<M>::operator->() {
+    return model_;
 }
 
-template <typename P>
-const P* Primitive<P>::operator->() const {
-    return primitive_;
+template <typename M>
+const M* Model<M>::operator->() const {
+    return model_;
 }
 
 template <>

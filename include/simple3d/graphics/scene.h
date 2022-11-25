@@ -36,38 +36,38 @@ public:
     // TODO: add ability to have multiple instances of renderers of the same type
     // usage example: group objects in separate renderers with different configuration
     // template <typename P, typename... Args>
-    // Primitive<P> Create(Args... args);
-    template <typename P, typename... Args>
+    // Model<P> Create(Args... args);
+    template <typename M, typename... Args>
     auto Create(Args... args)
         -> std::enable_if_t<
             std::is_same_v<
-                decltype(std::declval<typename P::Renderer>().template Create<P>(args...)),
-                P*>,
-            Primitive<P>>;
-    template <typename P, typename... Args>
+                decltype(std::declval<typename M::Renderer>().template Create<M>(args...)),
+                M*>,
+            Model<M>>;
+    template <typename M, typename... Args>
     auto Create(Args... args)
         -> std::enable_if_t<
             std::is_same_v<
-                decltype(std::declval<typename P::Renderer>().Create(args...)),
-                P*>,
-            Primitive<P>>;
-    template <typename P, typename R, typename... Args>
+                decltype(std::declval<typename M::Renderer>().Create(args...)),
+                M*>,
+            Model<M>>;
+    template <typename M, typename R, typename... Args>
     auto Create(Args... args)
         -> std::enable_if_t<
             std::is_same_v<
-                decltype(std::declval<R>().template Create<P>(args...)),
-                P*>,
-            Primitive<P>>;
-    template <typename P, typename R, typename... Args>
+                decltype(std::declval<R>().template Create<M>(args...)),
+                M*>,
+            Model<M>>;
+    template <typename M, typename R, typename... Args>
     auto Create(Args... args)
         -> std::enable_if_t<
             std::is_same_v<
                 decltype(std::declval<R>().Create(args...)),
-                P*>,
-            Primitive<P>>;
+                M*>,
+            Model<M>>;
 private:
-    template <typename P, typename R, typename... Args>
-    Primitive<P> CreateInternal(P* (R::*mf)(Args...), Args... args);
+    template <typename M, typename R, typename... Args>
+    Model<M> CreateInternal(M* (R::*mf)(Args...), Args... args);
 
     std::vector<IRenderer*> renderers_{};
 };
@@ -75,56 +75,56 @@ private:
 
 
 // implementation
-template <typename P, typename... Args>
+template <typename M, typename... Args>
 auto Scene::Create(Args... args)
     -> std::enable_if_t<
         std::is_same_v<
-            decltype(std::declval<typename P::Renderer>().template Create<P>(args...)),
-            P*>,
-        Primitive<P>>
+            decltype(std::declval<typename M::Renderer>().template Create<M>(args...)),
+            M*>,
+        Model<M>>
 {
-    return Scene::Create<P, typename P::Renderer>(args...);
+    return Scene::Create<M, typename M::Renderer>(args...);
 }
-template <typename P, typename... Args>
+template <typename M, typename... Args>
 auto Scene::Create(Args... args)
     -> std::enable_if_t<
         std::is_same_v<
-            decltype(std::declval<typename P::Renderer>().Create(args...)),
-            P*>,
-        Primitive<P>>
+            decltype(std::declval<typename M::Renderer>().Create(args...)),
+            M*>,
+        Model<M>>
 {
-    return Scene::Create<P, typename P::Renderer>(args...);
+    return Scene::Create<M, typename M::Renderer>(args...);
 }
-template <typename P, typename R, typename... Args>
+template <typename M, typename R, typename... Args>
 auto Scene::Create(Args... args)
     -> std::enable_if_t<
         std::is_same_v<
-            decltype(std::declval<R>().template Create<P>(args...)),
-            P*>,
-        Primitive<P>>
+            decltype(std::declval<R>().template Create<M>(args...)),
+            M*>,
+        Model<M>>
 {
-    return CreateInternal<P, R>(&R::template Create<P>, args...);
+    return CreateInternal<M, R>(&R::template Create<M>, args...);
 }
-template <typename P, typename R, typename... Args>
+template <typename M, typename R, typename... Args>
 auto Scene::Create(Args... args)
     -> std::enable_if_t<
         std::is_same_v<
             decltype(std::declval<R>().Create(args...)),
-            P*>,
-        Primitive<P>>
+            M*>,
+        Model<M>>
 {
-    return CreateInternal<P, R>(&R::Create, args...);
+    return CreateInternal<M, R>(&R::Create, args...);
 }
 
-template <typename P, typename R, typename... Args>
-Primitive<P> Scene::CreateInternal(P* (R::*mf)(Args...), Args... args) {
+template <typename M, typename R, typename... Args>
+Model<M> Scene::CreateInternal(M* (R::*mf)(Args...), Args... args) {
     using Renderer = R;
     auto& storage = Internal::RendererStorage<Renderer>;
     if (storage.find(this) == storage.end()) {
         storage.insert({this, Renderer{}});
         renderers_.push_back(&storage[this]);
     }
-    return Primitive{(storage[this].*mf)(args...)};
+    return Model{(storage[this].*mf)(args...)};
 }
 
 
