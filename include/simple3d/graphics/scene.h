@@ -10,6 +10,7 @@
 #include <simple3d/types.h>
 #include <simple3d/graphics/view.h>
 #include <simple3d/graphics/renderer.h>
+#include <simple3d/graphics/primitive/primitive.h>
 
 namespace Simple3D {
 
@@ -33,9 +34,9 @@ public:
     // TODO: add ability to have multiple instances of renderers of the same type
     // usage example: group objects in separate renderers with different configuration
     template <typename P, typename... Args>
-    P Create(Args... args);
+    Primitive<P> Create(Args... args);
     template <typename P, typename R, typename... Args>
-    P Create(Args... args);
+    Primitive<P> Create(Args... args);
 private:
     std::vector<IRenderer*> renderers_{};
 };
@@ -44,24 +45,24 @@ private:
 
 // implementation
 template<typename P, typename... Args>
-P Scene::Create(Args... args) {
+Primitive<P> Scene::Create(Args... args) {
     using Renderer = typename P::Renderer;
     auto& storage = Internal::RendererStorage<Renderer>;
     if (storage.find(this) == storage.end()) {
         storage.insert({this, Renderer{}});
         renderers_.push_back(&storage[this]);
     }
-    return storage[this].Create(args...);
+    return Primitive{storage[this].Create(args...)};
 }
 template <typename P, typename R, typename... Args>
-P Scene::Create(Args... args) {
+Primitive<P> Scene::Create(Args... args) {
     using Renderer = R;
     auto& storage = Internal::RendererStorage<Renderer>;
     if (storage.find(this) == storage.end()) {
         storage.insert({this, Renderer{}});
         renderers_.push_back(&storage[this]);
     }
-    return storage[this].Create(args...);
+    return Primitive{storage[this].Create(args...)};
 }
 
 
