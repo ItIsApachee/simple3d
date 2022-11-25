@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <simple3d/simple3d.h>
-#include <simple3d/graphics/primitive/primitive.h>
+#include <simple3d/graphics/primitive.h>
 // #include <iostream>
 // #include <thread>
 // #include <chrono>

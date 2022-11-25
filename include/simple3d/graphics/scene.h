@@ -12,7 +12,7 @@
 #include <simple3d/types.h>
 #include <simple3d/graphics/view.h>
 #include <simple3d/graphics/renderer.h>
-#include <simple3d/graphics/primitive/primitive.h>
+#include <simple3d/graphics/primitive.h>
 
 namespace Simple3D {
 
