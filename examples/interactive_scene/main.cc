@@ -68,10 +68,12 @@ int main() {
     Scene scene{};
     auto test1 = scene.Create<TestPrimitive>();
     auto test2 = scene.Create<TestPrimitive>(0);
+    auto test3 = scene.Create<TestPrimitive, TestPrimitiveRenderer>();
+    auto test4 = scene.Create<TestPrimitive, TestPrimitiveRenderer>(0);
     int cnt = 0;
     while (true) {
         Context::PollEvents();
-        test1->id = ++cnt;
+        test2->id = ++cnt;
         std::cout << "dbg: " << test1->id << std::endl;
         view.Draw(scene);
     }

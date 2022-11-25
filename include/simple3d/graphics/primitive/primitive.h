@@ -25,7 +25,7 @@ public:
     Primitive& operator=(const Primitive&) = delete;
     Primitive& operator=(Primitive&&) = default;
     // FIXME: add destroying primitive on the scene on desctruction
-    // one way to do that: 
+    // one way to do that:
     ~Primitive() = default;
 
     P& operator*();
@@ -54,7 +54,12 @@ public:
     TestPrimitiveRenderer& operator=(TestPrimitiveRenderer&&) = default;
     ~TestPrimitiveRenderer();
 
+
+    template <typename T>
     TestPrimitive* Create();
+    template <>
+    TestPrimitive* Create<TestPrimitive>();
+
     TestPrimitive* Create(int);
 
     void Draw() override;
@@ -90,6 +95,13 @@ P* Primitive<P>::operator->() {
 template <typename P>
 const P* Primitive<P>::operator->() const {
     return primitive_;
+}
+
+template <>
+TestPrimitive* TestPrimitiveRenderer::Create<TestPrimitive>() {
+    std::cout << "basic create" << std::endl;
+    primitives_.push_back(new TestPrimitive{-1});
+    return primitives_.back();
 }
 
 
