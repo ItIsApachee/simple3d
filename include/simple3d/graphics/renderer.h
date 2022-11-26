@@ -25,6 +25,8 @@ public:
 
 namespace Internal {
     // should it be a class?
+    // adv.: can make it a private static field, and 
+    // then access is provided only using friends
     template <typename R>
     std::unordered_map<Scene*, R> RendererStorage{};
 }
