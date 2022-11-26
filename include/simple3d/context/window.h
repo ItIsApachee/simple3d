@@ -3,8 +3,8 @@
  * \brief Window handling
 */
 
-#ifndef SIMPLE3D_CONTEXT_WINDOW_H
-#define SIMPLE3D_CONTEXT_WINDOW_H
+#ifndef INCLUDE_SIMPLE3D_CONTEXT_WINDOW_H_
+#define INCLUDE_SIMPLE3D_CONTEXT_WINDOW_H_
 
 #include <memory>
 
@@ -17,21 +17,22 @@ namespace Simple3D {
 
 
 class Window : public std::enable_shared_from_this<Window> {
-public:
-    static std::shared_ptr<Window> Create(GLFWwindow* window);
+ public:
+  static std::shared_ptr<Window> Create(GLFWwindow* window);
 
-    ~Window();
+  ~Window();
 
-    void Destroy(); // destroy window, invalidate pointer
-private:
-    Window() = default;
-    explicit Window(GLFWwindow* window);
+  void Destroy();  // destroy window, invalidate pointer
 
-    GLFWwindow* window_{nullptr};
+ private:
+  Window() = default;
+  explicit Window(GLFWwindow* window);
+
+  GLFWwindow* window_{nullptr};
 };
 
 
 
-}
+}  // namespace Simple3D
 
-#endif
+#endif  // INCLUDE_SIMPLE3D_CONTEXT_WINDOW_H_

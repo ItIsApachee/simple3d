@@ -5,8 +5,8 @@
  * \brief Managing shaders.
 */
 
-#ifndef SIMPLE3D_SHADER_SHADER_H
-#define SIMPLE3D_SHADER_SHADER_H
+#ifndef INCLUDE_SIMPLE3D_SHADER_SHADER_H_
+#define INCLUDE_SIMPLE3D_SHADER_SHADER_H_
 
 #include <string>
 #include <optional>
@@ -24,31 +24,33 @@ namespace Simple3D {
 class Shader;
 class ShaderBuilder;
 
-// TODO: consider adding support for compute shader, or add ComputeShader class
+// TODO(apachee): consider adding support for compute shader, or add
+// ComputeShader class
 /** \class Shader simple3d/shader/shader.h
  * \brief An abstraction over GLES shader.
 */
 class Shader {
-public:
-    friend ShaderBuilder;
+ public:
+  friend ShaderBuilder;
 
-    Shader() = default;
-    Shader(const Shader&) = delete;
-    Shader(Shader&&) = default;
+  Shader() = default;
+  Shader(const Shader&) = delete;
+  Shader(Shader&&) = default;
 
-    Shader& operator=(const Shader&) = delete;
-    Shader& operator=(Shader&&) = default;
+  Shader& operator=(const Shader&) = delete;
+  Shader& operator=(Shader&&) = default;
 
-    ~Shader() = default;
+  ~Shader() = default;
 
-    void Use() const;
-    unsigned int GetID() const;
-    bool IsValid() const;
-    void Delete();
-    // TODO: consider adding methods to modify uniforms
+  void Use() const;
+  unsigned int GetID() const;
+  bool IsValid() const;
+  void Delete();
+  // TODO(apachee): consider adding methods to modify uniforms
 
-    Error SetUniformMat4fv(const std::string& name, const glm::mat4& matrix);
-private:
+  Error SetUniformMat4fv(const std::string& name, const glm::mat4& matrix);
+
+ private:
     unsigned int shader_id_{0};
 };
 
@@ -56,29 +58,30 @@ private:
  * \brief Helper class for constructing Simple3D::Shader.
 */
 class ShaderBuilder {
-public:
-    ShaderBuilder() = default;
-    ShaderBuilder(const ShaderBuilder&) = default;
-    ShaderBuilder(ShaderBuilder&&) = default;
+// FIXME(apachee): remove ShaderBuilder (no reason for a builder)
+ public:
+  ShaderBuilder() = default;
+  ShaderBuilder(const ShaderBuilder&) = default;
+  ShaderBuilder(ShaderBuilder&&) = default;
 
-    ShaderBuilder& operator=(const ShaderBuilder&) = default;
-    ShaderBuilder& operator=(ShaderBuilder&&) = default;
+  ShaderBuilder& operator=(const ShaderBuilder&) = default;
+  ShaderBuilder& operator=(ShaderBuilder&&) = default;
 
-    ~ShaderBuilder() = default;
+  ~ShaderBuilder() = default;
 
-    Shader Build();
-    Shader Build(Error& error);
-    ShaderBuilder& VertexShaderSource(const std::string& src);
-    ShaderBuilder& VertexShaderSource(std::string&& src);
-    ShaderBuilder& FragmentShaderSource(const std::string& src);
-    ShaderBuilder& FragmentShaderSource(std::string&& src);
-private:
-    std::optional<std::string> vertex_shader_src_{};
-    std::optional<std::string> fragment_shader_src_{};
+  Shader Build();
+  Shader Build(Error* error);
+  ShaderBuilder& VertexShaderSource(const std::string& src);
+  ShaderBuilder& VertexShaderSource(std::string&& src);
+  ShaderBuilder& FragmentShaderSource(const std::string& src);
+  ShaderBuilder& FragmentShaderSource(std::string&& src);
+ private:
+  std::optional<std::string> vertex_shader_src_{};
+  std::optional<std::string> fragment_shader_src_{};
 };
 
 
 
-}
+}  // namespace Simple3D
 
-#endif
+#endif  // INCLUDE_SIMPLE3D_SHADER_SHADER_H_

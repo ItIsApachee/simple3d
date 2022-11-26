@@ -1,5 +1,5 @@
-#ifndef SIMPLE3D_GRAPHICS_RENDERER_H
-#define SIMPLE3D_GRAPHICS_RENDERER_H
+#ifndef INCLUDE_SIMPLE3D_GRAPHICS_RENDERER_H_
+#define INCLUDE_SIMPLE3D_GRAPHICS_RENDERER_H_
 
 #include <unordered_map>
 
@@ -15,25 +15,25 @@ namespace Simple3D {
  * \brief Interface for renderers.
 */
 class IRenderer {
-public:
-    IRenderer() = default;
-    virtual ~IRenderer() = default;
+ public:
+  IRenderer() = default;
+  virtual ~IRenderer() = default;
 
-    virtual void Draw() = 0;
-    virtual void Destroy(Scene* scene) = 0;
+  virtual void Draw() = 0;
+  virtual void Destroy(Scene* scene) = 0;
 };
 
 namespace Internal {
     // should it be a class?
-    // adv.: can make it a private static field, and 
+    // adv.: can make it a private static field, and
     // then access is provided only using friends
     template <typename R>
     std::unordered_map<Scene*, R> RendererStorage{};
-}
-// TODO: add is_renderer trait
+}  // namespace Internal
+// TODO(apachee): add is_renderer trait
 
 
 
-}
+}  // namespace Simple3D
 
-#endif
+#endif  // INCLUDE_SIMPLE3D_GRAPHICS_RENDERER_H_

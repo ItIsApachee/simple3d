@@ -2,8 +2,8 @@
  * \brief List of all classes declarations.
 */
 
-#ifndef SIMPLE3D_TYPES_H
-#define SIMPLE3D_TYPES_H
+#ifndef INCLUDE_SIMPLE3D_TYPES_H_
+#define INCLUDE_SIMPLE3D_TYPES_H_
 
 namespace Simple3D {
 
@@ -31,6 +31,6 @@ struct Error;
 
 
 
-}
+}  // namespace Simple3D
 
-#endif
+#endif  // INCLUDE_SIMPLE3D_TYPES_H_

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <utility>
-#include <chrono>
+// #include <chrono>
 
 #include <glad/gles2.h>
 #include <glm/glm.hpp>
@@ -20,10 +20,11 @@ namespace Simple3D {
 
 
 Scene::~Scene() {
-    for (auto& r: renderers_) {
-        r->Destroy(this);
-    }
+  for (auto& r : renderers_) {
+    r->Destroy(this);
+  }
 }
+/*
 // void render_scene(std::shared_ptr<Scene> scene) {
 //     GladGLES2Context gl = scene->window_->GetGLES2Context();
 
@@ -37,9 +38,14 @@ Scene::~Scene() {
 //     // };
 
 //     Error shader_program_error;
-//     Shader shader_program = ShaderBuilder().VertexShaderSource(kVertexShader).FragmentShaderSource(kFragmentShader).Build(&gl, shader_program_error);
+//     Shader shader_program = ShaderBuilder()
+        .VertexShaderSource(kVertexShader)
+        .FragmentShaderSource(kFragmentShader).Build(
+          &gl, shader_program_error);
 //     if (!shader_program.IsValid() || !shader_program_error.IsOk()) {
-//         std::cerr << "bad shader program: " << shader_program_error.description << std::endl;
+//         std::cerr << "bad shader program: "
+            << shader_program_error.description
+            std::cerr << std::endl;
 //         return;
 //     }
 
@@ -58,20 +64,26 @@ Scene::~Scene() {
 
 //     gl.BindVertexArray(vao);
 //     gl.BindBuffer(GL_ARRAY_BUFFER, vbo);
-//     gl.BufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+//     gl.BufferData(
+        GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
 
 //     gl.BindBuffer(GL_ARRAY_BUFFER, vbo);
-//     gl.BufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+//     gl.BufferData(
+          GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-//     gl.VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+//     gl.VertexAttribPointer(
+        0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 //     gl.EnableVertexAttribArray(0);
-//     gl.VertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+//     gl.VertexAttribPointer(
+        1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 //     gl.EnableVertexAttribArray(1);
-//     // gl.VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+//     // gl.VertexAttribPointer(
+       //   0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 //     // gl.EnableVertexAttribArray(0);  
 
-//     // gl.VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+//     // gl.VertexAttribPointer(
+       //   0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 //     // gl.EnableVertexAttribArray(1);  
 
 //     // ..:: Drawing code (in render loop) :: ..
@@ -88,7 +100,8 @@ Scene::~Scene() {
 //         v = (float)(sin(v/2.)+1.)/(float)2.0;
 
 //         glm::mat4 transform = glm::mat4(1.0f);
-//         transform = glm::rotate(transform, (float)(v*2.*glm::pi<float>()), glm::vec3(0., 0., 1.));
+//         transform = glm::rotate(
+            transform, (float)(v*2.*glm::pi<float>()), glm::vec3(0., 0., 1.));
 //         shader_program.SetUniformMat4fv(&gl, "transform", transform);
 
 //         gl.ClearColor(0., 0., 0., 1.0f);
@@ -98,7 +111,8 @@ Scene::~Scene() {
 //         shader_program.Use(&gl);
 //         gl.BindVertexArray(vao);
 //         gl.DrawArrays(GL_TRIANGLES, 0, 3);
-//         // // gl.DrawElements(GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0); 
+//         // // gl.DrawElements(
+           // GL_TRIANGLES, sizeof(indices) / sizeof(indices[0]), GL_UNSIGNED_INT, 0); 
 //         gl.BindVertexArray(0);
 
 //         gl.Flush();
@@ -128,7 +142,8 @@ Scene::~Scene() {
 //             render_thread_.join();
 //     }
 // }
+*/
 
 
 
-}
+}  // namespace Simple3D

@@ -2,8 +2,8 @@
  * \brief Definition of Simple3D::Scene
 */
 
-#ifndef SIMPLE3D_GRAPHICS_SCENE_H
-#define SIMPLE3D_GRAPHICS_SCENE_H
+#ifndef INCLUDE_SIMPLE3D_GRAPHICS_SCENE_H_
+#define INCLUDE_SIMPLE3D_GRAPHICS_SCENE_H_
 
 #include <vector>
 #include <type_traits>
@@ -23,53 +23,66 @@ namespace Simple3D {
  * \brief Container for light sources, and cameras.
 */
 class Scene {
-public:
-    friend class View;
-    Scene() = default;
-    Scene(const Scene&) = delete;
-    Scene(Scene&&) = default;
-    Scene& operator=(const Scene&) = delete;
-    Scene& operator=(Scene&&) = default;
-    ~Scene();
+ public:
+  friend class View;
+  Scene() = default;
+  Scene(const Scene&) = delete;
+  Scene(Scene&&) = default;
+  Scene& operator=(const Scene&) = delete;
+  Scene& operator=(Scene&&) = default;
+  ~Scene();
 
-    // TODO: add ability to initialize renderer like Scene::AddRenerer<R>(R&& renderer)
-    // TODO: add ability to have multiple instances of renderers of the same type
-    // usage example: group objects in separate renderers with different configuration
-    // template <typename P, typename... Args>
-    // Model<P> Create(Args... args);
-    template <typename M, typename... Args>
-    auto Create(Args... args)
-        -> std::enable_if_t<
-            std::is_same_v<
-                decltype(std::declval<typename M::Renderer>().template Create<M>(args...)),
-                M*>,
-            Model<M>>;
-    template <typename M, typename... Args>
-    auto Create(Args... args)
-        -> std::enable_if_t<
-            std::is_same_v<
-                decltype(std::declval<typename M::Renderer>().Create(args...)),
-                M*>,
-            Model<M>>;
-    template <typename M, typename R, typename... Args>
-    auto Create(Args... args)
-        -> std::enable_if_t<
-            std::is_same_v<
-                decltype(std::declval<R>().template Create<M>(args...)),
-                M*>,
-            Model<M>>;
-    template <typename M, typename R, typename... Args>
-    auto Create(Args... args)
-        -> std::enable_if_t<
-            std::is_same_v<
-                decltype(std::declval<R>().Create(args...)),
-                M*>,
-            Model<M>>;
-private:
-    template <typename M, typename R, typename... Args>
-    Model<M> CreateInternal(M* (R::*mf)(Args...), Args... args);
+  // TODO(apachee): add ability to initialize renderer like
+  // Scene::AddRenerer<R>(R&& renderer)
 
-    std::vector<IRenderer*> renderers_{};
+  // TODO(apachee): add ability to have multiple instances of renderers of the
+  // same type
+
+  // usage example: group objects in separate renderers with different
+  // configuration
+  // template <typename P, typename... Args>
+  // Model<P> Create(Args... args);
+  template <typename M, typename... Args>
+  auto Create(Args... args)
+    -> std::enable_if_t<
+      std::is_same_v<
+        decltype(
+          std::declval<typename M::Renderer>().template Create<M>(args...)),
+        M*>,
+      Model<M>>;
+
+  template <typename M, typename... Args>
+  auto Create(Args... args)
+    -> std::enable_if_t<
+      std::is_same_v<
+        decltype(
+          std::declval<typename M::Renderer>().Create(args...)),
+        M*>,
+      Model<M>>;
+
+  template <typename M, typename R, typename... Args>
+  auto Create(Args... args)
+    -> std::enable_if_t<
+      std::is_same_v<
+        decltype(
+          std::declval<R>().template Create<M>(args...)),
+        M*>,
+      Model<M>>;
+
+  template <typename M, typename R, typename... Args>
+  auto Create(Args... args)
+    -> std::enable_if_t<
+      std::is_same_v<
+        decltype(
+          std::declval<R>().Create(args...)),
+        M*>,
+      Model<M>>;
+
+ private:
+  template <typename M, typename R, typename... Args>
+  Model<M> CreateInternal(M* (R::*mf)(Args...), Args... args);
+
+  std::vector<IRenderer*> renderers_{};
 };
 
 
@@ -77,58 +90,61 @@ private:
 // implementation
 template <typename M, typename... Args>
 auto Scene::Create(Args... args)
-    -> std::enable_if_t<
-        std::is_same_v<
-            decltype(std::declval<typename M::Renderer>().template Create<M>(args...)),
-            M*>,
-        Model<M>>
-{
+  -> std::enable_if_t<
+    std::is_same_v<
+      decltype(
+        std::declval<typename M::Renderer>().template Create<M>(args...)),
+      M*>,
+    Model<M>> {
     return Scene::Create<M, typename M::Renderer>(args...);
 }
+
 template <typename M, typename... Args>
 auto Scene::Create(Args... args)
-    -> std::enable_if_t<
-        std::is_same_v<
-            decltype(std::declval<typename M::Renderer>().Create(args...)),
-            M*>,
-        Model<M>>
-{
+  -> std::enable_if_t<
+    std::is_same_v<
+      decltype(
+        std::declval<typename M::Renderer>().Create(args...)),
+      M*>,
+    Model<M>> {
     return Scene::Create<M, typename M::Renderer>(args...);
 }
+
 template <typename M, typename R, typename... Args>
 auto Scene::Create(Args... args)
-    -> std::enable_if_t<
-        std::is_same_v<
-            decltype(std::declval<R>().template Create<M>(args...)),
-            M*>,
-        Model<M>>
-{
+  -> std::enable_if_t<
+    std::is_same_v<
+      decltype(
+        std::declval<R>().template Create<M>(args...)),
+      M*>,
+    Model<M>> {
     return CreateInternal<M, R>(&R::template Create<M>, args...);
 }
+
 template <typename M, typename R, typename... Args>
 auto Scene::Create(Args... args)
-    -> std::enable_if_t<
-        std::is_same_v<
-            decltype(std::declval<R>().Create(args...)),
-            M*>,
-        Model<M>>
-{
+  -> std::enable_if_t<
+    std::is_same_v<
+      decltype(
+        std::declval<R>().Create(args...)),
+      M*>,
+    Model<M>> {
     return CreateInternal<M, R>(&R::Create, args...);
 }
 
 template <typename M, typename R, typename... Args>
 Model<M> Scene::CreateInternal(M* (R::*mf)(Args...), Args... args) {
-    using Renderer = R;
-    auto& storage = Internal::RendererStorage<Renderer>;
-    if (storage.find(this) == storage.end()) {
-        storage.insert({this, Renderer{}});
-        renderers_.push_back(&storage[this]);
-    }
-    return Model{(storage[this].*mf)(args...)};
+  using Renderer = R;
+  auto& storage = Internal::RendererStorage<Renderer>;
+  if (storage.find(this) == storage.end()) {
+    storage.insert({this, Renderer{}});
+    renderers_.push_back(&storage[this]);
+  }
+  return Model{(storage[this].*mf)(args...)};
 }
 
 
 
-}
+}  // namespace Simple3D
 
-#endif
+#endif  // INCLUDE_SIMPLE3D_GRAPHICS_SCENE_H_

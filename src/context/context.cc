@@ -14,74 +14,77 @@ namespace Simple3D {
 
 
 
-// FIXME: provide better error handling
+// FIXME(apachee): provide better error handling
 static void error_callback(int code, const char* description) {
-    std::cerr << "GLFW error: 0x" << std::hex << code << ": " << description << std::endl;
+  std::cerr << "GLFW error: 0x" << std::hex << code << ": " << description;
+  std::cerr << std::endl;
 }
 
 Context& Context::GetInstance() {
-    static Context main_loop = Context();
-    return main_loop;
+  static Context main_loop = Context();
+  return main_loop;
 }
 
 Context::Context() {}
 
 Error Context::Init() {
-    Context& ctx = GetInstance();
-    if (ctx.is_init) {
-        return Error(ErrorType::kInitFailed, "already initialized");
-    }
-    int glfw_init_error = glfwInit();
-    if (glfw_init_error == GLFW_FALSE) {
-        return Error(ErrorType::kInitFailed, "glfw initialization failed");
-    }
-    glfwSetErrorCallback(error_callback);
+  Context& ctx = GetInstance();
+  if (ctx.is_init) {
+    return Error(ErrorType::kInitFailed, "already initialized");
+  }
+  int glfw_init_error = glfwInit();
+  if (glfw_init_error == GLFW_FALSE) {
+    return Error(ErrorType::kInitFailed, "glfw initialization failed");
+  }
+  glfwSetErrorCallback(error_callback);
 
-    glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+  glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 
-    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+  glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
-    // doesn't work with ANGLE for some reason
-    // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
+  // doesn't work with ANGLE for some reason
+  // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
 
-    GLFWwindow* glfw_window = glfwCreateWindow(500, 500, "test (FIXME)", nullptr, nullptr);
-    if (glfw_window == nullptr) {
-        return Error(ErrorType::kInitFailed, "glfw failed to create window");
-    }
+  GLFWwindow* glfw_window = glfwCreateWindow(
+    500, 500, "test (FIXME)", nullptr, nullptr);
 
-    ctx.window_ = Window::Create(glfw_window);
+  if (glfw_window == nullptr) {
+    return Error(ErrorType::kInitFailed, "glfw failed to create window");
+  }
 
-    // TODO: Load GLES context
-    glfwMakeContextCurrent(glfw_window);
-    int version_ = gladLoadGLES2(glfwGetProcAddress); // unused
+  ctx.window_ = Window::Create(glfw_window);
 
-    // TODO: setup callbacks(?): inputs, etc.
+  // TODO(apachee): Load GLES context
+  glfwMakeContextCurrent(glfw_window);
+  int version_ = gladLoadGLES2(glfwGetProcAddress);  // unused
 
-    ctx.is_init = true;
+  // TODO(apachee): setup callbacks(?): inputs, etc.
 
-    return Error::Ok();
+  ctx.is_init = true;
+
+  return Error::Ok();
 }
 
 void Context::Destroy() {
-    Context& ctx = GetInstance();
-    
-    if (ctx.is_init) {
-        ctx.window_->Destroy();
-        glfwTerminate();
-        ctx.is_init = false;
-    }
+  Context& ctx = GetInstance();
+
+  if (ctx.is_init) {
+    ctx.window_->Destroy();
+    glfwTerminate();
+    ctx.is_init = false;
+  }
 }
 
 void Context::PollEvents() {
-    glfwPollEvents();
+  glfwPollEvents();
 }
 
 std::shared_ptr<Window> Context::GetWindow() {
-    return GetInstance().window_;
+  return GetInstance().window_;
 }
 
 
 
-}
+}  // namespace Simple3D

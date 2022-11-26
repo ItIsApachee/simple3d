@@ -2,8 +2,8 @@
  * \brief Camera manipulation.
 */
 
-#ifndef SIMPLE3D_GRAPHICS_CAMERA_H
-#define SIMPLE3D_GRAPHICS_CAMERA_H
+#ifndef INCLUDE_SIMPLE3D_GRAPHICS_CAMERA_H_
+#define INCLUDE_SIMPLE3D_GRAPHICS_CAMERA_H_
 
 #include <simple3d/types.h>
 
@@ -15,12 +15,12 @@ namespace Simple3D {
  * \brief An object representing observer position, and observer field of view on the scene.
  */
 class Camera {
-public:
-private:
+ public:
+ private:
 };
 
 
 
-}
+}  // namespace Simple3D
 
-#endif
+#endif  // INCLUDE_SIMPLE3D_GRAPHICS_CAMERA_H_

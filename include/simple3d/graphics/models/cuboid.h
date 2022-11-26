@@ -1,5 +1,5 @@
-#ifndef SIMPLE3D_GRAPHICS_MODELS_CUBOID_H
-#define SIMPLE3D_GRAPHICS_MODELS_CUBOID_H
+#ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_
+#define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_
 
 #include <vector>
 
@@ -11,30 +11,31 @@ namespace Simple3D {
 
 
 struct Cuboid {
-    float x{0.};
-    float y{0.};
-    float z{0.};
+  float x{0.};
+  float y{0.};
+  float z{0.};
 };
 
 class CuboidRenderer : public IRenderer {
-public:
-    CuboidRenderer() = default;
-    CuboidRenderer(const CuboidRenderer&) = delete;
-    CuboidRenderer(CuboidRenderer&&) = default;
-    CuboidRenderer& operator=(const CuboidRenderer) = delete;
-    CuboidRenderer& operator=(CuboidRenderer&&) = default;
-    ~CuboidRenderer();
+ public:
+  CuboidRenderer() = default;
+  CuboidRenderer(const CuboidRenderer&) = delete;
+  CuboidRenderer(CuboidRenderer&&) = default;
+  CuboidRenderer& operator=(const CuboidRenderer) = delete;
+  CuboidRenderer& operator=(CuboidRenderer&&) = default;
+  ~CuboidRenderer();
 
-    Cuboid* Create(float x, float y, float z);
-    
-    void Draw() override;
-    void Destroy(Scene* scene) override;
-private:
-    std::vector<Cuboid*> cuboids_{};
+  Cuboid* Create(float x, float y, float z);
+
+  void Draw() override;
+  void Destroy(Scene* scene) override;
+
+ private:
+  std::vector<Cuboid*> cuboids_{};
 };
 
 
 
-}
+}  // namespace Simple3D
 
-#endif
+#endif  // INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_
