@@ -19,6 +19,9 @@ class Scene;
 class IRenderer;
 class Camera;
 class View;
+// graphics/models
+struct Cuboid;
+class CuboidRenderer;
 // shader
 class Shader;
 class ShaderBuilder;
