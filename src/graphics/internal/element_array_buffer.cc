@@ -14,13 +14,13 @@ namespace Simple3D::Internal {
 
 constexpr auto kEboTarget = GL_ELEMENT_ARRAY_BUFFER;
 
-ElementArrayBuffer::ElementArrayBuffer(bool generate, GLenum usage)
+ElementBufferObject::ElementBufferObject(bool generate, GLenum usage)
     : size_{0}, usage_{usage} {
   if (generate)
     glGenBuffers(1, &ebo_);
 }
 
-ElementArrayBuffer::ElementArrayBuffer(
+ElementBufferObject::ElementBufferObject(
     std::size_t size, std::uint32_t* data, GLenum usage)
     : size_{size}, usage_{usage} {
   glGenBuffers(1, &ebo_);
@@ -30,8 +30,8 @@ ElementArrayBuffer::ElementArrayBuffer(
   Unbind();
 }
 
-ElementArrayBuffer::ElementArrayBuffer(const ElementArrayBuffer& other)
-    : ElementArrayBuffer{} {
+ElementBufferObject::ElementBufferObject(const ElementBufferObject& other)
+    : ElementBufferObject{} {
   size_ = other.size_;
   Bind();
   glBufferData(kEboTarget, size_, nullptr, other.usage_);
@@ -40,13 +40,13 @@ ElementArrayBuffer::ElementArrayBuffer(const ElementArrayBuffer& other)
   CopyBuffer(other.ebo_, ebo_, 0, 0, size_);
 }
 
-ElementArrayBuffer::ElementArrayBuffer(ElementArrayBuffer&& other)
-    : ElementArrayBuffer{} {
+ElementBufferObject::ElementBufferObject(ElementBufferObject&& other)
+    : ElementBufferObject{} {
   std::swap(ebo_, other.ebo_);
   std::swap(size_, other.size_);
 }
 
-ElementArrayBuffer& ElementArrayBuffer::operator=(const ElementArrayBuffer& other) {
+ElementBufferObject& ElementBufferObject::operator=(const ElementBufferObject& other) {
   if (&other == this)
     return *this;
   if (size_ != other.size_ || usage_ != other.usage_) {
@@ -62,7 +62,7 @@ ElementArrayBuffer& ElementArrayBuffer::operator=(const ElementArrayBuffer& othe
   return *this;
 }
 
-ElementArrayBuffer& ElementArrayBuffer::operator=(ElementArrayBuffer&& other) {
+ElementBufferObject& ElementBufferObject::operator=(ElementBufferObject&& other) {
   if (ebo_ != kGlesInvalidBuffer) {
     glDeleteBuffers(1, &ebo_);
   }
@@ -76,21 +76,21 @@ ElementArrayBuffer& ElementArrayBuffer::operator=(ElementArrayBuffer&& other) {
   return *this;
 }
 
-ElementArrayBuffer::~ElementArrayBuffer() {
+ElementBufferObject::~ElementBufferObject() {
   if (ebo_ != kGlesInvalidBuffer) {
     glDeleteBuffers(1, &ebo_);
   }
 }
 
-void ElementArrayBuffer::Bind() {
+void ElementBufferObject::Bind() {
   BindBuffer(kEboTarget, ebo_);
 }
 
-void ElementArrayBuffer::Unbind() {
+void ElementBufferObject::Unbind() {
   UnbindBuffer(kEboTarget);
 }
 
-GLuint ElementArrayBuffer::ebo() {
+GLuint ElementBufferObject::ebo() {
   return ebo_;
 }
 
