@@ -7,12 +7,26 @@ namespace Simple3D::Internal {
 
 
 
-void BindBuffer(std::uint32_t target, std::uint32_t buffer) {
+void BindBuffer(GLuint target, GLuint buffer) {
   glBindBuffer(target, buffer);
 }
 
-void UnbindBuffer(std::uint32_t target) {
+void UnbindBuffer(GLuint target) {
   glBindBuffer(target, kGlesInvalidBuffer);
+}
+
+void CopyBuffer(GLuint from, GLuint to,
+    GLintptr from_offset, GLintptr to_offset,
+    GLsizeiptr size) {
+
+  constexpr auto kCopyReadBuf = GL_COPY_READ_BUFFER;
+  constexpr auto kCopyWriteBuf = GL_COPY_WRITE_BUFFER;
+  BindBuffer(kCopyReadBuf, from);
+  BindBuffer(kCopyWriteBuf, to);
+  glCopyBufferSubData(
+    kCopyReadBuf, kCopyWriteBuf, from_offset, to_offset, size);
+  UnbindBuffer(kCopyReadBuf);
+  UnbindBuffer(kCopyWriteBuf);
 }
 
 

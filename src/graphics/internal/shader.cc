@@ -1,4 +1,4 @@
-#include <simple3d/shader/shader.h>
+#include <simple3d/graphics/internal/shader.h>
 
 #include <string>
 #include <sstream>

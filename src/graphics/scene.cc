@@ -12,8 +12,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include <simple3d/shader/shader.h>
-#include <simple3d/shader/shader_source.h>
+// #include <simple3d/shader/shader.h>
+// #include <simple3d/shader/shader_source.h>
 
 namespace Simple3D {
 

@@ -4,18 +4,22 @@
 #include <cstdint>
 #include <cstddef>
 
+#include <glad/gles2.h>
+
 #include <simple3d/graphics/internal/misc.h>
 
 namespace Simple3D::Internal {
 
 
 
+constexpr auto kDefaultUsage = GL_STATIC_DRAW;
+
 class ElementArrayBuffer {
 // TODO(apachee): ability to change usage parameter of glBufferData
  public:
-  ElementArrayBuffer();
-  // ElementArrayBuffer(std::size_t size); TODO: preallocating buffer
-  ElementArrayBuffer(std::size_t size, std::uint32_t* data);
+  explicit ElementArrayBuffer(bool generate = false, GLenum usage = kDefaultUsage);
+  // ElementArrayBuffer(std::size_t size); TODO(apachee): preallocating buffer
+  ElementArrayBuffer(std::size_t size, std::uint32_t* data, GLenum usage = kDefaultUsage);
   ElementArrayBuffer(const ElementArrayBuffer&);
   ElementArrayBuffer(ElementArrayBuffer&&);
   ElementArrayBuffer& operator=(const ElementArrayBuffer&);
@@ -26,10 +30,11 @@ class ElementArrayBuffer {
   void Bind();
   static void Unbind();
 
-  std::uint32_t ebo();
+  GLuint ebo();
 
  private:
-  std::uint32_t ebo_{kGlesInvalidBuffer};  // handle for OpenGL buffer
+  GLuint ebo_{kGlesInvalidBuffer};  // handle for OpenGL buffer
+  GLenum usage_{kDefaultUsage};  // usage of the buffer
   std::size_t size_{0};  // capacity of OpenGL buffer
 
   // maybe storing buffer is bad:

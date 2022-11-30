@@ -42,7 +42,7 @@ target_compile_definitions(
 )
 
 # Library setup
-add_subdirectory(internal/shader)
+add_subdirectory(graphics/internal/shader)
 
 # set(simple3d_SOURCES simple3d.cc)
 # set(simple3d_SOURCES ${simple3d_SOURCES} shader/shader.cc)
@@ -52,9 +52,9 @@ set(simple3d_SOURCES ${simple3d_SOURCES} context/context.cc context/window.cc)
 # src/graphics/
 set(simple3d_SOURCES ${simple3d_SOURCES} graphics/scene.cc graphics/view.cc graphics/model.cc)
 
-# /src/internal
+# /src/graphics/internal
 set(simple3d_SOURCES ${simple3d_SOURCES} graphics/internal/misc.cc graphics/internal/element_array_buffer.cc)
-# /src/internal/shader
+# /src/graphics/internal/shader
 set(simple3d_SOURCES ${simple3d_SOURCES} graphics/internal/shader.cc)
 add_library(simple3d STATIC ${simple3d_SOURCES})
 
