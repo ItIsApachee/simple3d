@@ -94,6 +94,10 @@ GLuint ElementBufferObject::ebo() {
   return ebo_;
 }
 
+GLenum ElementBufferObject::usage() {
+  return usage_;
+}
+
 
 
 }  // namespace Simple3D::Internal

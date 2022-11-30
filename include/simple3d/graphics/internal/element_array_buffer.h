@@ -31,6 +31,7 @@ class ElementBufferObject {
   static void Unbind();
 
   GLuint ebo();
+  GLenum usage();
 
  private:
   GLuint ebo_{kGlesInvalidBuffer};  // handle for OpenGL buffer
