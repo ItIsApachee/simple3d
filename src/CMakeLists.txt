@@ -57,9 +57,14 @@ set(simple3d_SOURCES ${simple3d_SOURCES}
     graphics/internal/misc.cc
     graphics/internal/vertex_array_object.cc
     graphics/internal/vertex_buffer_object.cc
-    graphics/internal/element_buffer_object.cc)
-# /src/graphics/internal/shader
-set(simple3d_SOURCES ${simple3d_SOURCES} graphics/internal/shader.cc)
+    graphics/internal/element_buffer_object.cc
+    graphics/internal/shader.cc)
+
+# /src/graphics/models
+set(simple3d_SOURCES ${simple3d_SOURCES}
+    graphics/models/cuboid.cc
+    graphics/models/model_shader.cc)
+
 add_library(simple3d STATIC ${simple3d_SOURCES})
 
 target_link_libraries(
