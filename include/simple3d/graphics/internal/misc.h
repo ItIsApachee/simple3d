@@ -5,12 +5,17 @@
 #include <glad/gles2.h>
 
 namespace Simple3D::Internal {
-  constexpr GLuint kGlesInvalidBuffer = 0;
-  constexpr auto kDefaultUsage = GL_STATIC_DRAW;
+constexpr GLuint kGlesInvalidBuffer = 0;
 
-  void BindBuffer(GLuint target, GLuint buffer);
-  void UnbindBuffer(GLuint target);
-  void CopyBuffer(GLuint from, GLuint to,
+// only used as default value for VAO field, and
+// shouldn't be used for any other reason whatsoever
+constexpr GLenum kGlesDefaultVao = 0;
+
+constexpr GLenum kDefaultUsage = GL_STATIC_DRAW;
+
+void BindBuffer(GLuint target, GLuint buffer);
+void UnbindBuffer(GLuint target);
+void CopyBuffer(GLuint from, GLuint to,
     GLintptr from_offset, GLintptr to_offset,
     GLsizeiptr size);
 }  // namespace Simple3D::Internal
