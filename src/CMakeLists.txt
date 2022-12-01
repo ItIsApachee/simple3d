@@ -42,7 +42,7 @@ target_compile_definitions(
 )
 
 # Library setup
-add_subdirectory(graphics/internal/shader)
+add_subdirectory(graphics/internal)
 
 # set(simple3d_SOURCES simple3d.cc)
 # set(simple3d_SOURCES ${simple3d_SOURCES} shader/shader.cc)
