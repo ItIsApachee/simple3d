@@ -7,11 +7,11 @@ namespace Simple3D::Internal {
 
 
 
-void BindBuffer(GLuint target, GLuint buffer) {
+void BindBuffer(GLenum target, GLuint buffer) {
   glBindBuffer(target, buffer);
 }
 
-void UnbindBuffer(GLuint target) {
+void UnbindBuffer(GLenum target) {
   glBindBuffer(target, kGlesInvalidBuffer);
 }
 
