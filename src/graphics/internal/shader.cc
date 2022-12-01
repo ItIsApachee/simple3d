@@ -11,7 +11,7 @@
 
 #include <simple3d/misc/error.h>
 
-namespace Simple3D {
+namespace Simple3D::Internal {
 
 
 
@@ -147,4 +147,4 @@ Error Shader::SetUniformMat4fv(
 
 
 
-}  // namespace Simple3D
+}  // namespace Simple3D::Internal

@@ -17,12 +17,9 @@
 #include <simple3d/types.h>
 #include <simple3d/misc/error.h>
 
-namespace Simple3D {
+namespace Simple3D::Internal {
 
 
-
-class Shader;
-class ShaderBuilder;
 
 // TODO(apachee): consider adding support for compute shader, or add
 // ComputeShader class
@@ -82,6 +79,6 @@ class ShaderBuilder {
 
 
 
-}  // namespace Simple3D
+}  // namespace Simple3D::Internal
 
 #endif  // INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_SHADER_H_
