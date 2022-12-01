@@ -29,6 +29,21 @@ class ShaderBuilder;
 enum class ErrorType;
 struct Error;
 
+namespace Internal {
+
+
+
+class Shader;
+class ShaderBuilder;
+class ElementBufferObject;
+class ElementBufferObjectBuilder;
+class VertexBufferObject;
+class VertexArrayObject;
+
+
+
+}  // namespace Internal
+
 
 
 }  // namespace Simple3D
