@@ -1,4 +1,4 @@
-#include <simple3d/graphics/internal/element_array_buffer.h>
+#include <simple3d/graphics/internal/element_buffer_object.h>
 
 #include <utility>
 #include <cstdint>
