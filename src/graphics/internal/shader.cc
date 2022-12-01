@@ -10,6 +10,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <simple3d/misc/error.h>
+#include <simple3d/graphics/internal/misc.h>
 
 namespace Simple3D::Internal {
 
@@ -113,8 +114,13 @@ Shader ShaderBuilder::Build(Error* error) {
   return result;
 }
 
+GLuint Shader::active_shader_id_{kGlesInvalidShader};
+
 void Shader::Use() const {
-  glUseProgram(shader_id_);
+  if (active_shader_id_ != shader_id_) {
+    glUseProgram(shader_id_);
+    active_shader_id_ = shader_id_;
+  }
 }
 
 unsigned int Shader::GetID() const {
