@@ -103,6 +103,8 @@ VertexBufferObject& VertexBufferObject::operator=(VertexBufferObject&& other) {
 
   usage_ = other.usage_;
   other.usage_ = kDefaultUsage;
+
+  return *this;
 }
 
 VertexBufferObject::~VertexBufferObject() {
