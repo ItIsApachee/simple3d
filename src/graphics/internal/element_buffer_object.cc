@@ -135,11 +135,11 @@ ElementBufferObject::~ElementBufferObject() {
 //   UnbindBuffer(kEboTarget);
 // }
 
-GLuint ElementBufferObject::ebo() {
+GLuint ElementBufferObject::ebo() const {
   return ebo_;
 }
 
-GLenum ElementBufferObject::usage() {
+GLenum ElementBufferObject::usage() const {
   return usage_;
 }
 
