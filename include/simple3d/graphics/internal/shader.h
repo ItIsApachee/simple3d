@@ -16,6 +16,7 @@
 
 #include <simple3d/types.h>
 #include <simple3d/misc/error.h>
+#include <simple3d/graphics/internal/misc.h>
 
 namespace Simple3D::Internal {
 
@@ -37,6 +38,7 @@ class Shader {
   Shader& operator=(const Shader&) = delete;
   Shader& operator=(Shader&&) = default;
 
+  // FIXME: delete shader on destruction
   ~Shader() = default;
 
   void Use() const;
@@ -48,7 +50,9 @@ class Shader {
   Error SetUniformMat4fv(const std::string& name, const glm::mat4& matrix);
 
  private:
-    unsigned int shader_id_{0};
+  static GLuint active_shader_id_;
+
+  GLuint shader_id_{kGlesInvalidShader};
 };
 
 /** \class ShaderBuilder simple3d/shader/shader.h

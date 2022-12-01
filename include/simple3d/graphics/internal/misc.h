@@ -6,6 +6,7 @@
 
 namespace Simple3D::Internal {
 constexpr GLuint kGlesInvalidBuffer = 0;
+constexpr GLuint kGlesInvalidShader = 0;
 
 // only used as default value for VAO field, and
 // shouldn't be used for any other reason whatsoever
