@@ -12,14 +12,14 @@ namespace Simple3D::Internal {
 
 
 
-constexpr auto kDefaultUsage = GL_STATIC_DRAW;
-
 class ElementBufferObject {
 // TODO(apachee): ability to change usage parameter of glBufferData
  public:
-  explicit ElementBufferObject(bool generate = false, GLenum usage = kDefaultUsage);
+  explicit ElementBufferObject(bool generate = false,
+      GLenum usage = kDefaultUsage);
   // ElementBufferObject(std::size_t size); TODO(apachee): preallocating buffer
-  ElementBufferObject(std::size_t size, std::uint32_t* data, GLenum usage = kDefaultUsage);
+  ElementBufferObject(std::size_t size, std::uint32_t* data = nullptr,
+      GLenum usage = kDefaultUsage);
   ElementBufferObject(const ElementBufferObject&);
   ElementBufferObject(ElementBufferObject&&);
   ElementBufferObject& operator=(const ElementBufferObject&);

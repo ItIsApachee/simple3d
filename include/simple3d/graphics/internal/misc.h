@@ -5,7 +5,8 @@
 #include <glad/gles2.h>
 
 namespace Simple3D::Internal {
-  constexpr std::uint32_t kGlesInvalidBuffer = 0;
+  constexpr GLuint kGlesInvalidBuffer = 0;
+  constexpr auto kDefaultUsage = GL_STATIC_DRAW;
 
   void BindBuffer(GLuint target, GLuint buffer);
   void UnbindBuffer(GLuint target);
