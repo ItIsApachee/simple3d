@@ -3,6 +3,8 @@
 
 #include <cstddef>
 
+#include <glad/gles2.h>
+
 #include <simple3d/graphics/internal/misc.h>
 
 namespace Simple3D::Internal {
@@ -12,14 +14,15 @@ namespace Simple3D::Internal {
 
 class VertexBufferObject {
  public:
-  explicit VertexBufferObject(bool generate = false,
+  VertexBufferObject() = default;
+  // explicit VertexBufferObject(bool generate = false,
+  //                             GLenum usage = kDefaultUsage);
+  explicit VertexBufferObject(std::size_t size, std::byte* data = nullptr,
       GLenum usage = kDefaultUsage);
-  VertexBufferObject(std::size_t size, std::byte* data = nullptr,
-      GLenum usage = kDefaultUsage);
-  VertexBufferObject(const VertexBufferObject&);
   VertexBufferObject(VertexBufferObject&&);
-  VertexBufferObject& operator=(const VertexBufferObject&);
   VertexBufferObject& operator=(VertexBufferObject&&);
+  VertexBufferObject(const VertexBufferObject&) = delete;
+  VertexBufferObject& operator=(const VertexBufferObject&) = delete;
   ~VertexBufferObject();
 
   void Bind();
