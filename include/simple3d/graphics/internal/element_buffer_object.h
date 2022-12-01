@@ -15,20 +15,22 @@ namespace Simple3D::Internal {
 class ElementBufferObject {
 // TODO(apachee): ability to change usage parameter of glBufferData
  public:
-  explicit ElementBufferObject(bool generate = false,
-      GLenum usage = kDefaultUsage);
-  // ElementBufferObject(std::size_t size); TODO(apachee): preallocating buffer
-  ElementBufferObject(std::size_t size, std::uint32_t* data = nullptr,
-      GLenum usage = kDefaultUsage);
-  ElementBufferObject(const ElementBufferObject&);
+    ElementBufferObject() = default;
+//   explicit ElementBufferObject(bool generate = false,
+//       GLenum usage = kDefaultUsage);
+//   ElementBufferObject(std::size_t size); TODO(apachee): preallocating buffer
+//   ElementBufferObject(std::size_t size, std::uint32_t* data = nullptr,
+//       GLenum usage = kDefaultUsage);
   ElementBufferObject(ElementBufferObject&&);
-  ElementBufferObject& operator=(const ElementBufferObject&);
   ElementBufferObject& operator=(ElementBufferObject&&);
+  ElementBufferObject(const ElementBufferObject&) = delete;
+  ElementBufferObject& operator=(const ElementBufferObject&) = delete;
   ~ElementBufferObject();
 
   // TODO(apachee): add buffer manipulation (currently buffer is immutable)
-  void Bind();
-  static void Unbind();
+  // deprecated: binding should be done through VAO
+//   void Bind();
+//   static void Unbind();
 
   GLuint ebo();
   GLenum usage();
