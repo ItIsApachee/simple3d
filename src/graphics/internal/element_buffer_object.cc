@@ -1,18 +1,44 @@
 #include <simple3d/graphics/internal/element_buffer_object.h>
 
 #include <utility>
-#include <cstdint>
 #include <cstddef>
 
 #include <glad/gles2.h>
 
 #include <simple3d/graphics/internal/misc.h>
+#include <simple3d/graphics/internal/vertex_array_object.h>
 
 namespace Simple3D::Internal {
 
 
 
 constexpr auto kEboTarget = GL_ELEMENT_ARRAY_BUFFER;
+
+ElementBufferObjectBuilder& ElementBufferObjectBuilder::Data(std::size_t size,
+    std::byte* data) {
+  size_ = size;
+  data_ = data;
+  return *this;
+}
+
+ElementBufferObjectBuilder& ElementBufferObjectBuilder::Usage(GLenum usage) {
+  usage_ = usage;
+  return *this;
+}
+
+ElementBufferObject ElementBufferObjectBuilder::Build(
+      const VertexArrayObject& vao) {
+  GLuint ebo{kGlesInvalidBuffer};
+  glGenBuffers(1, &ebo);
+
+  vao.Bind();
+  BindBuffer(kEboTarget, ebo);
+
+  glBufferData(
+      kEboTarget, size_, static_cast<void*>(data_), usage_);
+  
+  return ElementBufferObject(ebo, size_, usage_);
+}
 
 // deprecated: no reason to use other than default constructor
 // ElementBufferObject::ElementBufferObject(bool generate, GLenum usage)
@@ -54,6 +80,9 @@ constexpr auto kEboTarget = GL_ELEMENT_ARRAY_BUFFER;
 
 //   CopyBuffer(other.ebo_, ebo_, 0, 0, size_);
 // }
+
+ElementBufferObject::ElementBufferObject(GLuint ebo, std::size_t size,
+    GLenum usage) : ebo_{ebo}, size_{size}, usage_{usage} {}
 
 ElementBufferObject::ElementBufferObject(ElementBufferObject&& other)
     : ElementBufferObject() {
