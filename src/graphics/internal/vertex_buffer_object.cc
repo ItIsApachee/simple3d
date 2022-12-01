@@ -24,7 +24,7 @@ VertexBufferObject::VertexBufferObject(std::size_t size, std::byte* data,
 
   Bind();
   glBufferData(kVboTarget, size_, reinterpret_cast<void*>(data), usage_);
-  Unbind();
+  // Unbind();
 }
 
 // deprecated: few reasons to use, and user can do it themself
@@ -112,20 +112,20 @@ VertexBufferObject::~VertexBufferObject() {
     glDeleteBuffers(1, &vbo_);
 }
 
-void VertexBufferObject::Bind() {
+void VertexBufferObject::Bind() const {
   if (vbo_ != kGlesInvalidBuffer)
     BindBuffer(kVboTarget, vbo_);
 }
 
-void VertexBufferObject::Unbind() {
-  UnbindBuffer(kVboTarget);
-}
+// void VertexBufferObject::Unbind() {
+//   UnbindBuffer(kVboTarget);
+// }
 
-GLuint VertexBufferObject::vbo() {
+GLuint VertexBufferObject::vbo() const {
   return vbo_;
 }
 
-GLenum VertexBufferObject::usage() {
+GLenum VertexBufferObject::usage() const {
   return usage_;
 }
 

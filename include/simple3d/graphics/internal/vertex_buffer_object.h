@@ -25,11 +25,11 @@ class VertexBufferObject {
   VertexBufferObject& operator=(const VertexBufferObject&) = delete;
   ~VertexBufferObject();
 
-  void Bind();
-  static void Unbind();
+  void Bind() const;
+  // static void Unbind();
 
-  GLuint vbo();
-  GLenum usage();
+  GLuint vbo() const;
+  GLenum usage() const;
 
  private:
   GLuint vbo_{kGlesInvalidBuffer};
