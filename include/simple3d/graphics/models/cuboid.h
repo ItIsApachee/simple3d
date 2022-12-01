@@ -11,6 +11,8 @@ namespace Simple3D {
 
 
 struct Cuboid {
+  using Renderer = CuboidRenderer;
+
   float x{0.};
   float y{0.};
   float z{0.};
