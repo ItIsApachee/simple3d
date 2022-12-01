@@ -28,13 +28,13 @@ class VertexArrayObject {
   static void Unbind();
 
  private:
-  GLuint vao_{kGlesDefaultVao};
-
   // bind optimization:
   // since there's only one render thread
   // we can statically store active VAO
   // to reduce the amount of binding calls
   static GLuint active_vao_;
+
+  GLuint vao_{kGlesDefaultVao};
 };
 
 
