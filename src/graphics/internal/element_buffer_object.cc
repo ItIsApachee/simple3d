@@ -24,6 +24,7 @@ ElementBufferObject::ElementBufferObject(
     std::size_t size, std::uint32_t* data, GLenum usage)
     : size_{size}, usage_{usage} {
   glGenBuffers(1, &ebo_);
+  static_assert(false, "can't bind EBO when VAO isn't bound");
   Bind();
   glBufferData(
     kEboTarget, size, static_cast<void*>(data), usage_);
@@ -33,6 +34,7 @@ ElementBufferObject::ElementBufferObject(
 ElementBufferObject::ElementBufferObject(const ElementBufferObject& other)
     : ElementBufferObject{} {
   size_ = other.size_;
+  static_assert(false, "can't bind EBO when VAO isn't bound");
   Bind();
   glBufferData(kEboTarget, size_, nullptr, other.usage_);
   Unbind();
@@ -46,10 +48,12 @@ ElementBufferObject::ElementBufferObject(ElementBufferObject&& other)
   std::swap(size_, other.size_);
 }
 
-ElementBufferObject& ElementBufferObject::operator=(const ElementBufferObject& other) {
+ElementBufferObject& ElementBufferObject::operator=(
+    const ElementBufferObject& other) {
   if (&other == this)
     return *this;
   if (size_ != other.size_ || usage_ != other.usage_) {
+    static_assert(false, "can't bind EBO when VAO isn't bound");
     Bind();
     glBufferData(
       kEboTarget, other.size_, nullptr, other.usage_);
@@ -57,12 +61,13 @@ ElementBufferObject& ElementBufferObject::operator=(const ElementBufferObject& o
     size_ = other.size_;
     usage_ = other.usage_;
   }
-  
+
   CopyBuffer(other.ebo_, ebo_, 0, 0, size_);
   return *this;
 }
 
-ElementBufferObject& ElementBufferObject::operator=(ElementBufferObject&& other) {
+ElementBufferObject& ElementBufferObject::operator=(
+    ElementBufferObject&& other) {
   if (ebo_ != kGlesInvalidBuffer) {
     glDeleteBuffers(1, &ebo_);
   }
@@ -83,6 +88,7 @@ ElementBufferObject::~ElementBufferObject() {
 }
 
 void ElementBufferObject::Bind() {
+  static_assert(false, "can't bind EBO when VAO isn't bound");
   BindBuffer(kEboTarget, ebo_);
 }
 
