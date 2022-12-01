@@ -1,0 +1,44 @@
+#ifndef INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_VERTEX_ARRAY_OBJECT_H_
+#define INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_VERTEX_ARRAY_OBJECT_H_
+
+#include <glad/gles2.h>
+
+#include <simple3d/types.h>
+#include <simple3d/graphics/internal/misc.h>
+
+namespace Simple3D::Internal {
+
+
+
+class VertexArrayObject {
+ public:
+  VertexArrayObject();
+  VertexArrayObject(VertexArrayObject&&);
+  VertexArrayObject& operator=(VertexArrayObject&&);
+  VertexArrayObject(const VertexArrayObject&) = delete;
+  VertexArrayObject& operator=(const VertexArrayObject&) = delete;
+  ~VertexArrayObject();
+
+  // TODO(apachee):
+  // [ ] a way to define an array of generic vertex attribute data
+
+  void BindEbo(const ElementBufferObject&) const;
+
+  void Bind() const;
+  static void Unbind();
+
+ private:
+  GLuint vao_{kGlesDefaultVao};
+
+  // bind optimization:
+  // since there's only one render thread
+  // we can statically store active VAO
+  // to reduce the amount of binding calls
+  static GLuint active_vao_;
+};
+
+
+
+}  // namespace Simple3D::Internal
+
+#endif  //  INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_VERTEX_ARRAY_OBJECT_H_
