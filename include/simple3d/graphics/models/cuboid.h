@@ -2,9 +2,13 @@
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_
 
 #include <vector>
+#include <chrono>
 
 #include <simple3d/types.h>
 #include <simple3d/graphics/renderer.h>
+#include <simple3d/graphics/internal/element_buffer_object.h>
+#include <simple3d/graphics/internal/vertex_buffer_object.h>
+#include <simple3d/graphics/internal/vertex_array_object.h>
 
 namespace Simple3D {
 
@@ -20,7 +24,7 @@ struct Cuboid {
 
 class CuboidRenderer : public IRenderer {
  public:
-  CuboidRenderer() = default;
+  CuboidRenderer();
   CuboidRenderer(const CuboidRenderer&) = delete;
   CuboidRenderer(CuboidRenderer&&) = default;
   CuboidRenderer& operator=(const CuboidRenderer) = delete;
@@ -34,6 +38,12 @@ class CuboidRenderer : public IRenderer {
 
  private:
   std::vector<Cuboid*> cuboids_{};
+  Internal::ElementBufferObject ebo_{};
+  Internal::VertexBufferObject vbo_{};
+  // Internal::VertexBufferObject position_vbo_{};
+  Internal::VertexArrayObject vao_{};
+
+  decltype(std::chrono::high_resolution_clock::now()) start_time_{};
 };
 
 
