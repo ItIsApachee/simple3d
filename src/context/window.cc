@@ -20,6 +20,10 @@ Window::~Window() {
     Destroy();
 }
 
+void Window::SwapBuffers() {
+  glfwSwapBuffers(window_);
+}
+
 void Window::Destroy() {
   if (window_ != nullptr) {
     glfwDestroyWindow(window_);
