@@ -43,37 +43,37 @@ class Model {
 
 // TODO(apachee): add is_primitive trait
 // FIXME(apachee): remove test primitive
-struct TestPrimitive;
-class TestPrimitiveRenderer;
+// struct TestPrimitive;
+// class TestPrimitiveRenderer;
 
-class TestPrimitiveRenderer : public IRenderer {
- public:
-  TestPrimitiveRenderer() = default;
-  TestPrimitiveRenderer(const TestPrimitiveRenderer&) = delete;
-  TestPrimitiveRenderer(TestPrimitiveRenderer&&) = default;
-  TestPrimitiveRenderer& operator=(const TestPrimitiveRenderer&) = delete;
-  TestPrimitiveRenderer& operator=(TestPrimitiveRenderer&&) = default;
-  ~TestPrimitiveRenderer();
+// class TestPrimitiveRenderer : public IRenderer {
+//  public:
+//   TestPrimitiveRenderer() = default;
+//   TestPrimitiveRenderer(const TestPrimitiveRenderer&) = delete;
+//   TestPrimitiveRenderer(TestPrimitiveRenderer&&) = default;
+//   TestPrimitiveRenderer& operator=(const TestPrimitiveRenderer&) = delete;
+//   TestPrimitiveRenderer& operator=(TestPrimitiveRenderer&&) = default;
+//   ~TestPrimitiveRenderer();
 
 
-  template <typename T>
-  TestPrimitive* Create();
-  template <>
-  TestPrimitive* Create<TestPrimitive>();
+//   template <typename T>
+//   TestPrimitive* Create();
+//   template <>
+//   TestPrimitive* Create<TestPrimitive>();
 
-  TestPrimitive* Create(int);
+//   TestPrimitive* Create(int);
 
-  void Draw() override;
-  void Destroy(Scene* scene) override;
- private:
-  std::vector<TestPrimitive*> primitives_{};
-};
+//   void Draw() override;
+//   void Destroy(Scene* scene) override;
+//  private:
+//   std::vector<TestPrimitive*> primitives_{};
+// };
 
-struct TestPrimitive {
- public:
-  using Renderer = TestPrimitiveRenderer;
-  int id{0};
-};
+// struct TestPrimitive {
+//  public:
+//   using Renderer = TestPrimitiveRenderer;
+//   int id{0};
+// };
 
 // implementation
 template <typename M>
@@ -99,12 +99,12 @@ const M* Model<M>::operator->() const {
   return model_;
 }
 
-template <>
-TestPrimitive* TestPrimitiveRenderer::Create<TestPrimitive>() {
-  std::cout << "basic create" << std::endl;
-  primitives_.push_back(new TestPrimitive{-1});
-  return primitives_.back();
-}
+// template <>
+// TestPrimitive* TestPrimitiveRenderer::Create<TestPrimitive>() {
+//   std::cout << "basic create" << std::endl;
+//   primitives_.push_back(new TestPrimitive{-1});
+//   return primitives_.back();
+// }
 
 
 
