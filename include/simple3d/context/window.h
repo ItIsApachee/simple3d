@@ -22,6 +22,7 @@ class Window : public std::enable_shared_from_this<Window> {
 
   ~Window();
 
+  void SwapBuffers();
   void Destroy();  // destroy window, invalidate pointer
 
  private:
