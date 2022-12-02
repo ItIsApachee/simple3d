@@ -21,10 +21,12 @@ class ModelShader {
   static void Init();
   static void Use();
 
+  const Internal::Shader& shader() const;
+
  private:
   ModelShader();
 
-  Internal::Shader shader{};
+  Internal::Shader shader_{};
 };
 
 
