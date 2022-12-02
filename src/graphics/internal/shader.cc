@@ -139,7 +139,7 @@ void Shader::Delete() {
 }
 
 Error Shader::SetUniformMat4fv(
-    const std::string& name, const glm::mat4& matrix) {
+    const std::string& name, const glm::mat4& matrix) const {
   int location = glGetUniformLocation(shader_id_, name.c_str());
   if (location == -1) {
     std::string desc = "uniform not found, name=\"";

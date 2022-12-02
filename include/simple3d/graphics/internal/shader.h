@@ -47,7 +47,7 @@ class Shader {
   void Delete();
   // TODO(apachee): consider adding methods to modify uniforms
 
-  Error SetUniformMat4fv(const std::string& name, const glm::mat4& matrix);
+  Error SetUniformMat4fv(const std::string& name, const glm::mat4& matrix) const;
 
  private:
   static GLuint active_shader_id_;
