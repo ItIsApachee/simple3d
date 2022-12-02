@@ -1,7 +1,11 @@
 #include <iostream>
 
+#include <glad/gles2.h>
+
 #include <simple3d/simple3d.h>
 #include <simple3d/graphics/model.h>
+#include <simple3d/graphics/models/cuboid.h>
+#include <simple3d/graphics/internal/shader.h>
 // #include <iostream>
 // #include <thread>
 // #include <chrono>
@@ -61,22 +65,34 @@
 // }
 
 int main() {
-    using namespace Simple3D;
+	using namespace Simple3D;
 
-    Context::Init();
-    View view{};
-    Scene scene{};
-    auto test1 = scene.Create<TestPrimitive>();
-    auto test2 = scene.Create<TestPrimitive>(0);
-    auto test3 = scene.Create<TestPrimitive, TestPrimitiveRenderer>();
-    auto test4 = scene.Create<TestPrimitive, TestPrimitiveRenderer>(0);
-    int cnt = 0;
-    while (true) {
-        Context::PollEvents();
-        test2->id = ++cnt;
-        std::cout << "dbg: " << test1->id << std::endl;
-        view.Draw(scene);
-    }
+	Context::Init();
+	View view{};
+	Scene scene{};
+	// auto test1 = scene.Create<TestPrimitive>();
+	// auto test2 = scene.Create<TestPrimitive>(0);
+	// auto test3 = scene.Create<TestPrimitive, TestPrimitiveRenderer>();
+	// auto test4 = scene.Create<TestPrimitive, TestPrimitiveRenderer>(0);
+
+
+	auto cube = scene.Create<Cuboid, CuboidRenderer>(0., 0., 0.);
+
+	// Error err;
+	// Internal::Shader Shader = Internal::ShaderBuilder()
+	// 		.FragmentShaderSource(Internal::kFragmentShader)
+	// 		.VertexShaderSource(Internal::kVertexShader)
+	// 		.Build(&err);
+
+	int cnt = 0;
+	auto window = Context::GetWindow();
+	while (true) {
+		Context::PollEvents();
+		// test2->id = ++cnt;
+		// std::cout << "dbg: " << test1->id << std::endl;
+		view.Draw(scene);
+		window->SwapBuffers();
+	}
 
 
     // auto init_error = MainLoop::GetInstance().Init();
