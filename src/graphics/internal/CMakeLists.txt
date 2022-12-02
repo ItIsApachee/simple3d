@@ -6,5 +6,5 @@ configure_file(
     ${CMAKE_BINARY_DIR}/include/simple3d/graphics/internal/shader_source.h
 )
 
-set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS vertex.glsl)
-set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS fragment.glsl)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS shader_sources/vertex.glsl)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS shader_sources/fragment.glsl)
