@@ -1,6 +1,8 @@
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_SHADER_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_SHADER_H_
 
+#include <glm/mat4x4.hpp>
+
 #include <simple3d/graphics/internal/shader.h>
 
 namespace Simple3D {
@@ -21,6 +23,7 @@ class ModelShader {
   static void Init();
   static void Use();
 
+  // FIXME(apachee): make static
   const Internal::Shader& shader() const;
 
  private:
