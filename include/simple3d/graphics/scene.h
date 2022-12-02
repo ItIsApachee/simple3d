@@ -118,7 +118,14 @@ auto Scene::Create(Args... args)
         std::declval<R>().template Create<M>(args...)),
       M*>,
     Model<M>> {
-    return CreateInternal<M, R>(&R::template Create<M>, args...);
+  // return CreateInternal<M, R>(&R::template Create<M>, args...);
+  using Renderer = R;
+  auto& storage = Internal::RendererStorage<Renderer>;
+  if (storage.find(this) == storage.end()) {
+    storage.insert({this, Renderer{}});
+    renderers_.push_back(&storage[this]);
+  }
+  return Model{storage[this].template Create<M>(args...)};
 }
 
 template <typename M, typename R, typename... Args>
@@ -129,19 +136,26 @@ auto Scene::Create(Args... args)
         std::declval<R>().Create(args...)),
       M*>,
     Model<M>> {
-    return CreateInternal<M, R>(&R::Create, args...);
-}
-
-template <typename M, typename R, typename... Args>
-Model<M> Scene::CreateInternal(M* (R::*mf)(Args...), Args... args) {
+  // return CreateInternal<M, R>(&R::Create, args...);
   using Renderer = R;
   auto& storage = Internal::RendererStorage<Renderer>;
   if (storage.find(this) == storage.end()) {
     storage.insert({this, Renderer{}});
     renderers_.push_back(&storage[this]);
   }
-  return Model{(storage[this].*mf)(args...)};
+  return Model{storage[this].Create(args...)};
 }
+
+// template <typename M, typename R, typename... MFArgs, typename... Args>
+// Model<M> Scene::CreateInternal(M* (R::*mf)(MFArgs...), Args... args) {
+//   using Renderer = R;
+//   auto& storage = Internal::RendererStorage<Renderer>;
+//   if (storage.find(this) == storage.end()) {
+//     storage.insert({this, Renderer{}});
+//     renderers_.push_back(&storage[this]);
+//   }
+//   return Model{(storage[this].*mf)(args...)};
+// }
 
 
 
