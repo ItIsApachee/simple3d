@@ -58,7 +58,8 @@ set(simple3d_SOURCES ${simple3d_SOURCES}
     graphics/internal/vertex_array_object.cc
     graphics/internal/vertex_buffer_object.cc
     graphics/internal/element_buffer_object.cc
-    graphics/internal/shader.cc)
+    graphics/internal/shader.cc
+    graphics/internal/vertex.cc)
 
 # /src/graphics/models
 set(simple3d_SOURCES ${simple3d_SOURCES}
