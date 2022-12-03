@@ -25,10 +25,15 @@ class VertexBufferObject {
   VertexBufferObject& operator=(const VertexBufferObject&) = delete;
   ~VertexBufferObject();
 
+  void SetData(std::size_t size, const std::byte* data = nullptr,
+      GLenum usage = kDefaultUsage);
+  void SubData(std::size_t offset, std::size_t size, const std::byte* data);
+
   void Bind() const;
   // static void Unbind();
 
   GLuint vbo() const;
+  std::size_t size() const;
   GLenum usage() const;
 
  private:

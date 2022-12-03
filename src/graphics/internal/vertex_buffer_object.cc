@@ -1,6 +1,7 @@
 #include <simple3d/graphics/internal/vertex_buffer_object.h>
 
 #include <cstddef>
+#include <cassert>
 #include <utility>
 
 #include <glad/gles2.h>
@@ -112,6 +113,22 @@ VertexBufferObject::~VertexBufferObject() {
     glDeleteBuffers(1, &vbo_);
 }
 
+void VertexBufferObject::SetData(std::size_t size, const std::byte* data,
+    GLenum usage) {
+  size_ = size;
+  usage_ = usage;
+
+  Bind();
+  glBufferData(kVboTarget, size_, reinterpret_cast<const void*>(data), usage_);
+}
+
+void VertexBufferObject::SubData(std::size_t offset, std::size_t size,
+    const std::byte* data) {
+  assert(offset + size <= size_);
+  Bind();
+  glBufferSubData(kVboTarget, offset, size, reinterpret_cast<const void*>(data));
+}
+
 void VertexBufferObject::Bind() const {
   if (vbo_ != kGlesInvalidBuffer)
     BindBuffer(kVboTarget, vbo_);
@@ -123,6 +140,10 @@ void VertexBufferObject::Bind() const {
 
 GLuint VertexBufferObject::vbo() const {
   return vbo_;
+}
+
+std::size_t VertexBufferObject::size() const {
+  return size_;
 }
 
 GLenum VertexBufferObject::usage() const {
