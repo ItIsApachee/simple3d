@@ -7,6 +7,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <simple3d/graphics/scene.h>
 #include <simple3d/graphics/renderer.h>
@@ -20,7 +21,42 @@ namespace Simple3D {
 
 
 
+static constexpr GLenum kInstanceVboUsage = GL_DYNAMIC_DRAW;
+
+struct CuboidInstance {
+  static void BindAttributes();
+  glm::mat4 model;
+  glm::vec3 color;
+};
+
+void CuboidInstance::BindAttributes() {
+  constexpr auto model_layout_index = 3;
+  constexpr auto model_row_size = sizeof(glm::vec4);
+  constexpr auto model_rows = 4;
+
+  for (int i = 0; i < model_rows; i++) {
+    glVertexAttribPointer(
+        model_layout_index + i, 4, GL_FLOAT, GL_FALSE,
+        sizeof(CuboidInstance), reinterpret_cast<void*>(
+          offsetof(CuboidInstance, model) + model_row_size * i
+        ));
+    glEnableVertexAttribArray(model_layout_index + i);
+    glVertexAttribDivisor(model_layout_index + i, 1);
+  }
+
+  constexpr auto color_layout_index = 7;
+  glVertexAttribPointer(
+      color_layout_index, 3, GL_FLOAT, GL_FALSE, sizeof(CuboidInstance),
+      reinterpret_cast<void*>(offsetof(CuboidInstance, color)));
+  glEnableVertexAttribArray(color_layout_index);
+  glVertexAttribDivisor(color_layout_index, 1);
+
+}
+
 static constexpr auto GenVertices() {
+  // TODO(apachee): generate vertices in right order:
+  // so that OpenGL can determine the front side
+
   constexpr int faces_cnt = 6;
   constexpr int vertices_per_face = 4;
   constexpr int vertices_cnt = faces_cnt * vertices_per_face;
@@ -62,9 +98,13 @@ static constexpr auto GenVertices() {
     result[i].texture_coords.x = (i / vertices_per_face + 1) / 7.f;
     result[i].position /= 2.f;
   }
+  // result[0].texture_coords = glm::vec2(1.0f, 1.0f);
+  // result[1].texture_coords = glm::vec2(1.0f, 1.0f);
+  // result[2].texture_coords = glm::vec2(1.0f, 1.0f);
 
   return result;
 }
+
 static constexpr auto GenIndices() {
   constexpr int faces_cnt = 6;
   constexpr int vertices_per_face = 4;
@@ -83,79 +123,59 @@ static constexpr auto GenIndices() {
 
   return indices;
 }
+
 static constexpr auto kCuboidVertices = GenVertices();
 static constexpr auto kCuboidIndices = GenIndices();
-// static constexpr std::array<Internal::Vertex, 4> kCuboidVertices = {
-//   Internal::Vertex{{0.5f, 0.5f, 0.0f}},
-//   {{0.5f, -0.5f, 0.0f}},
-//   {{-0.5f, -0.5f, 0.0f}},
-//   {{-0.5f, 0.5f, 0.0f}}
-// };
-// static constexpr std::array<GLuint, 3> kCuboidIndices = {
-//   0, 1, 2
-// };
 
-// static constexpr float vertices[] = ;
 CuboidRenderer::CuboidRenderer()
     : vao_(),
-      vbo_(),
+      verices_vbo_(),
+      instances_vbo_(),
+      instances_vbo_capacity_{0},
       ebo_(),
-      cuboids_{},
-      start_time_{std::chrono::high_resolution_clock::now()} {
-
-  std::cerr << "debug: " << std::endl;
-  for (auto vertex: kCuboidVertices) {
-    std::cerr << "normal: " << vertex.normal.x << " " << vertex.normal.y << " " << vertex.normal.z;
-    std::cerr << ", position: " << vertex.position.x << " " << vertex.position.y << " " << vertex.position.z;
-    std::cerr << std::endl;
-  }
-  std::cerr << "debug: " << std::endl;
-  for (auto index : kCuboidIndices) {
-    std::cerr << index << std::endl;
-  }
-
+      cuboids_(),
+      start_time_(std::chrono::high_resolution_clock::now()) {
   ModelShader::Init();
-  // float vertices[] = {
-  //   0.5f,  0.5f, 0.0f,  // top right
-  //   0.5f, -0.5f, 0.0f,  // bottom right
-  //   -0.5f, -0.5f, 0.0f,  // bottom left
-  //   -0.5f,  0.5f, 0.0f   // top left 
-  // };
-
-  // float vertices[] = {
-  //   // positions         // colors
-  //   0.5f, -0.5f, 0.0f,  1.0f, 0.0f, 0.0f,   // bottom right
-  //   -0.5f, -0.5f, 0.0f,  0.0f, 1.0f, 0.0f,   // bottom left
-  //   0.0f,  0.5f, 0.0f,  0.0f, 0.0f, 1.0f    // top 
-  // };
-  // GLuint indices[] = {0, 1, 2};
 
   vao_.Bind();
 
-  // vbo_ = Internal::VertexBufferObject(sizeof(vertices), 
-  //     reinterpret_cast<std::byte*>(vertices));
-  vbo_ = Internal::VertexBufferObject(sizeof(Internal::Vertex)*kCuboidVertices.size(), 
-      (std::byte*)kCuboidVertices.data());
-  vbo_.Bind();
+  verices_vbo_ = Internal::VertexBufferObject(sizeof(Internal::Vertex)*kCuboidVertices.size(), 
+      (const std::byte*)(kCuboidVertices.data()));
+  verices_vbo_.Bind();
   Internal::Vertex::BindAttributes();
+
+  instances_vbo_ = Internal::VertexBufferObject(0, nullptr, kInstanceVboUsage);
+  instances_vbo_.Bind();
+  // std::size_t vec4Size = sizeof(glm::vec4);
+  // glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(offsetof(CuboidInstance, model)));
+  // glEnableVertexAttribArray(3); 
+  // glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(offsetof(CuboidInstance, model) + 1 * vec4Size));
+  // glEnableVertexAttribArray(4); 
+  // glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(offsetof(CuboidInstance, model) + 2 * vec4Size));
+  // glEnableVertexAttribArray(5); 
+  // glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(offsetof(CuboidInstance, model) + 3 * vec4Size));
+  // glEnableVertexAttribArray(6); 
+  // glVertexAttribDivisor(3, 12);
+  // glVertexAttribDivisor(4, 12);
+  // glVertexAttribDivisor(5, 12);
+  // glVertexAttribDivisor(6, 12);
+  CuboidInstance::BindAttributes();
   
-  // ebo_ = Internal::ElementBufferObjectBuilder()
-  //   .Data(sizeof(indices), reinterpret_cast<std::byte*>(indices))
-  //   .Build(vao_);
   ebo_ = Internal::ElementBufferObjectBuilder()
-    .Data(sizeof(GLuint)*kCuboidIndices.size(), (std::byte*)kCuboidIndices.data())
+    .Data(sizeof(GLuint)*kCuboidIndices.size(), (const std::byte*)(kCuboidIndices.data()))
     .Build(vao_);
   vao_.BindEbo(ebo_);
   vao_.Unbind();
 
-  // position_vbo_ = 
+  std::cerr << "vertices: " << std::endl;
+  for (auto vertex: kCuboidVertices) {
+    std::cerr << vertex.position.x << ' ' << vertex.position.y << ' ' << vertex.position.z << std::endl;
+  }
 
-  // glVertexAttribPointer(
-  //     0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-  // glEnableVertexAttribArray(0);
-  // glVertexAttribPointer(
-  //     1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-  // glEnableVertexAttribArray(1);
+  std::cerr << "indices: " << std::endl;
+  for (auto index: kCuboidIndices) {
+    std::cerr << index << std::endl;
+  }
 }
 
 CuboidRenderer::~CuboidRenderer() {
@@ -166,26 +186,77 @@ CuboidRenderer::~CuboidRenderer() {
 
 Cuboid* CuboidRenderer::Create(float x, float y, float z) {
   cuboids_.push_back(new Cuboid{x, y, z});
+
+  if (cuboids_.size() > instances_vbo_capacity_) {
+    instances_vbo_.SetData(cuboids_.size()*sizeof(CuboidInstance), nullptr, kInstanceVboUsage);
+    instances_vbo_capacity_ = cuboids_.size();
+  }
+
   return cuboids_.back();
 }
 
 void CuboidRenderer::Draw() {
+  if (cuboids_.empty())
+    return;
+
   auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
     std::chrono::high_resolution_clock::now() - start_time_);
   
-  glm::mat4 transform(1.);
+  glm::mat4 transform(1.0f);
   transform = glm::rotate(transform, elapsed.count() / 1000.f, glm::normalize(glm::vec3{.1, .2, .4}));
+  
+  std::size_t instances_cnt = cuboids_.size();
 
-  // std::cerr << "drawing cuboid" << std::endl;
+  std::vector<CuboidInstance> instances;
+  instances.reserve(instances_cnt);
+  // std::cerr << "debug: " << std::endl;
+
+  for (const auto cuboid_ptr: cuboids_) {
+    auto& cuboid = *cuboid_ptr;
+
+    glm::mat4 model(1.0f);
+    glm::vec3 pos(cuboid.x, cuboid.y, cuboid.z);
+    model = glm::translate(model, pos);
+    model = model * transform;
+
+    glm::vec3 color(cuboid.r, cuboid.g, cuboid.b);
+
+    // std::cerr << "Cube({" << std::endl;
+    // for (int i = 0; i < 4; i++) {
+    //   std::cerr << '\t';
+    //   for (int j = 0; j < 4; j++) {
+    //     std::cerr << model[i][j] << ", ";
+    //   }
+    //   std::cerr << std::endl;
+    // }
+    // std::cerr << std::endl << "}, {" << color.x << ", " << color.y << ", " << color.z << "}" << std::endl << ")" << std::endl;
+
+    instances.push_back(CuboidInstance{model, color});
+  }
+
+  instances_vbo_.SubData(0, instances_cnt * sizeof(CuboidInstance),
+      (const std::byte*)instances.data());
+
+  // CuboidInstance inst{transform};
+  // instances_vbo_.SubData(0, sizeof(CuboidInstance), (std::byte*)&inst);
 
   ModelShader::Use();
   vao_.Bind();
 
-  // GLuint model_location = glGetUniformLocation(ModelShader::GetInstance().shader().GetID(), "model");
-  ModelShader::GetInstance().shader().SetUniformMat4fv("model", transform);
 
-  // glDrawArrays(gl_dra, 0, 3);
-  glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0);
+  // ModelShader::GetInstance().shader().SetUniformMat4fv("model", transform);
+
+  glm::mat4 view(1.0f);
+  ModelShader::GetInstance().shader().SetUniformMat4fv("view", view);
+
+  glm::mat4 projection = glm::perspective(glm::radians(45.0f), 16.0f/9.0f, 0.1f, 100.0f);
+  // glm::mat4 projection(1.0f);
+  ModelShader::GetInstance().shader().SetUniformMat4fv("projection", projection);
+
+  // glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, static_cast<void*>(0));
+  // std::cerr << "instances_cnt: " << instances_cnt << std::endl;
+  // vao_.BindEbo(ebo_);
+  glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0, instances_cnt);
   vao_.Unbind();
 }
 
