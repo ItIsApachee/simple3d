@@ -37,7 +37,7 @@ class CuboidRenderer : public IRenderer {
   CuboidRenderer(CuboidRenderer&&) = default;
   CuboidRenderer& operator=(const CuboidRenderer) = delete;
   CuboidRenderer& operator=(CuboidRenderer&&) = default;
-  ~CuboidRenderer();
+  ~CuboidRenderer() override;
 
   Cuboid* Create(float x, float y, float z);
 
