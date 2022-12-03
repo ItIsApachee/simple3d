@@ -47,10 +47,14 @@ class CuboidRenderer : public IRenderer {
  private:
   std::vector<Cuboid*> cuboids_{};
   Internal::ElementBufferObject ebo_{};
-  Internal::VertexBufferObject vbo_{};
-  // Internal::VertexBufferObject position_vbo_{};
+  Internal::VertexBufferObject verices_vbo_{};
+
+  Internal::VertexBufferObject instances_vbo_{};
+  std::size_t instances_vbo_capacity_{0};
+
   Internal::VertexArrayObject vao_{};
 
+  // // TODO(apachee): remove
   decltype(std::chrono::high_resolution_clock::now()) start_time_{};
 };
 
