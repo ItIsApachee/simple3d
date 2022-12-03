@@ -20,7 +20,7 @@ void View::Draw(const Scene &scene) {
   // FIXME(apachee): bind framebuffer
   glEnable(GL_DEPTH_TEST);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glClearColor(0., 0., 0., 1.);
+  glClearColor(0., 0., 0., 1.0f);
 
   for (auto &renderer : scene.renderers_) {
     renderer->Draw();
