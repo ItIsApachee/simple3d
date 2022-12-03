@@ -15,11 +15,19 @@ namespace Simple3D {
 
 
 struct Cuboid {
+  // TODO(apachee): add ability to change face's color
+
   using Renderer = CuboidRenderer;
 
+  // coordinates
   float x{0.};
   float y{0.};
   float z{0.};
+
+  // colors
+  float r{0.};
+  float g{0.};
+  float b{0.};
 };
 
 class CuboidRenderer : public IRenderer {
