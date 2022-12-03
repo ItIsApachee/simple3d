@@ -12,6 +12,8 @@ namespace Simple3D {
 // context
 class Context;
 class Window;
+class IInputHandler;
+class IWindowInputHandler;
 // graphics
 template <class M>
 class Model;
