@@ -15,7 +15,7 @@ namespace Simple3D::Internal {
 constexpr auto kEboTarget = GL_ELEMENT_ARRAY_BUFFER;
 
 ElementBufferObjectBuilder& ElementBufferObjectBuilder::Data(std::size_t size,
-    std::byte* data) {
+    const std::byte* data) {
   size_ = size;
   data_ = data;
   return *this;
@@ -35,7 +35,7 @@ ElementBufferObject ElementBufferObjectBuilder::Build(
   BindBuffer(kEboTarget, ebo);
 
   glBufferData(
-      kEboTarget, size_, static_cast<void*>(data_), usage_);
+      kEboTarget, size_, static_cast<const void*>(data_), usage_);
   
   return ElementBufferObject(ebo, size_, usage_);
 }

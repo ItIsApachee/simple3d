@@ -23,11 +23,11 @@ class ElementBufferObjectBuilder {
   operator=(ElementBufferObjectBuilder&&) = default;
   ~ElementBufferObjectBuilder() = default;
 
-  ElementBufferObjectBuilder& Data(std::size_t size, std::byte* data = nullptr);
+  ElementBufferObjectBuilder& Data(std::size_t size, const std::byte* data = nullptr);
   ElementBufferObjectBuilder& Usage(GLenum usage);
   ElementBufferObject Build(const VertexArrayObject& vao);
  private:
-  std::byte* data_{nullptr};
+  const std::byte* data_{nullptr};
   std::size_t size_{0};
   GLenum usage_{kDefaultUsage};
 };
