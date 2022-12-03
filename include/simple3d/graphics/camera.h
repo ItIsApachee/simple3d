@@ -5,8 +5,6 @@
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_CAMERA_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_CAMERA_H_
 
-#include <memory>
-
 #include <glad/gles2.h>
 #include <glm/mat4x4.hpp>
 
@@ -16,14 +14,13 @@ namespace Simple3D {
 
 
 
-class ICamera : public std::enable_shared_from_this<ICamera> {
+class ICamera {
  public:
+  ICamera() = default;
   virtual ~ICamera() = default;
   
   virtual glm::mat4 GetModel() = 0;
   virtual glm::mat4 GetProjection() = 0;
- protected:
-  ICamera() = default;
 };
 
 /** \class Camera simple3d/graphics/camera.h
@@ -31,7 +28,7 @@ class ICamera : public std::enable_shared_from_this<ICamera> {
  */
 class Camera : public ICamera {
  public:
-  static std::shared_ptr<Camera> Create();
+  Camera() = default;
 
   GLfloat x{0.0f};
   GLfloat y{0.0f};
@@ -42,8 +39,6 @@ class Camera : public ICamera {
 
   glm::mat4 GetModel() override;
   glm::mat4 GetProjection() override;
- protected:
-  Camera() = default;
 };
 
 
