@@ -76,7 +76,15 @@ int main() {
 	// auto test4 = scene.Create<TestPrimitive, TestPrimitiveRenderer>(0);
 
 
-	auto cube = scene.Create<Cuboid, CuboidRenderer>(0., 0., 0.);
+    std::vector<Model<Cuboid>> cubes;
+    int v = 5;
+    for (int i = -v; i <= v; i++) {
+        for (int j = -v; j <= v; j++) {
+            cubes.push_back(scene.Create<Cuboid>(i*2, j*2, -30.0f));
+        }
+    }
+	// auto cube = scene.Create<Cuboid, CuboidRenderer>(0.f, 0.f, -10.0f);
+    // cube->r = cube->g = cube->b = 1.0f;
 
 	// Error err;
 	// Internal::Shader Shader = Internal::ShaderBuilder()
