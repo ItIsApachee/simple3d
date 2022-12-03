@@ -17,7 +17,7 @@ class VertexBufferObject {
   VertexBufferObject() = default;
   // explicit VertexBufferObject(bool generate = false,
   //                             GLenum usage = kDefaultUsage);
-  explicit VertexBufferObject(std::size_t size, std::byte* data = nullptr,
+  explicit VertexBufferObject(std::size_t size, const std::byte* data = nullptr,
       GLenum usage = kDefaultUsage);
   VertexBufferObject(VertexBufferObject&&);
   VertexBufferObject& operator=(VertexBufferObject&&);

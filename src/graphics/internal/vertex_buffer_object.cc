@@ -18,12 +18,12 @@ constexpr auto kVboTarget = GL_ARRAY_BUFFER;
 //     glGenBuffers(1, &vbo_);
 // }
 
-VertexBufferObject::VertexBufferObject(std::size_t size, std::byte* data,
+VertexBufferObject::VertexBufferObject(std::size_t size, const std::byte* data,
     GLenum usage) : size_{size}, usage_{usage} {
   glGenBuffers(1, &vbo_);
 
   Bind();
-  glBufferData(kVboTarget, size_, reinterpret_cast<void*>(data), usage_);
+  glBufferData(kVboTarget, size_, reinterpret_cast<const void*>(data), usage_);
   // Unbind();
 }
 
