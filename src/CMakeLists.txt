@@ -48,7 +48,7 @@ add_subdirectory(graphics/internal)
 # set(simple3d_SOURCES ${simple3d_SOURCES} shader/shader.cc)
 
 # src/context/
-set(simple3d_SOURCES ${simple3d_SOURCES} context/context.cc context/window.cc)
+set(simple3d_SOURCES ${simple3d_SOURCES} context/context.cc context/window.cc context/input.cc)
 # src/graphics/
 set(simple3d_SOURCES ${simple3d_SOURCES} graphics/scene.cc graphics/view.cc graphics/model.cc)
 
