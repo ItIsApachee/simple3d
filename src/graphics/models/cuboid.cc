@@ -211,31 +211,34 @@ void CuboidRenderer::Draw() {
   instances.reserve(instances_cnt);
   // std::cerr << "debug: " << std::endl;
 
-  for (const auto cuboid_ptr: cuboids_) {
-    auto& cuboid = *cuboid_ptr;
+  if (!ready) {
+    for (const auto cuboid_ptr: cuboids_) {
+      auto& cuboid = *cuboid_ptr;
 
-    glm::mat4 model(1.0f);
-    glm::vec3 pos(cuboid.x, cuboid.y, cuboid.z);
-    model = glm::translate(model, pos);
-    model = model * transform;
+      glm::mat4 model(1.0f);
+      glm::vec3 pos(cuboid.x, cuboid.y, cuboid.z);
+      model = glm::translate(model, pos);
+      // model = model * transform;
 
-    glm::vec3 color(cuboid.r, cuboid.g, cuboid.b);
+      glm::vec3 color(cuboid.r, cuboid.g, cuboid.b);
 
-    // std::cerr << "Cube({" << std::endl;
-    // for (int i = 0; i < 4; i++) {
-    //   std::cerr << '\t';
-    //   for (int j = 0; j < 4; j++) {
-    //     std::cerr << model[i][j] << ", ";
-    //   }
-    //   std::cerr << std::endl;
-    // }
-    // std::cerr << std::endl << "}, {" << color.x << ", " << color.y << ", " << color.z << "}" << std::endl << ")" << std::endl;
+      // std::cerr << "Cube({" << std::endl;
+      // for (int i = 0; i < 4; i++) {
+      //   std::cerr << '\t';
+      //   for (int j = 0; j < 4; j++) {
+      //     std::cerr << model[i][j] << ", ";
+      //   }
+      //   std::cerr << std::endl;
+      // }
+      // std::cerr << std::endl << "}, {" << color.x << ", " << color.y << ", " << color.z << "}" << std::endl << ")" << std::endl;
 
-    instances.push_back(CuboidInstance{model, color});
+      instances.push_back(CuboidInstance{model, color});
+    }
+    instances_vbo_.SubData(0, instances_cnt * sizeof(CuboidInstance),
+        (const std::byte*)instances.data());
+    ready = true;
   }
 
-  instances_vbo_.SubData(0, instances_cnt * sizeof(CuboidInstance),
-      (const std::byte*)instances.data());
 
   // CuboidInstance inst{transform};
   // instances_vbo_.SubData(0, sizeof(CuboidInstance), (std::byte*)&inst);
@@ -246,10 +249,16 @@ void CuboidRenderer::Draw() {
 
   // ModelShader::GetInstance().shader().SetUniformMat4fv("model", transform);
 
+  ModelShader::GetInstance().shader().SetUniformMat4fv("model_test", transform);
+
   glm::mat4 view(1.0f);
+  view = glm::translate(view, glm::vec3(0.0f, 0.0f, -350.0f));
+  view = glm::rotate(view, elapsed.count() / 25000.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+  view = glm::rotate(view, elapsed.count() / 4000.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+
   ModelShader::GetInstance().shader().SetUniformMat4fv("view", view);
 
-  glm::mat4 projection = glm::perspective(glm::radians(45.0f), 16.0f/9.0f, 0.1f, 100.0f);
+  glm::mat4 projection = glm::perspective(glm::radians(45.0f), 16.0f/9.0f, 0.1f, 1000.0f);
   // glm::mat4 projection(1.0f);
   ModelShader::GetInstance().shader().SetUniformMat4fv("projection", projection);
 

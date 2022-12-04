@@ -54,6 +54,9 @@ class CuboidRenderer : public IRenderer {
 
   Internal::VertexArrayObject vao_{};
 
+  // FIXME(apachee): delete this
+  bool ready{false};
+
   // // TODO(apachee): remove
   decltype(std::chrono::high_resolution_clock::now()) start_time_{};
 };
