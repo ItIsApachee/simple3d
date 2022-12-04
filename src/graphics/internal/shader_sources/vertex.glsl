@@ -9,10 +9,11 @@ layout (location = 7) in vec3 aColor;
 
 out vec3 ourColor;
 
+uniform mat4 model_test;
 uniform mat4 view;
 uniform mat4 projection;
 
 void main() {
-    gl_Position = projection * view * aModel * vec4(aPos, 1.0);
+    gl_Position = projection * view * aModel * model_test * vec4(aPos, 1.0);
     ourColor = vec3(1.0, aTexCoords.xy);
 }
