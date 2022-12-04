@@ -77,12 +77,18 @@ int main() {
 
 
     std::vector<Model<Cuboid>> cubes;
-    int v = 5;
+    int v = 70;
     for (int i = -v; i <= v; i++) {
         for (int j = -v; j <= v; j++) {
-            cubes.push_back(scene.Create<Cuboid>(i*2, j*2, -30.0f));
+            for (int k = -v; k <= v; k++) {
+                // if (i*i + j*j + k*k <= 31*31)
+                    cubes.push_back(scene.Create<Cuboid>(i, j, k));
+            }
         }
+        Context::PollEvents();
+        std::cout << (i + v) << " / " << (2*v+1) << std::endl;
     }
+    std::cout << "cubes: " << cubes.size() << std::endl;
 	// auto cube = scene.Create<Cuboid, CuboidRenderer>(0.f, 0.f, -10.0f);
     // cube->r = cube->g = cube->b = 1.0f;
 
