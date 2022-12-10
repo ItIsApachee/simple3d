@@ -56,9 +56,12 @@ Error Context::Init() {
 
   ctx.window_ = Window::Create(glfw_window);
 
-  // TODO(apachee): Load GLES context
   glfwMakeContextCurrent(glfw_window);
-  int version_ = gladLoadGLES2(glfwGetProcAddress);  // unused
+
+  // discard the version, because it must be compatible with
+  // OpenGL ES 3.1, and the library isn't using anything
+  // that isn't available in GLES 3.1
+  gladLoadGLES2(glfwGetProcAddress);
 
   // TODO(apachee): setup callbacks(?): inputs, etc.
 
