@@ -63,7 +63,6 @@ Error Context::Init() {
   // that isn't available in GLES 3.1
   gladLoadGLES2(glfwGetProcAddress);
 
-  // TODO(apachee): setup callbacks(?): inputs, etc.
 
   ctx.is_init = true;
 

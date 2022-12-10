@@ -41,6 +41,7 @@ std::shared_ptr<Window> Window::Create(GLFWwindow* window) {
 }
 
 Window::Window(GLFWwindow* window): window_{window} {
+  // TODO(apachee): setup callbacks(?): inputs, etc.
   // TODO(apachee): consider moving window creation here
   // so that Window follows RAII: creating Window instance
   // create window resource
