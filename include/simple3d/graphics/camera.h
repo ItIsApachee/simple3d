@@ -29,6 +29,7 @@ class ICamera {
 class Camera : public ICamera {
  public:
   Camera() = default;
+  ~Camera() override = default;
 
   GLfloat x{0.0f};
   GLfloat y{0.0f};
