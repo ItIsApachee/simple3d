@@ -67,46 +67,41 @@
 int main() {
 	using namespace Simple3D;
 
-	Context::Init();
+	auto app_init_error = App::Init();
+    if (!app_init_error.IsOk()) {
+        std::cerr << "initialization failed: " << app_init_error.description << std::endl;
+        return -1;
+    }
+
+    std::cout << "init succ" << std::endl;
+    
 	View view{};
 	Scene scene{};
-	// auto test1 = scene.Create<TestPrimitive>();
-	// auto test2 = scene.Create<TestPrimitive>(0);
-	// auto test3 = scene.Create<TestPrimitive, TestPrimitiveRenderer>();
-	// auto test4 = scene.Create<TestPrimitive, TestPrimitiveRenderer>(0);
 
 
     std::vector<Model<Cuboid>> cubes;
-    int v = 70;
-    for (int i = -v; i <= v; i++) {
-        for (int j = -v; j <= v; j++) {
-            for (int k = -v; k <= v; k++) {
-                // if (i*i + j*j + k*k <= 31*31)
-                    cubes.push_back(scene.Create<Cuboid>(i, j, k));
-            }
-        }
-        Context::PollEvents();
-        std::cout << (i + v) << " / " << (2*v+1) << std::endl;
-    }
+    cubes.push_back(scene.Create<Cuboid>(0.0f, 0.0f, 0.0f));
+    // int v = 30;
+    // for (int i = -v; i <= v; i++) {
+    //     for (int j = -v; j <= v; j++) {
+    //         for (int k = -v; k <= v; k++) {
+    //             // if (i*i + j*j + k*k <= 31*31)
+    //                 cubes.push_back(scene.Create<Cuboid>(i, j, k));
+    //         }
+    //     }
+    //     App::PollEvents();
+    //     std::cout << (i + v) << " / " << (2*v+1) << std::endl;
+    // }
     std::cout << "cubes: " << cubes.size() << std::endl;
-	// auto cube = scene.Create<Cuboid, CuboidRenderer>(0.f, 0.f, -10.0f);
-    // cube->r = cube->g = cube->b = 1.0f;
-
-	// Error err;
-	// Internal::Shader Shader = Internal::ShaderBuilder()
-	// 		.FragmentShaderSource(Internal::kFragmentShader)
-	// 		.VertexShaderSource(Internal::kVertexShader)
-	// 		.Build(&err);
 
 	int cnt = 0;
-	auto window = Context::GetWindow();
-	while (true) {
-		Context::PollEvents();
-		// test2->id = ++cnt;
-		// std::cout << "dbg: " << test1->id << std::endl;
+	while (!App::ShouldClose()) {
+		App::PollEvents();
 		view.Draw(scene);
-		window->SwapBuffers();
+        App::SwapBuffers();
 	}
+
+    App::Destroy();
 
 
     // auto init_error = MainLoop::GetInstance().Init();
