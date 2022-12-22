@@ -12,6 +12,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <simple3d/graphics/camera.h>
 // #include <simple3d/shader/shader.h>
 // #include <simple3d/shader/shader_source.h>
 
@@ -19,9 +20,19 @@ namespace Simple3D {
 
 
 
+Scene::Scene() : renderers_{}, active_camera_{new ICamera()} {}
+
 Scene::~Scene() {
   for (auto& r : renderers_) {
     r->Destroy(this);
+  }
+}
+
+void Scene::SetCamera(std::shared_ptr<ICamera> camera) {
+  if (camera) {
+    active_camera_ = camera;
+  } else {
+    active_camera_ = std::shared_ptr<ICamera>(new ICamera());
   }
 }
 /*

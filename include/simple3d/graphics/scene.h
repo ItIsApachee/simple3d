@@ -7,12 +7,14 @@
 
 #include <vector>
 #include <type_traits>
+#include <memory>
 #include <utility>
 
 #include <simple3d/types.h>
 #include <simple3d/graphics/view.h>
 #include <simple3d/graphics/renderer.h>
 #include <simple3d/graphics/model.h>
+#include <simple3d/graphics/camera.h>
 
 namespace Simple3D {
 
@@ -25,12 +27,14 @@ namespace Simple3D {
 class Scene {
  public:
   friend class View;
-  Scene() = default;
+  Scene();
   Scene(const Scene&) = delete;
   Scene(Scene&&) = default;
   Scene& operator=(const Scene&) = delete;
   Scene& operator=(Scene&&) = default;
   ~Scene();
+
+  void SetCamera(std::shared_ptr<ICamera> camera);
 
   // TODO(apachee): add ability to initialize renderer like
   // Scene::AddRenerer<R>(R&& renderer)
@@ -83,6 +87,7 @@ class Scene {
   Model<M> CreateInternal(M* (R::*mf)(Args...), Args... args);
 
   std::vector<IRenderer*> renderers_{};
+  std::shared_ptr<ICamera> active_camera_{};
 };
 
 
