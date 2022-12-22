@@ -6,7 +6,7 @@
 #ifndef INCLUDE_SIMPLE3D_CONTEXT_WINDOW_H_
 #define INCLUDE_SIMPLE3D_CONTEXT_WINDOW_H_
 
-#include <vector>
+#include <unordered_set>
 #include <memory>
 
 #include <GLFW/glfw3.h>
@@ -18,26 +18,37 @@ namespace Simple3D {
 
 
 
-class Window : public std::enable_shared_from_this<Window> {
+class Window {
  public:
-  static std::shared_ptr<Window> Create(GLFWwindow* window);
+  friend App;
+
+  Window(const Window&) = delete;
+  Window& operator=(const Window&) = delete;
 
   ~Window();
 
-  void AddInputHandler(std::shared_ptr<IInputHandler> input_handler);
-  void AddWindowInputHandler(
-    std::shared_ptr<IWindowInputHandler> window_input_handler);
-
-  void SwapBuffers();
-  void Destroy();  // destroy window, invalidate pointer
-
  private:
+  static Window Create(Error* error);
+
   Window() = default;
   explicit Window(GLFWwindow* window);
+  Window(Window&&);
+  Window& operator=(Window&&);
+
+  void LoadGLES2();
+
+  bool ShouldClose();
+  void SwapBuffers();
+  void EnableInputHandler(std::shared_ptr<IInputHandler> input_handler);
+  void EnableWindowInputHandler(
+    std::shared_ptr<IWindowInputHandler> window_input_handler);
+  void DisableInputHandler(std::shared_ptr<IInputHandler> input_handler);
+  void DisableWindowInputHandler(
+    std::shared_ptr<IWindowInputHandler> window_input_handler);
 
   GLFWwindow* window_{nullptr};
-  std::vector<std::shared_ptr<IInputHandler>> input_handlers_{};
-  std::vector<std::shared_ptr<IWindowInputHandler>> window_input_handlers_{};
+  std::unordered_set<std::shared_ptr<IInputHandler>> input_handlers_{};
+  std::unordered_set<std::shared_ptr<IWindowInputHandler>> window_input_handlers_{};
 };
 
 
