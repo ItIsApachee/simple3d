@@ -19,8 +19,9 @@ class ICamera {
   ICamera() = default;
   virtual ~ICamera() = default;
   
-  virtual glm::mat4 GetModel() = 0;
-  virtual glm::mat4 GetProjection() = 0;
+  // return identity matrix by default
+  virtual glm::mat4 GetView();
+  virtual glm::mat4 GetProj();
 };
 
 /** \class Camera simple3d/graphics/camera.h
@@ -38,8 +39,8 @@ class Camera : public ICamera {
   GLfloat pitch{0.0f};
   GLfloat yaw{0.0f};
 
-  glm::mat4 GetModel() override;
-  glm::mat4 GetProjection() override;
+  glm::mat4 GetView() override;
+  glm::mat4 GetProj() override;
 };
 
 
