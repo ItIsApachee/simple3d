@@ -7,6 +7,10 @@
 #include <simple3d/graphics/internal/shader_source.h>
 #include <simple3d/graphics/internal/shader.h>
 
+// FIXME
+#include <iostream>
+#include <glm/gtx/string_cast.hpp>
+
 namespace Simple3D {
 
 
@@ -23,9 +27,9 @@ ModelShader::ModelShader() {
     .VertexShaderSource(Internal::kVertexShader)
     .Build(&err);
 
-  assert(err.IsOk());
   // FIXME
   std::cerr << "is_ok: " << err.IsOk() << ", desc: " << err.description << std::endl;
+  assert(err.IsOk());
 }
 
 void ModelShader::Init() {
@@ -35,6 +39,28 @@ void ModelShader::Init() {
 
 void ModelShader::Use() {
   GetInstance().shader_.Use();
+}
+
+void ModelShader::SetView(const glm::mat4& view) {
+  ModelShader& inst = GetInstance();
+  inst.Use();
+  if (view != inst.view_) {
+    std::cout << "upd view: old=" << glm::to_string(inst.view_);
+    std::cout << ", new=" << glm::to_string(view) << std::endl;
+    inst.view_ = view;
+    inst.shader().SetUniformMat4fv("view", view);
+  }
+}
+
+void ModelShader::SetProj(const glm::mat4& proj) {
+  ModelShader& inst = GetInstance();
+  inst.Use();
+  if (proj != inst.proj_) {
+    std::cout << "upd proj: old=" << glm::to_string(inst.proj_);
+    std::cout << ", new=" << glm::to_string(proj) << std::endl;
+    inst.proj_ = proj;
+    inst.shader().SetUniformMat4fv("projection", proj);
+  }
 }
 
 const Internal::Shader& ModelShader::shader() const {

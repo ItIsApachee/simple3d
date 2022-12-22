@@ -22,6 +22,8 @@ class ModelShader {
 
   static void Init();
   static void Use();
+  static void SetView(const glm::mat4& view);
+  static void SetProj(const glm::mat4& proj);
 
   // FIXME(apachee): make static
   const Internal::Shader& shader() const;
@@ -30,6 +32,8 @@ class ModelShader {
   ModelShader();
 
   Internal::Shader shader_{};
+  glm::mat4 view_{0.0f};
+  glm::mat4 proj_{0.0f};
 };
 
 
