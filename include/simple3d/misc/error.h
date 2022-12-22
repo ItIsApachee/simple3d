@@ -18,6 +18,7 @@ namespace Simple3D {
 enum class ErrorType : int {
   kOk = 0,
   kInitFailed,
+  kWindowCreationFailed,
   kShaderCompilationFailed,
   kUniformNotFound,
   kUnknown
