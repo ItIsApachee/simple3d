@@ -24,8 +24,10 @@ class Model {
   Model(Model&&) = default;
   Model& operator=(const Model&) = delete;
   Model& operator=(Model&&) = default;
+
   // FIXME: add destroying primitive on the scene on desctruction
   // one way to do that:
+  // FIXME: redefine copy ctor & assignment to set the pointer to nullptr
   ~Model() = default;
 
   M& operator*();
