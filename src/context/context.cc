@@ -20,15 +20,15 @@ static void error_callback(int code, const char* description) {
   std::cerr << std::endl;
 }
 
-Context& Context::GetInstance() {
-  static Context main_loop = Context();
+App& App::GetInstance() {
+  static App main_loop = App();
   return main_loop;
 }
 
-Context::Context() {}
+// App::App() {}
 
-Error Context::Init() {
-  Context& ctx = GetInstance();
+Error App::Init() {
+  App& ctx = GetInstance();
   if (ctx.is_init) {
     return Error(ErrorType::kInitFailed, "already initialized");
   }
@@ -38,53 +38,82 @@ Error Context::Init() {
   }
   glfwSetErrorCallback(error_callback);
 
-  glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+  std::cout << "initliazed glfw successfully" << std::endl;
 
-  glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+  // glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 
-  // doesn't work with ANGLE for some reason
-  // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
+  // glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+  // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 
-  GLFWwindow* glfw_window = glfwCreateWindow(
-    500, 500, "test (FIXME)", nullptr, nullptr);
+  // // doesn't work with ANGLE for some reason
+  // // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
 
-  if (glfw_window == nullptr) {
-    return Error(ErrorType::kInitFailed, "glfw failed to create window");
+  // GLFWwindow* glfw_window = glfwCreateWindow(
+  //   500, 500, "test (FIXME)", nullptr, nullptr);
+
+  // if (glfw_window == nullptr) {
+  //   return Error(ErrorType::kInitFailed, "glfw failed to create window");
+  // }
+
+  // glfwMakeContextCurrent(glfw_window);
+  // gladLoadGLES2(glfwGetProcAddress);
+
+  // ctx.window_ = Window::Create(glfw_window);
+  // ctx.window_ = std::shared_ptr<Window>()
+
+  Error err{};
+  ctx.window_ = Window::Create(&err);
+  if (!err.IsOk()) {
+    return err;
   }
 
-  ctx.window_ = Window::Create(glfw_window);
-
-  glfwMakeContextCurrent(glfw_window);
-
-  // discard the version, because it must be compatible with
-  // OpenGL ES 3.1, and the library isn't using anything
-  // that isn't available in GLES 3.1
-  gladLoadGLES2(glfwGetProcAddress);
-
+  std::cerr << "window creation succ" << std::endl;
 
   ctx.is_init = true;
 
   return Error::Ok();
 }
 
-void Context::Destroy() {
-  Context& ctx = GetInstance();
+void App::Destroy() {
+  App& ctx = GetInstance();
 
   if (ctx.is_init) {
-    ctx.window_->Destroy();
+    {
+      Window window = std::move(ctx.window_);
+      ctx.window_ = Window{};
+      // window is destroyed once out of scope
+    }
     glfwTerminate();
     ctx.is_init = false;
   }
 }
 
-void Context::PollEvents() {
+bool App::ShouldClose() {
+  return GetInstance().window_.ShouldClose();
+}
+
+void App::SwapBuffers() {
+  GetInstance().window_.SwapBuffers();
+}
+
+void App::PollEvents() {
   glfwPollEvents();
 }
 
-std::shared_ptr<Window> Context::GetWindow() {
-  return GetInstance().window_;
+void App::EnableInputHandler(std::shared_ptr<IInputHandler> input_handler) {
+  GetInstance().EnableInputHandler(input_handler);
+}
+void App::EnableWindowInputHandler(
+    std::shared_ptr<IWindowInputHandler> window_input_handler) {
+  GetInstance().EnableWindowInputHandler(window_input_handler);
+}
+void App::DisableInputHandler(std::shared_ptr<IInputHandler> input_handler) {
+  GetInstance().DisableInputHandler(input_handler);
+}
+void App::DisableWindowInputHandler(
+    std::shared_ptr<IWindowInputHandler> window_input_handler) {
+  GetInstance().DisableWindowInputHandler(window_input_handler);
 }
 
 

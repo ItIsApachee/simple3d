@@ -26,35 +26,39 @@ namespace Simple3D {
 
 // TODO(apachee): implement mechanism to close the window
 /** \class Context simple3d/context/context.h
- * \brief Class representing context for managing resources
+ * \brief Class representing application
 */
-class Context {
+class App {
  public:
-  static Context& GetInstance();
+  static App& GetInstance();
 
-  Context(const Context&) = delete;
-  Context(Context&&) = delete;
-  Context& operator=(const Context&) = delete;
-  Context& operator=(Context&&) = delete;
+  App(const App&) = delete;
+  App(App&&) = delete;
+  App& operator=(const App&) = delete;
+  App& operator=(App&&) = delete;
 
-  ~Context() = default;
+  ~App() = default;
 
   // load everything, create window
   static Error Init();
   // destroy window, unload everything
   static void Destroy();
 
+  static bool ShouldClose();
+  static void SwapBuffers();
   static void PollEvents();
-  static std::shared_ptr<Window> GetWindow();
+  static void EnableInputHandler(std::shared_ptr<IInputHandler> input_handler);
+  static void EnableWindowInputHandler(
+      std::shared_ptr<IWindowInputHandler> window_input_handler);
+  static void DisableInputHandler(std::shared_ptr<IInputHandler> input_handler);
+  static void DisableWindowInputHandler(
+      std::shared_ptr<IWindowInputHandler> window_input_handler);
 
  private:
-  Context();
+  App() = default;
 
-  std::shared_ptr<Window> window_{nullptr};
   bool is_init{false};
-  // store Window (but then GetWindow???)
-  // shared_ptr<Window>??? so that there is only one window created, but
-  // multiple references
+  Window window_{};
 };
 
 

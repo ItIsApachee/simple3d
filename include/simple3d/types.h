@@ -10,7 +10,7 @@ namespace Simple3D {
 
 
 // context
-class Context;
+class App;
 class Window;
 class IInputHandler;
 class IWindowInputHandler;
