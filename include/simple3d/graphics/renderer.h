@@ -3,6 +3,8 @@
 
 #include <unordered_map>
 
+#include <glm/mat4x4.hpp>
+
 #include <simple3d/types.h>
 #include <simple3d/graphics/scene.h>
 
@@ -19,7 +21,7 @@ class IRenderer {
   IRenderer() = default;
   virtual ~IRenderer() = default;
 
-  virtual void Draw() = 0;
+  virtual void Draw(const glm::mat4 &view, const glm::mat4 &proj) = 0;
   virtual void Destroy(Scene* scene) = 0;
 };
 
