@@ -1,8 +1,10 @@
 #include <simple3d/graphics/view.h>
 
 #include <glad/gles2.h>
+#include <glm/mat4x4.hpp>
 
 #include <simple3d/graphics/scene.h>
+#include <simple3d/graphics/camera.h>
 
 namespace Simple3D {
 
@@ -22,8 +24,9 @@ void View::Draw(const Scene &scene) {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glClearColor(0., 0., 0., 1.0f);
 
+  auto& cam = scene.active_camera_;
   for (auto &renderer : scene.renderers_) {
-    renderer->Draw();
+    renderer->Draw(cam->GetView(), cam->GetProj());
   }
 
   glFlush();
