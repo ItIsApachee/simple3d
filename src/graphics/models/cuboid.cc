@@ -195,15 +195,15 @@ Cuboid* CuboidRenderer::Create(float x, float y, float z) {
   return cuboids_.back();
 }
 
-void CuboidRenderer::Draw() {
+void CuboidRenderer::Draw(const glm::mat4& view, const glm::mat4& proj) {
   if (cuboids_.empty())
     return;
 
-  auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-    std::chrono::high_resolution_clock::now() - start_time_);
+  // auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
+  //   std::chrono::high_resolution_clock::now() - start_time_);
   
-  glm::mat4 transform(1.0f);
-  transform = glm::rotate(transform, elapsed.count() / 1000.f, glm::normalize(glm::vec3{.1, .2, .4}));
+  // glm::mat4 transform(1.0f);
+  // transform = glm::rotate(transform, elapsed.count() / 1000.f, glm::normalize(glm::vec3{.1, .2, .4}));
   
   std::size_t instances_cnt = cuboids_.size();
 
@@ -244,23 +244,25 @@ void CuboidRenderer::Draw() {
   // instances_vbo_.SubData(0, sizeof(CuboidInstance), (std::byte*)&inst);
 
   ModelShader::Use();
+  ModelShader::SetView(view);
+  ModelShader::SetProj(proj);
   vao_.Bind();
 
 
   // ModelShader::GetInstance().shader().SetUniformMat4fv("model", transform);
 
-  ModelShader::GetInstance().shader().SetUniformMat4fv("model_test", transform);
+  // ModelShader::GetInstance().shader().SetUniformMat4fv("model_test", transform);
 
-  glm::mat4 view(1.0f);
-  view = glm::translate(view, glm::vec3(0.0f, 0.0f, -350.0f));
-  view = glm::rotate(view, elapsed.count() / 25000.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-  view = glm::rotate(view, elapsed.count() / 4000.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+  // glm::mat4 view(1.0f);
+  // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -350.0f));
+  // view = glm::rotate(view, elapsed.count() / 25000.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+  // view = glm::rotate(view, elapsed.count() / 4000.0f, glm::vec3(0.0f, 1.0f, 0.0f));
 
-  ModelShader::GetInstance().shader().SetUniformMat4fv("view", view);
+  // ModelShader::GetInstance().shader().SetUniformMat4fv("view", view);
 
-  glm::mat4 projection = glm::perspective(glm::radians(45.0f), 16.0f/9.0f, 0.1f, 1000.0f);
+  // glm::mat4 projection = glm::perspective(glm::radians(45.0f), 16.0f/9.0f, 0.1f, 1000.0f);
   // glm::mat4 projection(1.0f);
-  ModelShader::GetInstance().shader().SetUniformMat4fv("projection", projection);
+  // ModelShader::GetInstance().shader().SetUniformMat4fv("projection", projection);
 
   // glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, static_cast<void*>(0));
   // std::cerr << "instances_cnt: " << instances_cnt << std::endl;

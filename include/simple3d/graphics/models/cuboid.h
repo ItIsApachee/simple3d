@@ -4,6 +4,8 @@
 #include <vector>
 #include <chrono>
 
+#include <glm/mat4x4.hpp>
+
 #include <simple3d/types.h>
 #include <simple3d/graphics/renderer.h>
 #include <simple3d/graphics/internal/element_buffer_object.h>
@@ -41,7 +43,7 @@ class CuboidRenderer : public IRenderer {
 
   Cuboid* Create(float x, float y, float z);
 
-  void Draw() override;
+  void Draw(const glm::mat4& view, const glm::mat4& proj) override;
   void Destroy(Scene* scene) override;
 
  private:
