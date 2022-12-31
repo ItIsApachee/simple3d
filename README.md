@@ -28,8 +28,8 @@ Coding standard - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
 - [ ] Add support for non-desktop devices: Android, IOS.
 
 ### 1. Objects related to 3D rendering.
-- [ ] Create basic API/interface of library:
-    - [ ] Scene object (relative position of objects).
+- [x] Create basic API/interface of library:
+    - [x] Scene object (relative position of objects).
     - [ ] Camera object (render capabilites).
     - [ ] Misc (additional 3D primitives).
 - [ ] Implement API/interface:
