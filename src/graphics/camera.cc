@@ -1,6 +1,7 @@
 #include <simple3d/graphics/camera.h>
 
 #include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace Simple3D {
@@ -8,19 +9,25 @@ namespace Simple3D {
 
 
 glm::mat4 ICamera::GetProj() {
-  // glm::mat4 projection = glm::perspective(glm::radians(45.0f), 16.0f/9.0f, 0.1f, 1000.0f);
-  // return projection;
   return glm::mat4(1.0f);
 }
 
 glm::mat4 ICamera::GetView() {
-  // glm::mat4 view(1.0f);
-  // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -100.0f));
-  // // view = glm::rotate(view, elapsed.count() / 25000.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-  // // view = glm::rotate(view, elapsed.count() / 4000.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-
-  // return view;
   return glm::mat4(1.0f);
+}
+
+glm::mat4 Camera::GetView() {
+  glm::mat4 view(1.0f);
+  view = glm::rotate(view, roll, glm::vec3(0.0f, 0.0f, 1.0f));
+  view = glm::rotate(view, pitch, glm::vec3(1.0f, 0.0f, 0.0f));
+  view = glm::rotate(view, yaw, glm::vec3(0.0f, 1.0f, 0.0f));
+  view = glm::translate(view, glm::vec3(-x, -y, -z));
+  return view;
+}
+
+glm::mat4 Camera::GetProj() {
+  glm::mat4 proj = glm::perspective(glm::radians(fov), aspect_ratio, 0.1f, 1000.0f);
+  return proj;
 }
 
 

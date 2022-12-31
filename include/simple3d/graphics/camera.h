@@ -38,6 +38,8 @@ class Camera : public ICamera {
   GLfloat roll{0.0f};
   GLfloat pitch{0.0f};
   GLfloat yaw{0.0f};
+  GLfloat fov{45.0f};
+  GLfloat aspect_ratio{16.0f/9.0f};
 
   glm::mat4 GetView() override;
   glm::mat4 GetProj() override;
