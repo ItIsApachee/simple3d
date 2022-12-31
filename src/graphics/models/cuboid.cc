@@ -211,33 +211,30 @@ void CuboidRenderer::Draw(const glm::mat4& view, const glm::mat4& proj) {
   instances.reserve(instances_cnt);
   // std::cerr << "debug: " << std::endl;
 
-  if (!ready) {
-    for (const auto cuboid_ptr: cuboids_) {
-      auto& cuboid = *cuboid_ptr;
+  for (const auto cuboid_ptr: cuboids_) {
+    auto& cuboid = *cuboid_ptr;
 
-      glm::mat4 model(1.0f);
-      glm::vec3 pos(cuboid.x, cuboid.y, cuboid.z);
-      model = glm::translate(model, pos);
-      // model = model * transform;
+    glm::mat4 model(1.0f);
+    glm::vec3 pos(cuboid.x, cuboid.y, cuboid.z);
+    model = glm::translate(model, pos);
+    // model = model * transform;
 
-      glm::vec3 color(cuboid.r, cuboid.g, cuboid.b);
+    glm::vec3 color(cuboid.r, cuboid.g, cuboid.b);
 
-      // std::cerr << "Cube({" << std::endl;
-      // for (int i = 0; i < 4; i++) {
-      //   std::cerr << '\t';
-      //   for (int j = 0; j < 4; j++) {
-      //     std::cerr << model[i][j] << ", ";
-      //   }
-      //   std::cerr << std::endl;
-      // }
-      // std::cerr << std::endl << "}, {" << color.x << ", " << color.y << ", " << color.z << "}" << std::endl << ")" << std::endl;
+    // std::cerr << "Cube({" << std::endl;
+    // for (int i = 0; i < 4; i++) {
+    //   std::cerr << '\t';
+    //   for (int j = 0; j < 4; j++) {
+    //     std::cerr << model[i][j] << ", ";
+    //   }
+    //   std::cerr << std::endl;
+    // }
+    // std::cerr << std::endl << "}, {" << color.x << ", " << color.y << ", " << color.z << "}" << std::endl << ")" << std::endl;
 
-      instances.push_back(CuboidInstance{model, color});
-    }
-    instances_vbo_.SubData(0, instances_cnt * sizeof(CuboidInstance),
-        (const std::byte*)instances.data());
-    ready = true;
+    instances.push_back(CuboidInstance{model, color});
   }
+  instances_vbo_.SubData(0, instances_cnt * sizeof(CuboidInstance),
+      (const std::byte*)instances.data());
 
 
   // CuboidInstance inst{transform};
