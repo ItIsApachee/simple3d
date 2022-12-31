@@ -25,8 +25,10 @@ void View::Draw(const Scene &scene) {
   glClearColor(0., 0., 0., 1.0f);
 
   auto& cam = scene.active_camera_;
+  auto proj = cam->GetProj();
+  auto view = cam->GetView();
   for (auto &renderer : scene.renderers_) {
-    renderer->Draw(cam->GetView(), cam->GetProj());
+    renderer->Draw(view, proj);
   }
 
   glFlush();
