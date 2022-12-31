@@ -1,9 +1,13 @@
 #include <iostream>
+#include <memory>
+#include <cmath>
+#include <chrono>
 
 #include <glad/gles2.h>
 
 #include <simple3d/simple3d.h>
 #include <simple3d/graphics/model.h>
+#include <simple3d/graphics/camera.h>
 #include <simple3d/graphics/models/cuboid.h>
 #include <simple3d/graphics/internal/shader.h>
 // #include <iostream>
@@ -77,26 +81,48 @@ int main() {
     
 	View view{};
 	Scene scene{};
-
+    auto camera = std::make_shared<Camera>();
+    scene.SetCamera(camera);
 
     std::vector<Model<Cuboid>> cubes;
-    cubes.push_back(scene.Create<Cuboid>(0.0f, 0.0f, 0.0f));
-    // int v = 30;
-    // for (int i = -v; i <= v; i++) {
-    //     for (int j = -v; j <= v; j++) {
-    //         for (int k = -v; k <= v; k++) {
-    //             // if (i*i + j*j + k*k <= 31*31)
-    //                 cubes.push_back(scene.Create<Cuboid>(i, j, k));
-    //         }
-    //     }
-    //     App::PollEvents();
-    //     std::cout << (i + v) << " / " << (2*v+1) << std::endl;
-    // }
+    int v = 1;
+    float stride = 1.5f;
+    for (int i = -v; i <= v; i++) {
+        for (int j = -v; j <= v; j++) {
+            for (int k = -v; k <= v; k++) {
+                // if (i*i + j*j + k*k <= 31*31)
+                    cubes.push_back(scene.Create<Cuboid>(stride*j, stride*i, stride*k));
+            }
+        }
+        App::PollEvents();
+        std::cout << (i + v) << " / " << (2*v+1) << std::endl;
+    }
     std::cout << "cubes: " << cubes.size() << std::endl;
 
 	int cnt = 0;
+    float angle = 0.0f;
+    float dist = 10.0f;
+    auto start = std::chrono::high_resolution_clock::now();
 	while (!App::ShouldClose()) {
 		App::PollEvents();
+
+        auto now = std::chrono::high_resolution_clock::now();
+        float millis = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
+        // angle += 0.01f;
+
+        float shift_amp = 0.5;
+        float shift = shift_amp * sin(angle);
+        for (int i = 9; i < 18; i++) {
+            cubes[i]->y = shift;
+            if (i % 2) {
+                cubes[i]->y = -cubes[i]->y;
+            }
+        }
+        angle = millis / 1000.0f;
+        camera->z = dist*cos(angle);
+        camera->x = dist*sin(angle);
+        camera->yaw = -angle;
+
 		view.Draw(scene);
         App::SwapBuffers();
 	}
