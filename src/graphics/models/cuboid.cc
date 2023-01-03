@@ -195,7 +195,7 @@ Cuboid* CuboidRenderer::Create(float x, float y, float z) {
   return cuboids_.back();
 }
 
-void CuboidRenderer::Draw(const glm::mat4& view, const glm::mat4& proj) {
+void CuboidRenderer::Draw(const glm::mat4& view, const glm::mat4& proj, const glm::vec3& view_pos) {
   if (cuboids_.empty())
     return;
 
@@ -243,6 +243,7 @@ void CuboidRenderer::Draw(const glm::mat4& view, const glm::mat4& proj) {
   ModelShader::Use();
   ModelShader::SetView(view);
   ModelShader::SetProj(proj);
+  ModelShader::SetViewPos(view_pos);
   vao_.Bind();
 
 

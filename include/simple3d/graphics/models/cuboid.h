@@ -43,7 +43,7 @@ class CuboidRenderer : public IRenderer {
 
   Cuboid* Create(float x, float y, float z);
 
-  void Draw(const glm::mat4& view, const glm::mat4& proj) override;
+  void Draw(const glm::mat4& view, const glm::mat4& proj, const glm::vec3& view_pos) override;
   void Destroy(Scene* scene) override;
 
  private:
