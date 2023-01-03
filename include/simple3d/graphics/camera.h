@@ -6,6 +6,7 @@
 #define INCLUDE_SIMPLE3D_GRAPHICS_CAMERA_H_
 
 #include <glad/gles2.h>
+#include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
 #include <simple3d/types.h>
@@ -22,6 +23,7 @@ class ICamera {
   // return identity matrix by default
   virtual glm::mat4 GetView();
   virtual glm::mat4 GetProj();
+  virtual glm::vec3 GetViewPos();
 };
 
 /** \class Camera simple3d/graphics/camera.h
@@ -43,6 +45,7 @@ class Camera : public ICamera {
 
   glm::mat4 GetView() override;
   glm::mat4 GetProj() override;
+  glm::vec3 GetViewPos() override;
 };
 
 

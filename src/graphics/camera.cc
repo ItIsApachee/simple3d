@@ -16,6 +16,10 @@ glm::mat4 ICamera::GetView() {
   return glm::mat4(1.0f);
 }
 
+glm::vec3 ICamera::GetViewPos() {
+  return glm::vec3(0.0f);
+}
+
 glm::mat4 Camera::GetView() {
   glm::mat4 view(1.0f);
   view = glm::rotate(view, roll, glm::vec3(0.0f, 0.0f, 1.0f));
@@ -28,6 +32,10 @@ glm::mat4 Camera::GetView() {
 glm::mat4 Camera::GetProj() {
   glm::mat4 proj = glm::perspective(glm::radians(fov), aspect_ratio, 0.1f, 1000.0f);
   return proj;
+}
+
+glm::vec3 Camera::GetViewPos() {
+  return glm::vec3(x, y, z);
 }
 
 
