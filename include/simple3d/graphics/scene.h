@@ -28,10 +28,11 @@ class Scene {
  public:
   friend class View;
   Scene();
+  // TODO(apachee): add move constructor/assignment
   Scene(const Scene&) = delete;
-  Scene(Scene&&) = default;
+  Scene(Scene&&) = delete;
   Scene& operator=(const Scene&) = delete;
-  Scene& operator=(Scene&&) = default;
+  Scene& operator=(Scene&&) = delete;
   ~Scene();
 
   void SetCamera(std::shared_ptr<ICamera> camera);
