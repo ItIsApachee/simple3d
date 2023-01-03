@@ -118,7 +118,7 @@ int main() {
                 cubes[i]->y = -cubes[i]->y;
             }
         }
-        angle = millis / 1000.0f;
+        angle = millis / 5000.0f;
         camera->z = dist*cos(angle);
         camera->x = dist*sin(angle);
         camera->yaw = -angle;
