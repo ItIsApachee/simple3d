@@ -27,8 +27,9 @@ void View::Draw(const Scene &scene) {
   auto& cam = scene.active_camera_;
   auto proj = cam->GetProj();
   auto view = cam->GetView();
+  auto view_pos = cam->GetViewPos();
   for (auto &renderer : scene.renderers_) {
-    renderer->Draw(view, proj);
+    renderer->Draw(view, proj, view_pos);
   }
 
   glFlush();
