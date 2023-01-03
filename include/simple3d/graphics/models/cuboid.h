@@ -31,6 +31,12 @@ struct Cuboid {
   float r{0.};
   float g{0.};
   float b{0.};
+
+  // TODO(apachee): add rotation
+  // // rotation
+  // float roll{0.};
+  // float pitch{0.};
+  // float yaw{0.};
 };
 
 class CuboidRenderer : public IRenderer {
