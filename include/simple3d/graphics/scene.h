@@ -143,7 +143,7 @@ auto Scene::Create(Args... args)
     Model<M>> {
   // return CreateInternal<M, R>(&R::Create, args...);
   using Renderer = R;
-  auto& storage = Internal::RendererStorage<Renderer>::GetInstance().storage_;
+  auto& storage = Internal::RendererStorage<Renderer>::GetInstance().storage;
   if (storage.find(this) == storage.end()) {
     storage.insert({this, Renderer{}});
     renderers_.push_back(&storage[this]);

@@ -252,7 +252,7 @@ void CuboidRenderer::Draw(const glm::mat4& view, const glm::mat4& proj, const gl
 }
 
 void CuboidRenderer::Destroy(Scene* scene) {
-  Internal::RendererStorage<CuboidRenderer>::GetInstance().storage_.erase(scene);
+  Internal::RendererStorage<CuboidRenderer>::GetInstance().storage.erase(scene);
 }
 
 

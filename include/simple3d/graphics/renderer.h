@@ -50,7 +50,7 @@ class RendererStorage {
   RendererStorage& operator=(RendererStorage&&) = delete;
   ~RendererStorage() = default;
 
-  std::unordered_map<Scene*, R> storage_{};
+  std::unordered_map<Scene*, R> storage{};
 
  private:
   RendererStorage() = default;
