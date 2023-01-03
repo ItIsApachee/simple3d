@@ -8,6 +8,7 @@
 
 #include <simple3d/types.h>
 #include <simple3d/graphics/scene.h>
+#include <simple3d/graphics/shader.h>
 
 namespace Simple3D {
 
@@ -22,19 +23,19 @@ class IRenderer {
   IRenderer() = default;
   virtual ~IRenderer() = default;
 
-  virtual void Draw(const glm::mat4& view, const glm::mat4& proj, const glm::vec3& view_pos) = 0;
+  // virtual void Draw(const glm::mat4& view, const glm::mat4& proj, const glm::vec3& view_pos) = 0;
   virtual void Destroy(Scene* scene) = 0;
 };
 
 namespace Internal {
+
+
+
 // // should it be a class?
 // // adv.: can make it a private static field, and
 // // then access is provided only using friends
 // template <typename R>
 // std::unordered_map<Scene*, R> RendererStorage{};
-
-
-
 template <typename R>
 class RendererStorage {
  public:
