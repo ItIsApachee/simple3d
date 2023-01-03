@@ -23,6 +23,7 @@ namespace Simple3D::Internal {
 
 
 
+// TODO(apachee): change name to GlesShader
 // TODO(apachee): consider adding support for compute shader, or add
 // ComputeShader class
 /** \class Shader simple3d/shader/shader.h
