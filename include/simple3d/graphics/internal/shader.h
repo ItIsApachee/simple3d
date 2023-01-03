@@ -12,6 +12,7 @@
 #include <optional>
 
 #include <glad/gles2.h>
+#include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
 #include <simple3d/types.h>
@@ -31,6 +32,7 @@ class Shader {
  public:
   friend ShaderBuilder;
 
+  // FIXME: default move ctors/= work not as intended
   Shader() = default;
   Shader(const Shader&) = delete;
   Shader(Shader&&) = default;
@@ -48,6 +50,7 @@ class Shader {
   // TODO(apachee): consider adding methods to modify uniforms
 
   Error SetUniformMat4fv(const std::string& name, const glm::mat4& matrix) const;
+  Error SetUniform3fv(const std::string& name, const glm::vec3& vec) const;
 
  private:
   static GLuint active_shader_id_;
