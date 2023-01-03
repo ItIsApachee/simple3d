@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 
+#include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
 #include <simple3d/types.h>
@@ -21,7 +22,7 @@ class IRenderer {
   IRenderer() = default;
   virtual ~IRenderer() = default;
 
-  virtual void Draw(const glm::mat4 &view, const glm::mat4 &proj) = 0;
+  virtual void Draw(const glm::mat4& view, const glm::mat4& proj, const glm::vec3& view_pos) = 0;
   virtual void Destroy(Scene* scene) = 0;
 };
 
@@ -34,7 +35,7 @@ namespace Internal {
 
 
 
-    template <typename R>
+template <typename R>
 class RendererStorage {
  public:
   static RendererStorage& GetInstance() {
