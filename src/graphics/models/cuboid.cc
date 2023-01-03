@@ -5,6 +5,7 @@
 #include <chrono>
 #include <utility>
 
+// FIXME: don't include everything
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -54,8 +55,7 @@ void CuboidInstance::BindAttributes() {
 }
 
 static constexpr auto GenVertices() {
-  // TODO(apachee): generate vertices in right order:
-  // so that OpenGL can determine the front side
+  // TODO(apachee): fix order for face culling to work
 
   constexpr int faces_cnt = 6;
   constexpr int vertices_per_face = 4;
@@ -94,13 +94,8 @@ static constexpr auto GenVertices() {
   }
   
   for (int i = 0; i < vertices_cnt; i++) {
-    result[i].texture_coords = glm::vec2(0.0f);
-    result[i].texture_coords.x = (i / vertices_per_face + 1) / 7.f;
     result[i].position /= 2.f;
   }
-  // result[0].texture_coords = glm::vec2(1.0f, 1.0f);
-  // result[1].texture_coords = glm::vec2(1.0f, 1.0f);
-  // result[2].texture_coords = glm::vec2(1.0f, 1.0f);
 
   return result;
 }
@@ -146,19 +141,6 @@ CuboidRenderer::CuboidRenderer()
 
   instances_vbo_ = Internal::VertexBufferObject(0, nullptr, kInstanceVboUsage);
   instances_vbo_.Bind();
-  // std::size_t vec4Size = sizeof(glm::vec4);
-  // glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(offsetof(CuboidInstance, model)));
-  // glEnableVertexAttribArray(3); 
-  // glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(offsetof(CuboidInstance, model) + 1 * vec4Size));
-  // glEnableVertexAttribArray(4); 
-  // glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(offsetof(CuboidInstance, model) + 2 * vec4Size));
-  // glEnableVertexAttribArray(5); 
-  // glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, (void*)(offsetof(CuboidInstance, model) + 3 * vec4Size));
-  // glEnableVertexAttribArray(6); 
-  // glVertexAttribDivisor(3, 12);
-  // glVertexAttribDivisor(4, 12);
-  // glVertexAttribDivisor(5, 12);
-  // glVertexAttribDivisor(6, 12);
   CuboidInstance::BindAttributes();
   
   ebo_ = Internal::ElementBufferObjectBuilder()
@@ -265,7 +247,7 @@ void CuboidRenderer::Draw(const glm::mat4& view, const glm::mat4& proj, const gl
   // glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, static_cast<void*>(0));
   // std::cerr << "instances_cnt: " << instances_cnt << std::endl;
   // vao_.BindEbo(ebo_);
-  glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0, instances_cnt);
+  glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0, static_cast<GLsizei>(instances_cnt));
   vao_.Unbind();
 }
 
