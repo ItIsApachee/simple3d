@@ -23,6 +23,6 @@ class IShader {
 
 
 
-}
+}  // namespace Simple3D
 
 #endif  // INCLUDE_SIMPLE3D_GRAPHICS_SHADER_H_
