@@ -55,6 +55,15 @@ void ModelShader::SetProj(const glm::mat4& proj) {
   }
 }
 
+void ModelShader::SetViewPos(const glm::vec3& view_pos) {
+  ModelShader& inst = GetInstance();
+  inst.Use();
+  if (view_pos != inst.view_pos_) {
+    inst.view_pos_ = view_pos;
+    inst.shader().SetUniform3fv("view_pos", view_pos);
+  }
+}
+
 const Internal::Shader& ModelShader::shader() const {
   return shader_;
 }
