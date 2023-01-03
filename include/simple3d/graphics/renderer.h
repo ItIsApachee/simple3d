@@ -26,11 +26,36 @@ class IRenderer {
 };
 
 namespace Internal {
-    // should it be a class?
-    // adv.: can make it a private static field, and
-    // then access is provided only using friends
+// // should it be a class?
+// // adv.: can make it a private static field, and
+// // then access is provided only using friends
+// template <typename R>
+// std::unordered_map<Scene*, R> RendererStorage{};
+
+
+
     template <typename R>
-    std::unordered_map<Scene*, R> RendererStorage{};
+class RendererStorage {
+ public:
+  static RendererStorage& GetInstance() {
+    static RendererStorage rs{};
+    return rs;
+  }
+
+  RendererStorage(const RendererStorage&) = delete;
+  RendererStorage(RendererStorage&&) = delete;
+  RendererStorage& operator=(const RendererStorage&) = delete;
+  RendererStorage& operator=(RendererStorage&&) = delete;
+  ~RendererStorage() = default;
+
+  std::unordered_map<Scene*, R> storage_{};
+
+ private:
+  RendererStorage() = default;
+};
+
+
+
 }  // namespace Internal
 // TODO(apachee): add is_renderer trait
 
