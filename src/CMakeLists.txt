@@ -51,7 +51,7 @@ add_subdirectory(graphics/internal)
 set(simple3d_SOURCES ${simple3d_SOURCES} context/context.cc context/window.cc context/input.cc)
 # src/graphics/
 set(simple3d_SOURCES ${simple3d_SOURCES} graphics/scene.cc graphics/view.cc
-    graphics/model.cc graphics/camera.cc)
+    graphics/model.cc graphics/camera.cc graphics/shader_storage.cc)
 
 # /src/graphics/internal
 set(simple3d_SOURCES ${simple3d_SOURCES}
