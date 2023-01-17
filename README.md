@@ -23,6 +23,9 @@ Coding standard - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
 ## Limitations.
 - Context can be initialized only once, otherwise you can expect undefined
 behaviour.
+- Only one instance of shader per type. Makes shaders less flexible, but
+increases overall performance as it decreases switches between shader
+programs.
 
 ## TODO:
 ### Overall.
