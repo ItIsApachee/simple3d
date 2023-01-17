@@ -26,6 +26,8 @@ behaviour.
 - Only one instance of shader per type. Makes shaders less flexible, but
 increases overall performance as it decreases switches between shader
 programs.
+- Only one instance of renderer per scene. Couldn't come up with a good
+way to allow that, but also provide easy library interface.
 
 ## TODO:
 ### Overall.
