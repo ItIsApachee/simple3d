@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <unordered_set>
 #include <type_traits>
 #include <memory>
 #include <utility>
@@ -19,6 +20,7 @@
 #include <simple3d/graphics/camera.h>
 #include <simple3d/graphics/shader.h>
 #include <simple3d/graphics/shader_storage.h>
+#include <simple3d/graphics/light.h>
 
 namespace Simple3D {
 
@@ -84,6 +86,9 @@ class Scene {
         M*>,
       Model<M>>;
 
+  void AddDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_light);
+  void RemoveDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_light);
+
  private:
   struct ShaderCell {
    public:
@@ -97,6 +102,8 @@ class Scene {
   std::unordered_map<std::type_index, ShaderCell> renderers_{};
 
   std::shared_ptr<ICamera> active_camera_{};
+
+  std::unordered_set<std::shared_ptr<DirectionalLight>> directional_lights_{};
 };
 
 

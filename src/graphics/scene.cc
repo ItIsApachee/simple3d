@@ -20,7 +20,11 @@ namespace Simple3D {
 
 
 
-Scene::Scene() : renderers_{}, active_camera_{new ICamera()} {}
+Scene::Scene()
+    : renderers_{}, 
+      active_camera_{new ICamera()}, 
+      directional_lights_{} {
+}
 
 void Scene::SetCamera(std::shared_ptr<ICamera> camera) {
   if (camera) {
@@ -28,6 +32,14 @@ void Scene::SetCamera(std::shared_ptr<ICamera> camera) {
   } else {
     active_camera_ = std::shared_ptr<ICamera>(new ICamera());
   }
+}
+
+void Scene::AddDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_light) {
+  directional_lights_.insert(dir_light);
+}
+
+void Scene::RemoveDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_light) {
+  directional_lights_.erase(dir_light);
 }
 /*
 // void render_scene(std::shared_ptr<Scene> scene) {
