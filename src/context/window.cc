@@ -38,7 +38,7 @@ Window Window::Create(Error* error) {
   // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
 
   GLFWwindow* glfw_window = glfwCreateWindow(
-    500, 500, "test (FIXME)", nullptr, nullptr);
+    800, 800, "test (FIXME)", nullptr, nullptr);
 
   if (glfw_window == nullptr) {
     *error = Error(ErrorType::kWindowCreationFailed,
