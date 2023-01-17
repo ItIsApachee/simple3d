@@ -25,7 +25,7 @@ glm::mat4 Camera::GetView() {
   view = glm::rotate(view, roll, glm::vec3(0.0f, 0.0f, 1.0f));
   view = glm::rotate(view, pitch, glm::vec3(1.0f, 0.0f, 0.0f));
   view = glm::rotate(view, yaw, glm::vec3(0.0f, 1.0f, 0.0f));
-  view = glm::translate(view, glm::vec3(-x, -y, -z));
+  view = glm::translate(view, -pos);
   return view;
 }
 
@@ -35,7 +35,7 @@ glm::mat4 Camera::GetProj() {
 }
 
 glm::vec3 Camera::GetViewPos() {
-  return glm::vec3(x, y, z);
+  return pos;
 }
 
 

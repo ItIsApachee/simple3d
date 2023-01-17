@@ -20,7 +20,6 @@ class ICamera {
   ICamera() = default;
   virtual ~ICamera() = default;
   
-  // return identity matrix by default
   virtual glm::mat4 GetView();
   virtual glm::mat4 GetProj();
   virtual glm::vec3 GetViewPos();
@@ -34,9 +33,7 @@ class Camera : public ICamera {
   Camera() = default;
   ~Camera() override = default;
 
-  GLfloat x{0.0f};
-  GLfloat y{0.0f};
-  GLfloat z{0.0f};
+  glm::vec3 pos{0.0f};
   GLfloat roll{0.0f};
   GLfloat pitch{0.0f};
   GLfloat yaw{0.0f};
