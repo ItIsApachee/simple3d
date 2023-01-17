@@ -17,7 +17,7 @@ namespace Simple3D {
 // definition
 class ShaderStorage {
  public:
-  ShaderStorage& GetInstance();
+  static ShaderStorage& GetInstance();
 
   ShaderStorage(const ShaderStorage&) = delete;
   ShaderStorage(ShaderStorage&&) = delete;
@@ -71,7 +71,7 @@ std::weak_ptr<IShader> ShaderStorage::GetShader() {
 
   // store the pointer, and return the weak version of it
   // shared_ptr will be destroyed anyways, so move it
-  return shaders_[typeid(S)] = std::dynamic_pointer_cast(
+  return shaders_[typeid(S)] = std::dynamic_pointer_cast<IShader>(
       std::move(shader_ptr));
 }
 
