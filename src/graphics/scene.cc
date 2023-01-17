@@ -22,12 +22,6 @@ namespace Simple3D {
 
 Scene::Scene() : renderers_{}, active_camera_{new ICamera()} {}
 
-Scene::~Scene() {
-  for (auto& r : renderers_) {
-    r->Destroy(this);
-  }
-}
-
 void Scene::SetCamera(std::shared_ptr<ICamera> camera) {
   if (camera) {
     active_camera_ = camera;

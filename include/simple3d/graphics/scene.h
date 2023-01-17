@@ -6,15 +6,19 @@
 #define INCLUDE_SIMPLE3D_GRAPHICS_SCENE_H_
 
 #include <vector>
+#include <unordered_map>
 #include <type_traits>
 #include <memory>
 #include <utility>
+#include <typeindex>
 
 #include <simple3d/types.h>
 #include <simple3d/graphics/view.h>
 #include <simple3d/graphics/renderer.h>
 #include <simple3d/graphics/model.h>
 #include <simple3d/graphics/camera.h>
+#include <simple3d/graphics/shader.h>
+#include <simple3d/graphics/shader_storage.h>
 
 namespace Simple3D {
 
@@ -33,15 +37,12 @@ class Scene {
   Scene(Scene&&) = delete;
   Scene& operator=(const Scene&) = delete;
   Scene& operator=(Scene&&) = delete;
-  ~Scene();
+  ~Scene() = default;
 
   void SetCamera(std::shared_ptr<ICamera> camera);
 
   // TODO(apachee): add ability to initialize renderer like
   // Scene::AddRenerer<R>(R&& renderer)
-
-  // TODO(apachee): add ability to have multiple instances of renderers of the
-  // same type
 
   // usage example: group objects in separate renderers with different
   // configuration
@@ -84,16 +85,49 @@ class Scene {
       Model<M>>;
 
  private:
-  template <typename M, typename R, typename... Args>
-  Model<M> CreateInternal(M* (R::*mf)(Args...), Args... args);
+  struct ShaderCell {
+   public:
+    std::weak_ptr<IShader> shader{};
+    std::unordered_map<std::type_index, std::unique_ptr<IRenderer>> renderers{};
+  };
 
-  std::vector<IRenderer*> renderers_{};
+  template <typename R>
+  R& GetRenderer();
+
+  std::unordered_map<std::type_index, ShaderCell> renderers_{};
+
   std::shared_ptr<ICamera> active_camera_{};
 };
 
 
 
 // implementation
+template <typename R>
+R& Scene::GetRenderer() {
+  using Shader = R::Shader;
+
+  std::type_index shader_type = typeid(Shader);
+  std::type_index renderer_type = typeid(R);
+
+  auto renderers_it = renderers_.find(shader_type);
+  if (renderers_it == renderers_.end()) {
+    auto& cell = ShaderCell{
+      ShaderStorage::GetInstance().GetShader<Shader>(),
+      {}
+    };
+    renderers_it = renderers_.emplace(shader_type, std::move(cell)).first;
+  }
+
+  auto& shader_renderers = renderers_it->second.renderers;
+  auto it = shader_renderers.find(shader_type);
+  if (it == shader_renderers.end()) {
+    it = shader_renderers.emplace(renderer_type, std::make_unique<R>()).first;
+  }
+  
+  auto& renderer_ptr = it->second;
+  return *dynamic_cast<R*>(renderer_ptr.get());
+}
+
 template <typename M, typename... Args>
 auto Scene::Create(Args... args)
   -> std::enable_if_t<
@@ -124,14 +158,9 @@ auto Scene::Create(Args... args)
         std::declval<R>().template Create<M>(args...)),
       M*>,
     Model<M>> {
-  // return CreateInternal<M, R>(&R::template Create<M>, args...);
   using Renderer = R;
-  auto& storage = Internal::RendererStorage<Renderer>;
-  if (storage.find(this) == storage.end()) {
-    storage.insert({this, Renderer{}});
-    renderers_.push_back(&storage[this]);
-  }
-  return Model{storage[this].template Create<M>(args...)};
+  auto& renderer = GetRenderer<R>();
+  return Model{renderer.template Create<M>(args...)};
 }
 
 template <typename M, typename R, typename... Args>
@@ -142,26 +171,10 @@ auto Scene::Create(Args... args)
         std::declval<R>().Create(args...)),
       M*>,
     Model<M>> {
-  // return CreateInternal<M, R>(&R::Create, args...);
   using Renderer = R;
-  auto& storage = Internal::RendererStorage<Renderer>::GetInstance().storage;
-  if (storage.find(this) == storage.end()) {
-    storage.insert({this, Renderer{}});
-    renderers_.push_back(&storage[this]);
-  }
-  return Model{storage[this].Create(args...)};
+  auto& renderer = GetRenderer<R>();
+  return Model{renderer.Create(args...)};
 }
-
-// template <typename M, typename R, typename... MFArgs, typename... Args>
-// Model<M> Scene::CreateInternal(M* (R::*mf)(MFArgs...), Args... args) {
-//   using Renderer = R;
-//   auto& storage = Internal::RendererStorage<Renderer>;
-//   if (storage.find(this) == storage.end()) {
-//     storage.insert({this, Renderer{}});
-//     renderers_.push_back(&storage[this]);
-//   }
-//   return Model{(storage[this].*mf)(args...)};
-// }
 
 
 
