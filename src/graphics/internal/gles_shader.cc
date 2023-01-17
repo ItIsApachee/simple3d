@@ -17,34 +17,34 @@ namespace Simple3D::Internal {
 
 
 
-ShaderBuilder& ShaderBuilder::VertexShaderSource(const std::string& src) {
+GlesShaderBuilder& GlesShaderBuilder::VertexShaderSource(const std::string& src) {
   vertex_shader_src_ = src;
   return *this;
 }
 
-ShaderBuilder& ShaderBuilder::VertexShaderSource(std::string&& src) {
+GlesShaderBuilder& GlesShaderBuilder::VertexShaderSource(std::string&& src) {
   vertex_shader_src_ = src;
   return *this;
 }
 
-ShaderBuilder& ShaderBuilder::FragmentShaderSource(const std::string& src) {
+GlesShaderBuilder& GlesShaderBuilder::FragmentShaderSource(const std::string& src) {
   fragment_shader_src_ = src;
   return *this;
 }
 
-ShaderBuilder& ShaderBuilder::FragmentShaderSource(std::string&& src) {
+GlesShaderBuilder& GlesShaderBuilder::FragmentShaderSource(std::string&& src) {
   fragment_shader_src_ = src;
   return *this;
 }
 
-Shader ShaderBuilder::Build() {
+GlesShader GlesShaderBuilder::Build() {
   Error discarded_error;
   return Build(&discarded_error);
 }
 
-Shader ShaderBuilder::Build(Error* error) {
+GlesShader GlesShaderBuilder::Build(Error* error) {
   // TODO(apachee): check if context is loaded
-  Shader result = Shader();
+  GlesShader result = GlesShader();
   if (!vertex_shader_src_) {
     *error = Error(
       ErrorType::kShaderCompilationFailed,
@@ -115,31 +115,31 @@ Shader ShaderBuilder::Build(Error* error) {
   return result;
 }
 
-GLuint Shader::active_shader_id_{kGlesInvalidShader};
+GLuint GlesShader::active_shader_id_{kGlesInvalidShader};
 
-void Shader::Use() const {
+void GlesShader::Use() const {
   if (active_shader_id_ != shader_id_) {
     glUseProgram(shader_id_);
     active_shader_id_ = shader_id_;
   }
 }
 
-unsigned int Shader::GetID() const {
+unsigned int GlesShader::GetID() const {
   return shader_id_;
 }
 
-bool Shader::IsValid() const {
+bool GlesShader::IsValid() const {
   return shader_id_ != 0;
 }
 
-void Shader::Delete() {
+void GlesShader::Delete() {
   if (IsValid()) {
     glDeleteProgram(shader_id_);
     shader_id_ = 0;
   }
 }
 
-Error Shader::SetUniformMat4fv(
+Error GlesShader::SetUniformMat4fv(
     const std::string& name, const glm::mat4& matrix) const {
   int location = glGetUniformLocation(shader_id_, name.c_str());
   if (location == -1) {
@@ -152,7 +152,7 @@ Error Shader::SetUniformMat4fv(
   return Error(ErrorType::kOk);
 }
 
-Error Shader::SetUniform3fv(
+Error GlesShader::SetUniform3fv(
     const std::string& name, const glm::vec3& vec) const {
   int location = glGetUniformLocation(shader_id_, name.c_str());
   if (location == -1) {

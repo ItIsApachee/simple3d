@@ -27,7 +27,7 @@ class ModelShader : public IShader {
   void SetViewPos(const glm::vec3& view_pos) override;
 
  private:
-  Internal::Shader shader_{};
+  Internal::GlesShader shader_{};
   glm::mat4 view_{0.0f};
   glm::mat4 proj_{0.0f};
   glm::vec3 view_pos_{0.0f};
