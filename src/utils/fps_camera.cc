@@ -76,16 +76,18 @@ void FpsCameraInputHandler::CursorPosCallback(double xpos, double ypos) {
 
   const double pixels_to_radians = glm::radians(0.25f);
 
-  double xdiff = xpos - prev_xpos_;
+  float xdiff = (float)(xpos - prev_xpos_);
   xdiff *= pixels_to_radians;
+  using yaw_t = decltype(camera_->yaw);
   camera_->yaw += cfg_.sensitivity * xdiff;
-  camera_->yaw = std::fmod(camera_->yaw, glm::two_pi<double>());
+  camera_->yaw = std::fmod(camera_->yaw, glm::two_pi<yaw_t>());
 
-  double ydiff = ypos - prev_ypos_;
+  float ydiff = (float)(ypos - prev_ypos_);
   ydiff *= pixels_to_radians;
+  using pitch_t = decltype(camera_->pitch);
   camera_->pitch += cfg_.sensitivity * ydiff;
-  camera_->pitch = std::clamp<decltype(camera_->pitch)>(
-      camera_->pitch, -glm::half_pi<double>(), glm::half_pi<double>());
+  camera_->pitch = std::clamp<pitch_t>(
+      camera_->pitch, -glm::half_pi<pitch_t>(), glm::half_pi<pitch_t>());
 
   prev_xpos_ = xpos;
   prev_ypos_ = ypos;
