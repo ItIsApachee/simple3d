@@ -107,7 +107,7 @@ int main() {
 		App::PollEvents();
 
         auto now = std::chrono::high_resolution_clock::now();
-        float millis = std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
+        float millis = (float)std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
         // angle += 0.01f;
 
         float shift_amp = 0.5;
