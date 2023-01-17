@@ -17,14 +17,37 @@ namespace Simple3D {
 void FpsCameraInputHandler::Enable(const std::shared_ptr<Camera>& camera) {
   glfwGetCursorPos(cfg_.window, &prev_xpos_, &prev_ypos_);
   // TODO(apachee): disable cursor & raw mouse motion
+  prev_cursor_mode = glfwGetInputMode(cfg_.window, GLFW_CURSOR);
   glfwSetInputMode(cfg_.window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+  if (cfg_.raw_motion_enabled && glfwRawMouseMotionSupported()) {
+    glfwSetInputMode(cfg_.window, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+  }
 
-  key_states_ = KeyStates{};
   camera_ = camera;
 }
 void FpsCameraInputHandler::Disable() {
-  glfwSetInputMode(cfg_.window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+  if (glfwGetInputMode(cfg_.window, GLFW_RAW_MOUSE_MOTION) == GLFW_TRUE) {
+    glfwSetInputMode(cfg_.window, GLFW_RAW_MOUSE_MOTION, GLFW_FALSE);
+  }
+  glfwSetInputMode(cfg_.window, GLFW_CURSOR, prev_cursor_mode);
   camera_ = {};
+}
+
+FpsCameraInputHandler::KeyStates FpsCameraInputHandler::GetKeyStates() {
+  FpsCameraInputHandler::KeyStates key_states{};
+  
+  auto check = [this](int key) {
+    return glfwGetKey(cfg_.window, key) == GLFW_PRESS;
+  };
+
+  key_states.forwards = check(cfg_.forwards_key);
+  key_states.backwards = check(cfg_.backwards_key);
+  key_states.left = check(cfg_.left_key);
+  key_states.right = check(cfg_.right_key);
+  key_states.up = check(cfg_.up_key);
+  key_states.down = check(cfg_.down_key);
+
+  return key_states;
 }
 
 void FpsCameraInputHandler::Update(const std::chrono::milliseconds& delta) {
@@ -34,16 +57,19 @@ void FpsCameraInputHandler::Update(const std::chrono::milliseconds& delta) {
   constexpr float kMillisPerSecond = 1000.0F;
   float mult = cfg_.movement_speed * (float)delta.count() / kMillisPerSecond;
 
+  auto key_states = GetKeyStates();
+
   glm::vec3 cam_front{-glm::sin(-camera_->yaw), 0.0F, -glm::cos(-camera_->yaw)};
-  float front_mult = mult * (key_states_.forwards - key_states_.backwards);
+  float front_mult = mult * (key_states.forwards - key_states.backwards);
   camera_->pos += front_mult * cam_front;
 
   glm::vec3 cam_right{glm::cos(-camera_->yaw), 0.0F, -glm::sin(-camera_->yaw)};
-  float right_mult = mult * (key_states_.right - key_states_.left);
+  float right_mult = mult * (key_states.right - key_states.left);
   camera_->pos += right_mult * cam_right;
 
-  // glm::vec3 cam_up{0.0F, 1.0F, 0.0F};
-  // camera_->pos += (int)vertical_ * cfg_.movement_speed * (float)delta.count() * cam_right;
+  glm::vec3 cam_up{0.0F, 1.0F, 0.0F};
+  float up_mult = mult * (key_states.up - key_states.down);
+  camera_->pos += up_mult * cam_up;
 }
 
 FpsCameraInputHandler::FpsCameraInputHandler(const FpsCameraConfig& cfg)
@@ -51,25 +77,6 @@ FpsCameraInputHandler::FpsCameraInputHandler(const FpsCameraConfig& cfg)
   focused_ = glfwGetWindowAttrib(cfg_.window, GLFW_FOCUSED) == GLFW_TRUE;
 }
 
-void FpsCameraInputHandler::KeyCallback(int key, 
-    int scancode, int action, int mods) {
-  if (!camera_)
-    return;
-  
-  if (action != GLFW_PRESS && action != GLFW_RELEASE)
-    return;
-  char val = action == GLFW_PRESS;
-
-  if (key == cfg_.forwards_key) {
-    key_states_.forwards = val;
-  } else if (key == cfg_.backwards_key) {
-    key_states_.backwards = val;
-  } else if (key == cfg_.left_key) {
-    key_states_.left = val;
-  } else if (key == cfg_.right_key) {
-    key_states_.right = val;
-  }
-}
 void FpsCameraInputHandler::CursorPosCallback(double xpos, double ypos) {
   if (!camera_ || !focused_)
     return;

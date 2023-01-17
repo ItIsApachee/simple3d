@@ -25,6 +25,8 @@ struct FpsCameraConfig {
   int backwards_key{GLFW_KEY_S};
   int left_key{GLFW_KEY_A};
   int right_key{GLFW_KEY_D};
+  int up_key{GLFW_KEY_SPACE};
+  int down_key{GLFW_KEY_LEFT_SHIFT};
 };
 
 class FpsCameraInputHandler : public IInputHandler, public IWindowInputHandler {
@@ -39,8 +41,8 @@ class FpsCameraInputHandler : public IInputHandler, public IWindowInputHandler {
 
   void Update(const std::chrono::milliseconds& delta);
 
-  void KeyCallback(int key, 
-      int scancode, int action, int mods) override;
+  // void KeyCallback(int key, 
+  //     int scancode, int action, int mods) override;
   void CursorPosCallback(double xpos, double ypos) override;
 
   void WindowFocusCallback(int focused) override;
@@ -52,7 +54,11 @@ class FpsCameraInputHandler : public IInputHandler, public IWindowInputHandler {
     char backwards{0};
     char left{0};
     char right{0};
+    char up{0};
+    char down{0};
   };
+
+  KeyStates GetKeyStates();
 
   std::shared_ptr<Camera> camera_{};
 
@@ -61,7 +67,8 @@ class FpsCameraInputHandler : public IInputHandler, public IWindowInputHandler {
   bool focused_{false};
   double prev_xpos_{0.0f};
   double prev_ypos_{0.0f};
-  KeyStates key_states_{};
+
+  int prev_cursor_mode{GLFW_CURSOR_NORMAL};
 };
 
 }  // namespace Simple3D
