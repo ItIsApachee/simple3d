@@ -25,7 +25,7 @@ class Window : public IInputHandler, public IWindowInputHandler {
   Window(const Window&) = delete;
   Window& operator=(const Window&) = delete;
 
-  ~Window();
+  ~Window() override;
 
   void KeyCallback(int key, int scancode, int action, int mods) override;
   void CharCallback(unsigned int codepoint) override;

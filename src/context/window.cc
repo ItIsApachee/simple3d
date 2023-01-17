@@ -14,6 +14,15 @@ namespace Simple3D {
 
 
 
+class FramebufferSizeHandler : public IWindowInputHandler {
+ public:
+  FramebufferSizeHandler() = default;
+  ~FramebufferSizeHandler() override = default;
+
+  void FramebufferSizeCallback(int width, int height) override {
+    glViewport(0, 0, width, height);
+  }
+};
 // static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 //   glViewport(0, 0, width, height);
 // }
@@ -49,7 +58,8 @@ Window Window::Create(Error* error) {
 }
 
 Window::Window(GLFWwindow* window): window_{window} {
-  // TODO(apachee): add input handler for glViewport
+  EnableWindowInputHandler(
+    std::dynamic_pointer_cast<IWindowInputHandler>(std::make_shared<FramebufferSizeHandler>()));
 }
 
 Window::Window(Window&& window)
