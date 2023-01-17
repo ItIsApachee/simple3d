@@ -10,6 +10,7 @@
 #include <simple3d/graphics/camera.h>
 #include <simple3d/graphics/models/cuboid.h>
 #include <simple3d/graphics/internal/shader.h>
+#include <simple3d/utils/fps_camera.h>
 // #include <iostream>
 // #include <thread>
 // #include <chrono>
@@ -81,8 +82,16 @@ int main() {
     
 	View view{};
 	Scene scene{};
+
     auto camera = std::make_shared<Camera>();
     scene.SetCamera(camera);
+
+    FpsCameraConfig cfg{};
+    cfg.window = App::GetGLFWwindow();
+    auto cam_handler = std::make_shared<FpsCameraInputHandler>(cfg);
+    App::EnableInputHandler(cam_handler);
+    App::EnableWindowInputHandler(cam_handler);
+    cam_handler->Enable(camera);
 
     std::vector<Model<Cuboid>> cubes;
     int v = 1;
@@ -103,11 +112,16 @@ int main() {
     float angle = 0.0f;
     float dist = 10.0f;
     auto start = std::chrono::high_resolution_clock::now();
+    auto prev = start;
 	while (!App::ShouldClose()) {
 		App::PollEvents();
 
         auto now = std::chrono::high_resolution_clock::now();
-        float millis = (float)std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
+        auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(now - start);
+
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - prev);
+        prev = now;
+        cam_handler->Update(elapsed);
         // angle += 0.01f;
 
         float shift_amp = 0.5;
@@ -118,10 +132,11 @@ int main() {
                 cubes[i]->y = -cubes[i]->y;
             }
         }
-        angle = millis / 5000.0f;
-        camera->z = dist*cos(angle);
-        camera->x = dist*sin(angle);
-        camera->yaw = -angle;
+        angle = millis.count() / 5000.0f;
+
+        // camera->z = dist*cos(angle);
+        // camera->x = dist*sin(angle);
+        // camera->yaw = -angle;
 
 		view.Draw(scene);
         App::SwapBuffers();
