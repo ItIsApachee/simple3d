@@ -22,6 +22,7 @@ enum class ErrorType : int {
   kWindowCreationFailed,
   kShaderCompilationFailed,
   kUniformNotFound,
+  kUnitializedShader,
   kUnknown
 };
 

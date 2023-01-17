@@ -1,5 +1,7 @@
 #include <simple3d/graphics/view.h>
 
+#include <sstream>
+
 #include <glad/gles2.h>
 #include <glm/mat4x4.hpp>
 
@@ -43,7 +45,9 @@ Error View::Draw(const Scene &scene) {
         renderer->Draw();
       }
     } else {
-      // TODO(apachee): error handling
+      std::ostringstream ostrm{};
+      ostrm << "unitialized shader of type " << cell_type.name();
+      return Error(ErrorType::kUnitializedShader, ostrm.str());
     }
   }
 
