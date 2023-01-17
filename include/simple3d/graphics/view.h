@@ -2,6 +2,7 @@
 #define INCLUDE_SIMPLE3D_GRAPHICS_VIEW_H_
 
 #include <simple3d/types.h>
+#include <simple3d/misc/error.h>
 #include <simple3d/graphics/scene.h>
 
 namespace Simple3D {
@@ -21,7 +22,7 @@ class View {
   View& operator=(View&&) = default;
   ~View();  // delete framebuffer if not 0
 
-  void Draw(const Scene& scene);
+  Error Draw(const Scene& scene);
 
  private:
   unsigned int framebuffer_{0};
