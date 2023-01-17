@@ -14,9 +14,9 @@ namespace Simple3D {
 
 
 
-static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-  glViewport(0, 0, width, height);
-}
+// static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+//   glViewport(0, 0, width, height);
+// }
 
 Window Window::Create(Error* error) {
   glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
@@ -49,8 +49,7 @@ Window Window::Create(Error* error) {
 }
 
 Window::Window(GLFWwindow* window): window_{window} {
-  // TODO(apachee): setup callbacks(?): inputs, etc.
-  glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+  // TODO(apachee): add input handler for glViewport
 }
 
 Window::Window(Window&& window)
@@ -83,30 +82,121 @@ Window::~Window() {
   }
 }
 
-void Window::EnableInputHandler(std::shared_ptr<IInputHandler> input_handler) {
-  input_handlers_.insert(input_handler);
-}
-
-void Window::EnableWindowInputHandler(
-    std::shared_ptr<IWindowInputHandler> window_input_handler) {
-  window_input_handlers_.insert(window_input_handler);
-}
-
-void Window::DisableInputHandler(std::shared_ptr<IInputHandler> input_handler) {
-  input_handlers_.erase(input_handler);
-}
-
-void Window::DisableWindowInputHandler(
-    std::shared_ptr<IWindowInputHandler> window_input_handler) {
-  window_input_handlers_.erase(window_input_handler);
-}
-
 void Window::SwapBuffers() {
   glfwSwapBuffers(window_);
 }
 
 bool Window::ShouldClose() {
   return glfwWindowShouldClose(window_);
+}
+
+void Window::EnableInputHandler(const std::shared_ptr<IInputHandler>& input_handler) {
+  input_handlers_.insert(input_handler);
+}
+
+void Window::EnableWindowInputHandler(
+    const std::shared_ptr<IWindowInputHandler>& window_input_handler) {
+  window_input_handlers_.insert(window_input_handler);
+}
+
+void Window::DisableInputHandler(const std::shared_ptr<IInputHandler>& input_handler) {
+  input_handlers_.erase(input_handler);
+}
+
+void Window::DisableWindowInputHandler(
+    const std::shared_ptr<IWindowInputHandler>& window_input_handler) {
+  window_input_handlers_.erase(window_input_handler);
+}
+
+
+
+void Window::KeyCallback(int key, int scancode, int action, int mods) {
+  for (auto& input_handler : input_handlers_) {
+    input_handler->KeyCallback(key, scancode, action, mods);
+  }
+}
+void Window::CharCallback(unsigned int codepoint) {
+  for (auto& input_handler : input_handlers_) {
+    input_handler->CharCallback(codepoint);
+  }
+}
+void Window::CharModsCallback(unsigned int codepoint, int mods) {
+  for (auto& input_handler : input_handlers_) {
+    input_handler->CharModsCallback(codepoint, mods);
+  }
+}
+void Window::MouseButtonCallback(int button, int action, int mods) {
+  for (auto& input_handler : input_handlers_) {
+    input_handler->MouseButtonCallback(button, action, mods);
+  }
+}
+void Window::CursorPosCallback(double xpos, double ypos) {
+  for (auto& input_handler : input_handlers_) {
+    input_handler->CursorPosCallback(xpos, ypos);
+  }
+}
+void Window::CursorEnterCallback(int entered) {
+  for (auto& input_handler : input_handlers_) {
+    input_handler->CursorEnterCallback(entered);
+  }
+}
+void Window::ScrollCallback(double xoffset, double yoffset) {
+  for (auto& input_handler : input_handlers_) {
+    input_handler->ScrollCallback(xoffset, yoffset);
+  }
+}
+void Window::DropCallback(int path_count, const char* paths[]) {
+  for (auto& input_handler : input_handlers_) {
+    input_handler->DropCallback(path_count, paths);
+  }
+}
+
+
+
+void Window::WindowPosCallback(int xpos, int ypos) {
+  for (auto& window_input_handler : window_input_handlers_) {
+    window_input_handler->WindowPosCallback(xpos, ypos);
+  }
+}
+void Window::WindowSizeCallback(int width, int height) {
+  for (auto& window_input_handler : window_input_handlers_) {
+    window_input_handler->WindowSizeCallback(width, height);
+  }
+}
+void Window::WindowCloseCallback() {
+  for (auto& window_input_handler : window_input_handlers_) {
+    window_input_handler->WindowCloseCallback();
+  }
+}
+void Window::WindowRefreshCallback() {
+  for (auto& window_input_handler : window_input_handlers_) {
+    window_input_handler->WindowRefreshCallback();
+  }
+}
+void Window::WindowFocusCallback(int focused) {
+  for (auto& window_input_handler : window_input_handlers_) {
+    window_input_handler->WindowFocusCallback(focused);
+  }
+}
+void Window::WindowIconifyCallback(int iconified) {
+  for (auto& window_input_handler : window_input_handlers_) {
+    window_input_handler->WindowIconifyCallback(iconified);
+  }
+}
+void Window::WindowMaximizeCallback(int maximized) {
+  for (auto& window_input_handler : window_input_handlers_) {
+    window_input_handler->WindowMaximizeCallback(maximized);
+  }
+}
+void Window::FramebufferSizeCallback(int width, int height) {
+  for (auto& window_input_handler : window_input_handlers_) {
+    window_input_handler->FramebufferSizeCallback(width, height);
+  }
+}
+void Window::WindowContentScaleCallback(float xscale, float yscale) {
+  for (auto& window_input_handler : window_input_handlers_) {
+    window_input_handler->WindowContentScaleCallback(xscale, yscale);
+  }
 }
 
 

@@ -18,7 +18,7 @@ namespace Simple3D {
 
 
 
-class Window {
+class Window : public IInputHandler, public IWindowInputHandler {
  public:
   friend App;
 
@@ -26,6 +26,25 @@ class Window {
   Window& operator=(const Window&) = delete;
 
   ~Window();
+
+  void KeyCallback(int key, int scancode, int action, int mods) override;
+  void CharCallback(unsigned int codepoint) override;
+  void CharModsCallback(unsigned int codepoint, int mods) override;
+  void MouseButtonCallback(int button, int action, int mods) override;
+  void CursorPosCallback(double xpos, double ypos) override;
+  void CursorEnterCallback(int entered) override;
+  void ScrollCallback(double xoffset, double yoffset) override;
+  void DropCallback(int path_count, const char* paths[]) override;
+
+  void WindowPosCallback(int xpos, int ypos) override;
+  void WindowSizeCallback(int width, int height) override;
+  void WindowCloseCallback() override;
+  void WindowRefreshCallback() override;
+  void WindowFocusCallback(int focused) override;
+  void WindowIconifyCallback(int iconified) override;
+  void WindowMaximizeCallback(int maximized) override;
+  void FramebufferSizeCallback(int width, int height) override;
+  void WindowContentScaleCallback(float xscale, float yscale) override;
 
  private:
   static Window Create(Error* error);
@@ -39,12 +58,12 @@ class Window {
 
   bool ShouldClose();
   void SwapBuffers();
-  void EnableInputHandler(std::shared_ptr<IInputHandler> input_handler);
+  void EnableInputHandler(const std::shared_ptr<IInputHandler>& input_handler);
   void EnableWindowInputHandler(
-    std::shared_ptr<IWindowInputHandler> window_input_handler);
-  void DisableInputHandler(std::shared_ptr<IInputHandler> input_handler);
+    const std::shared_ptr<IWindowInputHandler>& window_input_handler);
+  void DisableInputHandler(const std::shared_ptr<IInputHandler>& input_handler);
   void DisableWindowInputHandler(
-    std::shared_ptr<IWindowInputHandler> window_input_handler);
+    const std::shared_ptr<IWindowInputHandler>& window_input_handler);
 
   GLFWwindow* window_{nullptr};
   std::unordered_set<std::shared_ptr<IInputHandler>> input_handlers_{};

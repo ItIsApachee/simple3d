@@ -67,6 +67,8 @@ Error App::Init() {
   if (!err.IsOk()) {
     return err;
   }
+  Internal::SetInputHandler(ctx.window_.window_, &ctx.window_);
+  Internal::SetWindowInputHandler(ctx.window_.window_, &ctx.window_);
 
   std::cerr << "window creation succ" << std::endl;
 
@@ -79,6 +81,8 @@ void App::Destroy() {
   App& ctx = GetInstance();
 
   if (ctx.is_init) {
+    Internal::UnsetInputHandler();
+    Internal::UnsetWindowInputHandler();
     {
       Window window = std::move(ctx.window_);
       ctx.window_ = Window{};
@@ -102,18 +106,18 @@ void App::PollEvents() {
 }
 
 void App::EnableInputHandler(std::shared_ptr<IInputHandler> input_handler) {
-  GetInstance().EnableInputHandler(input_handler);
+  GetInstance().window_.EnableInputHandler(input_handler);
 }
 void App::EnableWindowInputHandler(
     std::shared_ptr<IWindowInputHandler> window_input_handler) {
-  GetInstance().EnableWindowInputHandler(window_input_handler);
+  GetInstance().window_.EnableWindowInputHandler(window_input_handler);
 }
 void App::DisableInputHandler(std::shared_ptr<IInputHandler> input_handler) {
-  GetInstance().DisableInputHandler(input_handler);
+  GetInstance().window_.DisableInputHandler(input_handler);
 }
 void App::DisableWindowInputHandler(
     std::shared_ptr<IWindowInputHandler> window_input_handler) {
-  GetInstance().DisableWindowInputHandler(window_input_handler);
+  GetInstance().window_.DisableWindowInputHandler(window_input_handler);
 }
 
 
