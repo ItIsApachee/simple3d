@@ -35,8 +35,8 @@ namespace Internal {
 
 
 
-class Shader;
-class ShaderBuilder;
+class GlesShader;
+class GlesShaderBuilder;
 class ElementBufferObject;
 class ElementBufferObjectBuilder;
 class VertexBufferObject;

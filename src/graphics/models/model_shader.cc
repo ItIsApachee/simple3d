@@ -14,7 +14,7 @@ namespace Simple3D {
 // FIXME: make string constants for shader fields
 ModelShader::ModelShader() {
   Error err;
-  shader_ = Internal::ShaderBuilder()
+  shader_ = Internal::GlesShaderBuilder()
     .FragmentShaderSource(Internal::kFragmentShader)
     .VertexShaderSource(Internal::kVertexShader)
     .Build(&err);

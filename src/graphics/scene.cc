@@ -59,7 +59,7 @@ void Scene::SetAmbientLight(const glm::vec3& light) {
 //     // };
 
 //     Error shader_program_error;
-//     Shader shader_program = ShaderBuilder()
+//     GlesShader shader_program = GlesShaderBuilder()
         .VertexShaderSource(kVertexShader)
         .FragmentShaderSource(kFragmentShader).Build(
           &gl, shader_program_error);
