@@ -20,6 +20,10 @@ Coding standard - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
 - GLFW (https://www.glfw.org/).
 - ANGLE (https://github.com/google/angle).
 
+## Limitations.
+- Context can be initialized only once, otherwise you can expect undefined
+behaviour.
+
 ## TODO:
 ### Overall.
 - [x] Create CMake config of library
