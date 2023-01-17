@@ -12,6 +12,7 @@
 #include <simple3d/graphics/internal/element_buffer_object.h>
 #include <simple3d/graphics/internal/vertex_buffer_object.h>
 #include <simple3d/graphics/internal/vertex_array_object.h>
+#include <simple3d/graphics/models/model_shader.h>
 
 namespace Simple3D {
 
@@ -41,6 +42,8 @@ struct Cuboid {
 
 class CuboidRenderer : public IRenderer {
  public:
+  using Shader = ModelShader;
+
   CuboidRenderer();
   CuboidRenderer(const CuboidRenderer&) = delete;
   CuboidRenderer(CuboidRenderer&&) = default;
@@ -50,8 +53,7 @@ class CuboidRenderer : public IRenderer {
 
   Cuboid* Create(float x, float y, float z);
 
-  void Draw(const glm::mat4& view, const glm::mat4& proj, const glm::vec3& view_pos) override;
-  void Destroy(Scene* scene) override;
+  void Draw() override;
 
  private:
   std::vector<Cuboid*> cuboids_{};

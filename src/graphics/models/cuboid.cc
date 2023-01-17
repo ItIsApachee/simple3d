@@ -130,8 +130,6 @@ CuboidRenderer::CuboidRenderer()
       ebo_(),
       cuboids_(),
       start_time_(std::chrono::high_resolution_clock::now()) {
-  ModelShader::Init();
-
   vao_.Bind();
 
   verices_vbo_ = Internal::VertexBufferObject(sizeof(Internal::Vertex)*kCuboidVertices.size(), 
@@ -177,7 +175,7 @@ Cuboid* CuboidRenderer::Create(float x, float y, float z) {
   return cuboids_.back();
 }
 
-void CuboidRenderer::Draw(const glm::mat4& view, const glm::mat4& proj, const glm::vec3& view_pos) {
+void CuboidRenderer::Draw() {
   if (cuboids_.empty())
     return;
 
@@ -221,11 +219,6 @@ void CuboidRenderer::Draw(const glm::mat4& view, const glm::mat4& proj, const gl
 
   // CuboidInstance inst{transform};
   // instances_vbo_.SubData(0, sizeof(CuboidInstance), (std::byte*)&inst);
-
-  ModelShader::Use();
-  ModelShader::SetView(view);
-  ModelShader::SetProj(proj);
-  ModelShader::SetViewPos(view_pos);
   vao_.Bind();
 
 
@@ -249,10 +242,6 @@ void CuboidRenderer::Draw(const glm::mat4& view, const glm::mat4& proj, const gl
   // vao_.BindEbo(ebo_);
   glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0, static_cast<GLsizei>(instances_cnt));
   vao_.Unbind();
-}
-
-void CuboidRenderer::Destroy(Scene* scene) {
-  Internal::RendererStorage<CuboidRenderer>::GetInstance().storage.erase(scene);
 }
 
 
