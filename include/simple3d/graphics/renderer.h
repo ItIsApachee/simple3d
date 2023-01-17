@@ -23,38 +23,13 @@ class IRenderer {
   IRenderer() = default;
   virtual ~IRenderer() = default;
 
-  // virtual void Draw(const glm::mat4& view, const glm::mat4& proj, const glm::vec3& view_pos) = 0;
-  virtual void Destroy(Scene* scene) = 0;
+  virtual void Draw() = 0;
 };
 
 namespace Internal {
 
 
 
-// // should it be a class?
-// // adv.: can make it a private static field, and
-// // then access is provided only using friends
-// template <typename R>
-// std::unordered_map<Scene*, R> RendererStorage{};
-template <typename R>
-class RendererStorage {
- public:
-  static RendererStorage& GetInstance() {
-    static RendererStorage rs{};
-    return rs;
-  }
-
-  RendererStorage(const RendererStorage&) = delete;
-  RendererStorage(RendererStorage&&) = delete;
-  RendererStorage& operator=(const RendererStorage&) = delete;
-  RendererStorage& operator=(RendererStorage&&) = delete;
-  ~RendererStorage() = default;
-
-  std::unordered_map<Scene*, R> storage{};
-
- private:
-  RendererStorage() = default;
-};
 
 
 
