@@ -38,29 +38,7 @@ Error App::Init() {
   }
   glfwSetErrorCallback(error_callback);
 
-  std::cout << "initliazed glfw successfully" << std::endl;
-
-  // glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
-
-  // glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-  // glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  // glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-
-  // // doesn't work with ANGLE for some reason
-  // // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
-
-  // GLFWwindow* glfw_window = glfwCreateWindow(
-  //   500, 500, "test (FIXME)", nullptr, nullptr);
-
-  // if (glfw_window == nullptr) {
-  //   return Error(ErrorType::kInitFailed, "glfw failed to create window");
-  // }
-
-  // glfwMakeContextCurrent(glfw_window);
-  // gladLoadGLES2(glfwGetProcAddress);
-
-  // ctx.window_ = Window::Create(glfw_window);
-  // ctx.window_ = std::shared_ptr<Window>()
+  // std::cout << "initliazed glfw successfully" << std::endl;
 
   Error err{};
   ctx.window_ = Window::Create(&err);
@@ -70,7 +48,7 @@ Error App::Init() {
   Internal::SetInputHandler(ctx.window_.window_, &ctx.window_);
   Internal::SetWindowInputHandler(ctx.window_.window_, &ctx.window_);
 
-  std::cerr << "window creation succ" << std::endl;
+  // std::cerr << "window creation succ" << std::endl;
 
   ctx.is_init = true;
 
