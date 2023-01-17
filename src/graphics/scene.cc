@@ -41,6 +41,10 @@ void Scene::AddDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_lig
 void Scene::RemoveDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_light) {
   directional_lights_.erase(dir_light);
 }
+
+void Scene::SetAmbientLight(const glm::vec3& light) {
+  ambient_light = light;
+}
 /*
 // void render_scene(std::shared_ptr<Scene> scene) {
 //     GladGLES2Context gl = scene->window_->GetGLES2Context();
