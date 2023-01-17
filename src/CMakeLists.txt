@@ -53,7 +53,7 @@ set(simple3d_SOURCES ${simple3d_SOURCES} context/context.cc context/window.cc co
 set(simple3d_SOURCES ${simple3d_SOURCES} graphics/scene.cc graphics/view.cc
     graphics/model.cc graphics/camera.cc graphics/shader_storage.cc)
 
-# /src/graphics/internal
+# /src/graphics/internal/
 set(simple3d_SOURCES ${simple3d_SOURCES}
     graphics/internal/misc.cc
     graphics/internal/vertex_array_object.cc
@@ -62,10 +62,14 @@ set(simple3d_SOURCES ${simple3d_SOURCES}
     graphics/internal/gles_shader.cc
     graphics/internal/vertex.cc)
 
-# /src/graphics/models
+# /src/graphics/models/
 set(simple3d_SOURCES ${simple3d_SOURCES}
     graphics/models/cuboid.cc
     graphics/models/model_shader.cc)
+
+# /src/utils/
+set(simple3d_SOURCES ${simple3d_SOURCES}
+    utils/fps_camera.cc)
 
 add_library(simple3d STATIC ${simple3d_SOURCES})
 
