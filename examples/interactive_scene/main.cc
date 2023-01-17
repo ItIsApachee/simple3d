@@ -87,6 +87,7 @@ int main() {
     scene.SetCamera(camera);
 
     FpsCameraConfig cfg{};
+    cfg.raw_motion_enabled = true;
     cfg.window = App::GetGLFWwindow();
     auto cam_handler = std::make_shared<FpsCameraInputHandler>(cfg);
     App::EnableInputHandler(cam_handler);
