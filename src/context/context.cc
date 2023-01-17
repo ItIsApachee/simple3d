@@ -120,6 +120,10 @@ void App::DisableWindowInputHandler(
   GetInstance().window_.DisableWindowInputHandler(window_input_handler);
 }
 
+GLFWwindow* App::GetGLFWwindow() {
+  return GetInstance().window_.window_;
+}
+
 
 
 }  // namespace Simple3D

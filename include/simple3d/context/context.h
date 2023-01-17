@@ -32,13 +32,6 @@ class App {
  public:
   static App& GetInstance();
 
-  App(const App&) = delete;
-  App(App&&) = delete;
-  App& operator=(const App&) = delete;
-  App& operator=(App&&) = delete;
-
-  ~App() = default;
-
   // load everything, create window
   static Error Init();
   // destroy window, unload everything
@@ -53,6 +46,16 @@ class App {
   static void DisableInputHandler(std::shared_ptr<IInputHandler> input_handler);
   static void DisableWindowInputHandler(
       std::shared_ptr<IWindowInputHandler> window_input_handler);
+
+  static GLFWwindow* App::GetGLFWwindow();
+
+
+  App(const App&) = delete;
+  App(App&&) = delete;
+  App& operator=(const App&) = delete;
+  App& operator=(App&&) = delete;
+
+  ~App() = default;
 
  private:
   App() = default;
