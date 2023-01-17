@@ -5,34 +5,28 @@
 #include <glm/mat4x4.hpp>
 
 #include <simple3d/graphics/internal/shader.h>
+#include <simple3d/graphics/shader.h>
 
 namespace Simple3D {
 
 
 
 // singletone of shader program used by primitives
-class ModelShader {
+class ModelShader : public IShader {
  public:
-  static ModelShader& GetInstance();
-
+  ModelShader();
   ModelShader(const ModelShader&) = delete;
   ModelShader(ModelShader&&) = delete;
   ModelShader& operator=(const ModelShader&) = delete;
   ModelShader& operator=(ModelShader&&) = delete;
-  ~ModelShader() = default;
+  ~ModelShader() override = default;
 
-  static void Init();
-  static void Use();
-  static void SetView(const glm::mat4& view);
-  static void SetProj(const glm::mat4& proj);
-  static void SetViewPos(const glm::vec3& view_pos);
-
-  // FIXME(apachee): make static
-  const Internal::Shader& shader() const;
+  void Use() override;
+  void SetView(const glm::mat4& view) override;
+  void SetProj(const glm::mat4& proj) override;
+  void SetViewPos(const glm::vec3& view_pos) override;
 
  private:
-  ModelShader();
-
   Internal::Shader shader_{};
   glm::mat4 view_{0.0f};
   glm::mat4 proj_{0.0f};

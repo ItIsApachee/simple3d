@@ -11,11 +11,7 @@ namespace Simple3D {
 
 
 
-ModelShader& ModelShader::GetInstance() {
-  static ModelShader model_shader{};
-  return model_shader;
-}
-
+// FIXME: make string constants for shader fields
 ModelShader::ModelShader() {
   Error err;
   shader_ = Internal::ShaderBuilder()
@@ -28,44 +24,32 @@ ModelShader::ModelShader() {
   assert(err.IsOk());
 }
 
-void ModelShader::Init() {
-  // is it going to be optimized?
-  GetInstance();
-}
-
 void ModelShader::Use() {
-  GetInstance().shader_.Use();
+  shader_.Use();
 }
 
 void ModelShader::SetView(const glm::mat4& view) {
-  ModelShader& inst = GetInstance();
-  inst.Use();
-  if (view != inst.view_) {
-    inst.view_ = view;
-    inst.shader().SetUniformMat4fv("view", view);
+  Use();
+  if (view != view_) {
+    view_ = view;
+    shader_.SetUniformMat4fv("view", view);
   }
 }
 
 void ModelShader::SetProj(const glm::mat4& proj) {
-  ModelShader& inst = GetInstance();
-  inst.Use();
-  if (proj != inst.proj_) {
-    inst.proj_ = proj;
-    inst.shader().SetUniformMat4fv("projection", proj);
+  Use();
+  if (proj != proj_) {
+    proj_ = proj;
+    shader_.SetUniformMat4fv("projection", proj);
   }
 }
 
 void ModelShader::SetViewPos(const glm::vec3& view_pos) {
-  ModelShader& inst = GetInstance();
-  inst.Use();
-  if (view_pos != inst.view_pos_) {
-    inst.view_pos_ = view_pos;
-    inst.shader().SetUniform3fv("view_pos", view_pos);
+  Use();
+  if (view_pos != view_pos_) {
+    view_pos_ = view_pos;
+    shader_.SetUniform3fv("view_pos", view_pos);
   }
-}
-
-const Internal::Shader& ModelShader::shader() const {
-  return shader_;
 }
 
 
