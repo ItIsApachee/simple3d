@@ -74,7 +74,6 @@ void ModelShader::SetDirectionalLights(
     }
 
     shader_.SetUniform1i("directional_light_count", directional_light_count);
-    std::cout << "debug: " << directional_light_count << std::endl;
   }
 }
 void ModelShader::SetAmbientLight(const glm::vec3& ambient_light) {
