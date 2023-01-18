@@ -24,18 +24,10 @@ class IRenderer {
   virtual ~IRenderer() = default;
 
   virtual void Draw() = 0;
+
+  virtual void NotifyUpdated(void*) = 0;
   virtual void Destroy(void*) = 0;
 };
-
-namespace Internal {
-
-
-
-
-
-
-}  // namespace Internal
-// TODO(apachee): add is_renderer trait
 
 
 

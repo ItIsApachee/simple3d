@@ -1,7 +1,9 @@
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_
 
-#include <unordered_set>
+#include <cstdint>
+#include <vector>
+#include <unordered_map>
 #include <utility>
 
 #include <glm/vec3.hpp>
@@ -39,6 +41,8 @@ struct Cuboid {
   // float yaw{0.};
 };
 
+struct CuboidInstance;
+
 class CuboidRenderer : public IRenderer {
  public:
   using Shader = ModelShader;
@@ -48,21 +52,30 @@ class CuboidRenderer : public IRenderer {
   CuboidRenderer(CuboidRenderer&&) = default;
   CuboidRenderer& operator=(const CuboidRenderer) = delete;
   CuboidRenderer& operator=(CuboidRenderer&&) = default;
-  ~CuboidRenderer() override;
+  ~CuboidRenderer() override = default;
 
   template <typename... Args>
   Cuboid* Create(Args&&... args);
 
   void Draw() override;
+
+  void NotifyUpdated(void*) override;
   void Destroy(void*) override;
 
  private:
-  std::unordered_set<Cuboid*> cuboids_{};
+  bool reinitialize_instances{false};
+  std::vector<Cuboid*> updated_cuboids{};
+
+  std::unordered_map<Cuboid*,
+    std::pair<std::unique_ptr<Cuboid>, std::int64_t>> cuboids_{};
+
   Internal::ElementBufferObject ebo_{};
   Internal::VertexBufferObject verices_vbo_{};
 
   Internal::VertexBufferObject instances_vbo_{};
   std::size_t instances_vbo_capacity_{0};
+
+  std::vector<CuboidInstance> instances_{};
 
   Internal::VertexArrayObject vao_{};
 };
@@ -72,12 +85,13 @@ class CuboidRenderer : public IRenderer {
 // implementation
 template <typename... Args>
 Cuboid* CuboidRenderer::Create(Args&&... args) {
-  Cuboid* cuboid_ptr =  new Cuboid{
-    std::forward<Args>(args)...
-  };
-  cuboids_.insert(cuboid_ptr);
+  // Cuboid* cuboid_ptr =  new Cuboid{std::forward<Args>(args)...};
+  auto cuboid_ptr = std::unique_ptr<Cuboid>(new Cuboid{std::forward<Args>(args)...});
+  auto cuboid_ptr_val = cuboid_ptr.get();
+  cuboids_.emplace(cuboid_ptr_val, std::pair{std::move(cuboid_ptr), -1});
+  updated_cuboids.push_back(cuboid_ptr_val);
 
-  return cuboid_ptr;
+  return cuboid_ptr_val;
 }
 
 

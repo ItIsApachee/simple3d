@@ -4,8 +4,6 @@
 // FIXME: remove iostream
 #include <iostream>
 #include <array>
-// #include <chrono>
-#include <utility>
 
 // FIXME: don't include everything
 #include <glm/glm.hpp>
@@ -177,49 +175,103 @@ CuboidRenderer::CuboidRenderer()
   }
 }
 
-CuboidRenderer::~CuboidRenderer() {
-  for (auto cuboid : cuboids_) {
-    delete cuboid;
-  }
-}
+// CuboidRenderer::~CuboidRenderer() {
+//   // for (auto cuboid : cuboids_) {
+//   //   delete cuboid.first;
+//   // }
+// }
 
 void CuboidRenderer::Draw() {
   if (cuboids_.empty()) {
     return;
   }
 
+  // resize VBO buffer
+  constexpr std::int64_t kChunkSize = 64;  // cubes are stored in chunks of 64
+
+  // if true, need to reload everything in instances_vbo
+  bool flag_full_sub_data = reinitialize_instances;
+
   if (cuboids_.size() > instances_vbo_capacity_) {
-    instances_vbo_.SetData(cuboids_.size()*sizeof(CuboidInstance), nullptr, kInstanceVboUsage);
-    instances_vbo_capacity_ = cuboids_.size();
+    flag_full_sub_data = true;
+
+    instances_vbo_capacity_ = (cuboids_.size() + kChunkSize - 1) / kChunkSize * kChunkSize;
+    instances_vbo_.SetData(instances_vbo_capacity_*sizeof(CuboidInstance),
+        nullptr, kInstanceVboUsage);
+  }
+  if (instances_vbo_capacity_ - (std::int64_t)cuboids_.size() > kChunkSize) {
+    flag_full_sub_data = true;
+
+    instances_vbo_capacity_ = (cuboids_.size() + kChunkSize - 1) / kChunkSize * kChunkSize;
+    instances_vbo_.SetData(instances_vbo_capacity_*sizeof(CuboidInstance),
+        nullptr, kInstanceVboUsage);
   }
   
   std::size_t instances_cnt = cuboids_.size();
 
-  std::vector<CuboidInstance> instances;
-  instances.reserve(instances_cnt);
+  // important: should be instances_vbo_capacity_
+  // otherwise segfault (pointer out of bounds)
+  instances_.reserve(instances_vbo_capacity_);
 
-  for (const auto cuboid_ptr: cuboids_) {
-    auto& cuboid = *cuboid_ptr;
+  std::int64_t prev_size = instances_.size();
+  if (reinitialize_instances) {
+    instances_.clear();
 
-    glm::mat4 model(1.0f);
-    glm::vec3 pos(cuboid.pos);
-    model = glm::translate(model, pos);
+    for (auto& [cuboid_ptr, val]: cuboids_) {
+      auto& cuboid = *cuboid_ptr;
+      auto& [cuboid_unique_ptr_, index] = val;
 
-    instances.push_back(CuboidInstance{model, cuboid.diffuse_color,
-        cuboid.specular_color, cuboid.shininess});
+      glm::mat4 model(1.0f);
+      glm::vec3 pos(cuboid.pos);
+      model = glm::translate(model, pos);
+
+      index = instances_.size();
+      instances_.push_back(CuboidInstance{model, cuboid.diffuse_color,
+          cuboid.specular_color, cuboid.shininess});
+    }
+  } else {
+    for (auto& cuboid_ptr : updated_cuboids) {
+      auto& cuboid = *cuboid_ptr;
+
+      glm::mat4 model(1.0f);
+      glm::vec3 pos(cuboid.pos);
+      model = glm::translate(model, pos);
+      if (auto& index = cuboids_[cuboid_ptr].second; index == -1) {
+        index = instances_.size();
+        instances_.push_back(CuboidInstance{model, cuboid.diffuse_color,
+            cuboid.specular_color, cuboid.shininess});
+      } else {
+        instances_[index] = CuboidInstance{model, cuboid.diffuse_color,
+            cuboid.specular_color, cuboid.shininess};
+      }
+    }
   }
-  instances_vbo_.SubData(0, instances_cnt * sizeof(CuboidInstance),
-      (const std::byte*)instances.data());
+  updated_cuboids.clear();
+
+  if (flag_full_sub_data) {
+    instances_vbo_.SubData(0, instances_cnt * sizeof(CuboidInstance),
+        (const std::byte*)instances_.data());
+  } else {
+    std::int64_t updated_size = (instances_.size() - prev_size) * sizeof(CuboidInstance);
+    const std::byte* ptr = reinterpret_cast<const std::byte*>(instances_.data());
+    ptr += updated_size;
+    instances_vbo_.SubData(prev_size*sizeof(CuboidInstance), updated_size, ptr);
+  }
 
   vao_.Bind();
   glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0, static_cast<GLsizei>(instances_cnt));
   vao_.Unbind();
 }
 
+void CuboidRenderer::NotifyUpdated(void* cuboid_void) {
+  Cuboid* cuboid_ptr = reinterpret_cast<Cuboid*>(cuboid_void);
+  updated_cuboids.push_back(cuboid_ptr);
+}
+
 void CuboidRenderer::Destroy(void* cuboid_void) {
   Cuboid* cuboid_ptr = reinterpret_cast<Cuboid*>(cuboid_void);
   cuboids_.erase(cuboid_ptr);
-  delete cuboid_ptr;
+  reinitialize_instances = true;
 }
 
 
