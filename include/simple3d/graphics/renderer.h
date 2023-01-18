@@ -24,6 +24,7 @@ class IRenderer {
   virtual ~IRenderer() = default;
 
   virtual void Draw() = 0;
+  virtual void Destroy(void*) = 0;
 };
 
 namespace Internal {

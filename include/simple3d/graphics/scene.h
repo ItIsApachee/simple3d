@@ -98,11 +98,14 @@ class Scene {
   struct ShaderCell {
    public:
     std::weak_ptr<IShader> shader{};
-    std::unordered_map<std::type_index, std::unique_ptr<IRenderer>> renderers{};
+    std::unordered_map<std::type_index, std::shared_ptr<IRenderer>> renderers{};
   };
 
   template <typename R>
-  R& GetRenderer();
+  std::shared_ptr<IRenderer>& GetIRendererShared();
+
+  template <typename R>
+  R& GetRendererRef();
 
   std::unordered_map<std::type_index, ShaderCell> renderers_{};
 
@@ -116,7 +119,7 @@ class Scene {
 
 // implementation
 template <typename R>
-R& Scene::GetRenderer() {
+std::shared_ptr<IRenderer>& Scene::GetIRendererShared() {
   using Shader = R::Shader;
 
   std::type_index shader_type = typeid(Shader);
@@ -134,11 +137,16 @@ R& Scene::GetRenderer() {
   auto& shader_renderers = renderers_it->second.renderers;
   auto it = shader_renderers.find(shader_type);
   if (it == shader_renderers.end()) {
-    it = shader_renderers.emplace(renderer_type, std::make_unique<R>()).first;
+    it = shader_renderers.emplace(renderer_type, std::make_shared<R>()).first;
   }
   
   auto& renderer_ptr = it->second;
-  return *dynamic_cast<R*>(renderer_ptr.get());
+  return renderer_ptr;
+}
+
+template <typename R>
+R& Scene::GetRendererRef() {
+  return *dynamic_cast<R*>(GetIRendererShared<R>().get());
 }
 
 template <typename M, typename... Args>
@@ -172,8 +180,11 @@ auto Scene::Create(Args... args)
       M*>,
     Model<M>> {
   using Renderer = R;
-  auto& renderer = GetRenderer<R>();
-  return Model{renderer.template Create<M>(args...)};
+  // auto& renderer = GetRendererRef<R>();
+  auto renderer = GetIRendererShared<R>();
+  R& renderer_ref = *dynamic_cast<R*>(renderer.get());
+
+  return Model{renderer_ref.template Create<M>(args...), std::move(renderer)};
 }
 
 template <typename M, typename R, typename... Args>
@@ -185,8 +196,11 @@ auto Scene::Create(Args... args)
       M*>,
     Model<M>> {
   using Renderer = R;
-  auto& renderer = GetRenderer<R>();
-  return Model{renderer.Create(args...)};
+  // auto& renderer = GetRendererRef<R>();
+  auto renderer = GetIRendererShared<R>();
+  R& renderer_ref = *dynamic_cast<R*>(renderer.get());
+
+  return Model{renderer_ref.Create(args...), std::move(renderer)};
 }
 
 

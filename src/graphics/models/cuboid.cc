@@ -165,14 +165,16 @@ CuboidRenderer::~CuboidRenderer() {
 }
 
 Cuboid* CuboidRenderer::Create(float x, float y, float z) {
-  cuboids_.push_back(new Cuboid{x, y, z});
+  Cuboid* cuboid = new Cuboid{x, y, z};
+  cuboids_.insert(cuboid);
 
+  // FIXME: move to draw call (less reallocations)
   if (cuboids_.size() > instances_vbo_capacity_) {
     instances_vbo_.SetData(cuboids_.size()*sizeof(CuboidInstance), nullptr, kInstanceVboUsage);
     instances_vbo_capacity_ = cuboids_.size();
   }
 
-  return cuboids_.back();
+  return cuboid;
 }
 
 void CuboidRenderer::Draw() {
@@ -242,6 +244,11 @@ void CuboidRenderer::Draw() {
   // vao_.BindEbo(ebo_);
   glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0, static_cast<GLsizei>(instances_cnt));
   vao_.Unbind();
+}
+
+void CuboidRenderer::Destroy(void* cuboid_void) {
+  Cuboid* cuboid_ptr = reinterpret_cast<Cuboid*>(cuboid_void);
+  cuboids_.erase(cuboid_ptr);
 }
 
 

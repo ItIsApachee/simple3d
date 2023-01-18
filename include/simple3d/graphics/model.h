@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <memory>
 #include <type_traits>
 #include <cstdint>
 
@@ -18,17 +19,17 @@ namespace Simple3D {
 template <typename M>
 class Model {
  public:
-  explicit Model(M* p_);
-  Model() = delete;
+  Model(M* p_, std::weak_ptr<IRenderer> renderer);
+  Model() = default;
   Model(const Model&) = delete;
-  Model(Model&&) = default;
+  Model(Model&&);
   Model& operator=(const Model&) = delete;
-  Model& operator=(Model&&) = default;
+  Model& operator=(Model&&);
 
   // FIXME: add destroying primitive on the scene on desctruction
   // one way to do that:
   // FIXME: redefine copy ctor & assignment to set the pointer to nullptr
-  ~Model() = default;
+  ~Model();
 
   M& operator*();
   const M& operator*() const;
@@ -40,6 +41,7 @@ class Model {
 
  private:
   M* model_{nullptr};
+  std::weak_ptr<IRenderer> renderer_{};
   // std::uint64_t id_{0};
 };
 
@@ -79,7 +81,40 @@ class Model {
 
 // implementation
 template <typename M>
-Model<M>::Model(M* p_): model_{p_} {}
+Model<M>::Model(M* p_, std::weak_ptr<IRenderer> renderer)
+    : model_{p_}, renderer_{std::move(renderer)} {}
+
+template <typename M>
+Model<M>::Model(Model&& other)
+    : model_{other.model_}, renderer_{std::move(other.renderer_)} {
+  other.model_ = nullptr;
+}
+
+template <typename M>
+Model<M>& Model<M>::operator=(Model&& other) {
+  if (std::addressof(other) == this)
+    return *this;
+  
+  if (model_ != nullptr) {
+    Model<M> temp{std::move(this)};
+  }  // destructor is called and model_ is freed
+  // *this is now empty
+
+  std::swap(model_, other.model_);
+  std::swap(renderer_, other.renderer_);
+  // other is empty
+
+  return *this;
+}
+
+template <typename M>
+Model<M>::~Model() {
+  if (model_ == nullptr)
+    return;
+  if (auto renderer = renderer_.lock()) {
+    renderer->Destroy(reinterpret_cast<void*>(model_));
+  }
+}
 
 template <typename M>
 M& Model<M>::operator*() {

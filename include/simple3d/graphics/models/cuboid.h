@@ -1,7 +1,7 @@
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_
 
-#include <vector>
+#include <unordered_set>
 #include <chrono>
 
 #include <glm/vec3.hpp>
@@ -54,9 +54,10 @@ class CuboidRenderer : public IRenderer {
   Cuboid* Create(float x, float y, float z);
 
   void Draw() override;
+  void Destroy(void*) override;
 
  private:
-  std::vector<Cuboid*> cuboids_{};
+  std::unordered_set<Cuboid*> cuboids_{};
   Internal::ElementBufferObject ebo_{};
   Internal::VertexBufferObject verices_vbo_{};
 
