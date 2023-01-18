@@ -1,8 +1,9 @@
 #include <simple3d/graphics/models/cuboid.h>
 
 #include <cstddef>
+#include <iostream>
 #include <array>
-#include <chrono>
+// #include <chrono>
 #include <utility>
 
 // FIXME: don't include everything
@@ -27,11 +28,12 @@ static constexpr GLenum kInstanceVboUsage = GL_DYNAMIC_DRAW;
 struct CuboidInstance {
   static void BindAttributes();
   glm::mat4 model;
-  glm::vec3 color;
+  glm::vec3 diffuse_color;
+  glm::vec3 specular_color;
 };
 
 void CuboidInstance::BindAttributes() {
-  constexpr auto model_layout_index = 3;
+  constexpr auto model_layout_index = 2;
   constexpr auto model_row_size = sizeof(glm::vec4);
   constexpr auto model_rows = 4;
 
@@ -45,12 +47,19 @@ void CuboidInstance::BindAttributes() {
     glVertexAttribDivisor(model_layout_index + i, 1);
   }
 
-  constexpr auto color_layout_index = 7;
+  constexpr auto diffuse_color_layout_index = 10;
   glVertexAttribPointer(
-      color_layout_index, 3, GL_FLOAT, GL_FALSE, sizeof(CuboidInstance),
-      reinterpret_cast<void*>(offsetof(CuboidInstance, color)));
-  glEnableVertexAttribArray(color_layout_index);
-  glVertexAttribDivisor(color_layout_index, 1);
+      diffuse_color_layout_index, 3, GL_FLOAT, GL_FALSE,
+      sizeof(CuboidInstance),
+      reinterpret_cast<void*>(offsetof(CuboidInstance, diffuse_color)));
+  glEnableVertexAttribArray(diffuse_color_layout_index);
+  glVertexAttribDivisor(diffuse_color_layout_index, 1);
+
+  constexpr auto specular_color_layout_inedx = 11;
+  glVertexAttribPointer(
+    specular_color_layout_inedx, 3, GL_FLOAT, GL_FALSE,
+    sizeof(CuboidInstance),
+    reinterpret_cast<void*>(offsetof(CuboidInstance, specular_color)));
 
 }
 
@@ -164,22 +173,17 @@ CuboidRenderer::~CuboidRenderer() {
   }
 }
 
-Cuboid* CuboidRenderer::Create(float x, float y, float z) {
-  Cuboid* cuboid = new Cuboid{x, y, z};
-  cuboids_.insert(cuboid);
+void CuboidRenderer::Draw() {
+  // std::cout << "Draw()" << std::endl;
+  if (cuboids_.empty()) {
+    // std::cout << "wtf" << std::endl;
+    return;
+  }
 
-  // FIXME: move to draw call (less reallocations)
   if (cuboids_.size() > instances_vbo_capacity_) {
     instances_vbo_.SetData(cuboids_.size()*sizeof(CuboidInstance), nullptr, kInstanceVboUsage);
     instances_vbo_capacity_ = cuboids_.size();
   }
-
-  return cuboid;
-}
-
-void CuboidRenderer::Draw() {
-  if (cuboids_.empty())
-    return;
 
   // auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
   //   std::chrono::high_resolution_clock::now() - start_time_);
@@ -197,11 +201,11 @@ void CuboidRenderer::Draw() {
     auto& cuboid = *cuboid_ptr;
 
     glm::mat4 model(1.0f);
-    glm::vec3 pos(cuboid.x, cuboid.y, cuboid.z);
+    glm::vec3 pos(cuboid.pos);
     model = glm::translate(model, pos);
     // model = model * transform;
 
-    glm::vec3 color(cuboid.r, cuboid.g, cuboid.b);
+    // glm::vec3 color(cuboid.r, cuboid.g, cuboid.b);
 
     // std::cerr << "Cube({" << std::endl;
     // for (int i = 0; i < 4; i++) {
@@ -213,7 +217,8 @@ void CuboidRenderer::Draw() {
     // }
     // std::cerr << std::endl << "}, {" << color.x << ", " << color.y << ", " << color.z << "}" << std::endl << ")" << std::endl;
 
-    instances.push_back(CuboidInstance{model, color});
+    instances.push_back(CuboidInstance{model,
+        cuboid.diffuse_color, cuboid.specular_color});
   }
   instances_vbo_.SubData(0, instances_cnt * sizeof(CuboidInstance),
       (const std::byte*)instances.data());

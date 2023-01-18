@@ -3,6 +3,7 @@
 
 #include <unordered_set>
 #include <chrono>
+#include <utility>
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -24,14 +25,11 @@ struct Cuboid {
   using Renderer = CuboidRenderer;
 
   // coordinates
-  float x{0.};
-  float y{0.};
-  float z{0.};
+  glm::vec3 pos = glm::vec3(0.0f);
 
   // colors
-  float r{0.};
-  float g{0.};
-  float b{0.};
+  glm::vec3 diffuse_color = glm::vec3(1.0f);
+  glm::vec3 specular_color = glm::vec3(1.0f);
 
   // TODO(apachee): add rotation
   // // rotation
@@ -51,7 +49,8 @@ class CuboidRenderer : public IRenderer {
   CuboidRenderer& operator=(CuboidRenderer&&) = default;
   ~CuboidRenderer() override;
 
-  Cuboid* Create(float x, float y, float z);
+  template <typename... Args>
+  Cuboid* Create(Args&&... args);
 
   void Draw() override;
   void Destroy(void*) override;
@@ -69,6 +68,19 @@ class CuboidRenderer : public IRenderer {
   // // TODO(apachee): remove
   decltype(std::chrono::high_resolution_clock::now()) start_time_{};
 };
+
+
+
+// implementation
+template <typename... Args>
+Cuboid* CuboidRenderer::Create(Args&&... args) {
+  Cuboid* cuboid_ptr =  new Cuboid{
+    std::forward<Args>(args)...
+  };
+  cuboids_.insert(cuboid_ptr);
+
+  return cuboid_ptr;
+}
 
 
 

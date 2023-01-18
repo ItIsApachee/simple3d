@@ -59,7 +59,7 @@ Model<M>& Model<M>::operator=(Model&& other) {
     return *this;
   
   if (model_ != nullptr) {
-    Model<M> temp{std::move(this)};
+    Model<M> temp = std::move(this);
   }  // destructor is called and model_ is freed
   // *this is now empty
 
@@ -75,6 +75,7 @@ template <typename M>
 Model<M>::~Model() {
   if (model_ == nullptr)
     return;
+  std::cout << "delete model" << std::endl;
   if (auto renderer = renderer_.lock()) {
     renderer->Destroy(reinterpret_cast<void*>(model_));
   }

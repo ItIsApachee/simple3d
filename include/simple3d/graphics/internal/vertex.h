@@ -10,6 +10,14 @@ namespace Simple3D::Internal {
 
 struct Vertex {
  public:
+  static void BindAttributes();
+
+  glm::vec3 position{0.f, 0.f, 0.f};
+  glm::vec3 normal{1.f, 0.f, 0.f};
+};
+
+struct TexturedVertex {
+ public:
   // TODO(apachee): add more customization
   static void BindAttributes();
 
