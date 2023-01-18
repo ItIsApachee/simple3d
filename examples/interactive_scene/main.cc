@@ -96,7 +96,7 @@ int main() {
     cam_handler, camera));
 
   std::vector<Simple3D::Model<Simple3D::Cuboid>> cubes;
-  int v = 10;
+  int v = 50;
   float stride = 1.5f;
   for (int i = -v; i <= v; i++) {
     for (int j = -v; j <= v; j++) {
@@ -113,16 +113,11 @@ int main() {
   }
   std::cout << "cubes: " << cubes.size() << std::endl;
 
-  int cnt = 0;
-  // float angle = 0.0f;
-  float dist = 10.0f;
-  auto start = std::chrono::high_resolution_clock::now();
-  auto prev = start;
+  auto prev = std::chrono::high_resolution_clock::now();
   while (!Simple3D::App::ShouldClose()) {
     Simple3D::App::PollEvents();
 
     auto now = std::chrono::high_resolution_clock::now();
-    auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(now - start);
 
     auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - prev);
     prev = now;
@@ -130,16 +125,6 @@ int main() {
     if (cam_handler->Update(elapsed)) {
         imgui_handler->ToggleInputs(true);
     }
-
-    // float shift_amp = 0.5;
-    // float shift = shift_amp * sin(angle);
-    // for (int i = 9; i < 18; i++) {
-    //     cubes[i]->pos.y = shift;
-    //     if (i % 2) {
-    //         cubes[i]->pos.y = -cubes[i]->pos.y;
-    //     }
-    // }
-    // angle = millis.count() / 5000.0f;
 
     view.Draw(scene);
 
