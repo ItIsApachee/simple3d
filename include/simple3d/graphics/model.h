@@ -81,6 +81,9 @@ Model<M>::~Model() {
 
 template <typename M>
 M& Model<M>::operator*() {
+  if (auto renderer = renderer_.lock()) {
+    renderer->NotifyUpdated(reinterpret_cast<void*>(model_));
+  }
   return *model_;
 }
 
