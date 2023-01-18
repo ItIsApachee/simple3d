@@ -103,6 +103,9 @@ int main() {
       for (int k = -v; k <= v; k++) {
         cubes.push_back(scene.Create<Simple3D::Cuboid>(
           glm::vec3(stride*j, stride*i, stride*k)));
+        cubes.back()->diffuse_color = glm::vec3(0.55f);
+        cubes.back()->specular_color = glm::vec3(0.7f);
+        cubes.back()->shininess = 0.25f;
       }
     }
     Simple3D::App::PollEvents();
