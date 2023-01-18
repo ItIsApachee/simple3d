@@ -1,6 +1,8 @@
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_SHADER_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_SHADER_H_
 
+#include <unordered_set>
+
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
@@ -26,11 +28,18 @@ class ModelShader : public IShader {
   void SetProj(const glm::mat4& proj) override;
   void SetViewPos(const glm::vec3& view_pos) override;
 
+  void SetDirectionalLights(
+      const std::unordered_set<std::shared_ptr<DirectionalLight>>&) override;
+  void SetAmbientLight(const glm::vec3&) override;
+
  private:
   Internal::GlesShader shader_{};
   glm::mat4 view_{0.0f};
   glm::mat4 proj_{0.0f};
   glm::vec3 view_pos_{0.0f};
+
+  std::unordered_set<std::shared_ptr<DirectionalLight>> directional_lights_{};
+  glm::vec3 ambient_light_{};
 };
 
 

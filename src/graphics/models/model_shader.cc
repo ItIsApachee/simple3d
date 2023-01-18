@@ -52,6 +52,24 @@ void ModelShader::SetViewPos(const glm::vec3& view_pos) {
   }
 }
 
+void ModelShader::SetDirectionalLights(
+    const std::unordered_set<std::shared_ptr<DirectionalLight>>& dir_lights) {
+  Use();
+  if (directional_lights_ != dir_lights) {
+    directional_lights_ = dir_lights;
+    // TODO(apachee): set lights
+    throw;
+  }
+}
+void ModelShader::SetAmbientLight(const glm::vec3& ambient_light) {
+  Use();
+  if (ambient_light_ != ambient_light) {
+    ambient_light_ = ambient_light;
+    // TODO(apachee): set ambient light
+    throw;
+  }
+}
+
 
 
 }  // namespace Simple3D

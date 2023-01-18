@@ -32,6 +32,8 @@ Error View::Draw(const Scene &scene) {
   auto proj = cam->GetProj();
   auto view = cam->GetView();
   auto view_pos = cam->GetViewPos();
+  auto& directional_lights = scene.directional_lights_;
+  auto& ambient_light = scene.ambient_light_;
 
 
   for (auto& [cell_type, cell] : scene.renderers_) {
@@ -39,6 +41,8 @@ Error View::Draw(const Scene &scene) {
       shader_ptr->SetProj(proj);
       shader_ptr->SetView(view);
       shader_ptr->SetViewPos(view_pos);
+      shader_ptr->SetDirectionalLights(directional_lights);
+      shader_ptr->SetAmbientLight(ambient_light);
 
       shader_ptr->Use();
       for (auto& [renderer_type, renderer]: cell.renderers) {

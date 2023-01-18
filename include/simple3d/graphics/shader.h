@@ -1,17 +1,20 @@
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_SHADER_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_SHADER_H_
 
-#include <unordered_map>
+#include <unordered_set>
+#include <memory>
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 
 #include <simple3d/types.h>
+#include <simple3d/graphics/light.h>
 
 namespace Simple3D {
 
 
 
+// support at least 8 lights
 class IShader {
  public:
   IShader() = default;
@@ -20,37 +23,12 @@ class IShader {
   virtual void SetView(const glm::mat4&) = 0;
   virtual void SetProj(const glm::mat4&) = 0;
   virtual void SetViewPos(const glm::vec3&) = 0;
+
+  virtual void SetDirectionalLights(const std::unordered_set<std::shared_ptr<DirectionalLight>>&) = 0;
+  virtual void SetAmbientLight(const glm::vec3&) = 0;
+
   virtual void Use() = 0;
-
-  // TODO(apahcee): add lighting support
 };
-
-// namespace Internal {
-
-
-
-// template <typename S>
-// class ShaderStorage {
-//  public:
-//   static ShaderStorage& GetInstance() {
-//     static ShaderStorage shader_storage{};
-//     return shader_storage;
-//   }
-
-//   ShaderStorage(const ShaderStorage&) = delete;
-//   ShaderStorage(ShaderStorage&&) = delete;
-//   ShaderStorage& operator=(const ShaderStorage&) = delete;
-//   ShaderStorage& operator=(ShaderStorage&&) = delete;
-
-//   std::unordered_map<Scene*, S> storage{};
-
-//  private:
-//   ShaderStorage() = default;
-// };
-
-
-
-// }
 
 
 
