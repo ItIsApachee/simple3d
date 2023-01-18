@@ -1,6 +1,7 @@
 #include <simple3d/graphics/models/model_shader.h>
 
 #include <cassert>
+#include <string>
 #include <iostream>
 
 #include <simple3d/misc/error.h>
@@ -57,16 +58,30 @@ void ModelShader::SetDirectionalLights(
   Use();
   if (directional_lights_ != dir_lights) {
     directional_lights_ = dir_lights;
-    // TODO(apachee): set lights
-    throw;
+
+    int directional_light_count = 0;
+    auto it = dir_lights.begin();
+    while (directional_light_count < kMinimumDirectionalLights && it != dir_lights.end()) {
+      std::string name = "directional_light[";
+      name += std::to_string(directional_light_count++);
+      name += "]";
+
+      shader_.SetUniform3fv(name + ".direction", (*it)->direction);
+      shader_.SetUniform3fv(name + ".diffuse", (*it)->diffuse);
+      shader_.SetUniform3fv(name + ".specular", (*it)->specular);
+
+      it++;
+    }
+
+    shader_.SetUniform1i("directional_light_count", directional_light_count);
+    std::cout << "debug: " << directional_light_count << std::endl;
   }
 }
 void ModelShader::SetAmbientLight(const glm::vec3& ambient_light) {
   Use();
   if (ambient_light_ != ambient_light) {
     ambient_light_ = ambient_light;
-    // TODO(apachee): set ambient light
-    throw;
+    shader_.SetUniform3fv("ambient_light", ambient_light);
   }
 }
 
