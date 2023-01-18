@@ -52,6 +52,7 @@ class GlesShader {
 
   Error SetUniformMat4fv(const std::string& name, const glm::mat4& matrix) const;
   Error SetUniform3fv(const std::string& name, const glm::vec3& vec) const;
+  Error SetUniform1i(const std::string& name, const GLint& val) const;
 
  private:
   static GLuint active_shader_id_;

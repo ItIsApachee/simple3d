@@ -165,6 +165,19 @@ Error GlesShader::SetUniform3fv(
   return Error(ErrorType::kOk);
 }
 
+Error GlesShader::SetUniform1i(
+    const std::string& name, const GLint& val) const {
+  int location = glGetUniformLocation(shader_id_, name.c_str());
+  if (location == -1) {
+    std::string desc = "uniform not found, name=\"";
+    desc += name;
+    desc += "\"";
+    return Error(ErrorType::kUniformNotFound, desc);
+  }
+  glUniform1i(location, val);
+  return Error(ErrorType::kOk);
+}
+
 
 
 }  // namespace Simple3D::Internal
