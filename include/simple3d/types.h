@@ -26,7 +26,7 @@ struct Cuboid;
 class CuboidRenderer;
 // shader
 class Shader;
-class ShaderBuilder;
+class GlesShaderBuilder;
 // misc
 enum class ErrorType;
 struct Error;

@@ -5,7 +5,7 @@
 
 #include <simple3d/misc/error.h>
 #include <simple3d/graphics/internal/shader_source.h>
-#include <simple3d/graphics/internal/shader.h>
+#include <simple3d/graphics/internal/gles_shader.h>
 
 namespace Simple3D {
 

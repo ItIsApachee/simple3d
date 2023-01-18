@@ -6,7 +6,7 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 
-#include <simple3d/graphics/internal/shader.h>
+#include <simple3d/graphics/internal/gles_shader.h>
 #include <simple3d/graphics/shader.h>
 
 namespace Simple3D {

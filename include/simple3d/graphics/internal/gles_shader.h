@@ -31,7 +31,7 @@ namespace Simple3D::Internal {
 */
 class GlesShader {
  public:
-  friend ShaderBuilder;
+  friend GlesShaderBuilder;
 
   // FIXME: default move ctors/= work not as intended
   GlesShader() = default;
@@ -59,27 +59,27 @@ class GlesShader {
   GLuint shader_id_{kGlesInvalidShader};
 };
 
-/** \class ShaderBuilder simple3d/shader/shader.h
+/** \class GlesShaderBuilder simple3d/shader/shader.h
  * \brief Helper class for constructing Simple3D::GlesShader.
 */
-class ShaderBuilder {
-// FIXME(apachee): remove ShaderBuilder (no reason for a builder)
+class GlesShaderBuilder {
+// FIXME(apachee): remove GlesShaderBuilder (no reason for a builder)
  public:
-  ShaderBuilder() = default;
-  ShaderBuilder(const ShaderBuilder&) = default;
-  ShaderBuilder(ShaderBuilder&&) = default;
+  GlesShaderBuilder() = default;
+  GlesShaderBuilder(const GlesShaderBuilder&) = default;
+  GlesShaderBuilder(GlesShaderBuilder&&) = default;
 
-  ShaderBuilder& operator=(const ShaderBuilder&) = default;
-  ShaderBuilder& operator=(ShaderBuilder&&) = default;
+  GlesShaderBuilder& operator=(const GlesShaderBuilder&) = default;
+  GlesShaderBuilder& operator=(GlesShaderBuilder&&) = default;
 
-  ~ShaderBuilder() = default;
+  ~GlesShaderBuilder() = default;
 
   GlesShader Build();
   GlesShader Build(Error* error);
-  ShaderBuilder& VertexShaderSource(const std::string& src);
-  ShaderBuilder& VertexShaderSource(std::string&& src);
-  ShaderBuilder& FragmentShaderSource(const std::string& src);
-  ShaderBuilder& FragmentShaderSource(std::string&& src);
+  GlesShaderBuilder& VertexShaderSource(const std::string& src);
+  GlesShaderBuilder& VertexShaderSource(std::string&& src);
+  GlesShaderBuilder& FragmentShaderSource(const std::string& src);
+  GlesShaderBuilder& FragmentShaderSource(std::string&& src);
  private:
   std::optional<std::string> vertex_shader_src_{};
   std::optional<std::string> fragment_shader_src_{};

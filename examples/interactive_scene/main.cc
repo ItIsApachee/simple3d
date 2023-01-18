@@ -12,7 +12,6 @@
 #include <simple3d/graphics/model.h>
 #include <simple3d/graphics/camera.h>
 #include <simple3d/graphics/models/cuboid.h>
-#include <simple3d/graphics/internal/shader.h>
 #include <simple3d/utils/fps_camera.h>
 #include <simple3d/imgui/imgui.h>
 

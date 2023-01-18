@@ -1,4 +1,4 @@
-#include <simple3d/graphics/internal/shader.h>
+#include <simple3d/graphics/internal/gles_shader.h>
 
 #include <string>
 #include <sstream>
