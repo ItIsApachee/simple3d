@@ -23,10 +23,10 @@ uniform bool specular_texture_enabled;
 void main() {
     gl_Position = projection * view * model_in * vec4(pos_in, 1.0);
 
-    pos = (model_in * vec4(pos_in, 1.0)).xyz;
+    pos = vec3(model_in * vec4(pos_in, 1.0));
 
-    // FIXME: normal is not in model space
-    normal = normal_in;
+    // FIXME: scaling breaks normals
+    normal = vec3(model_in * vec4(normal_in, 0.0));
 
     diffuse_color = vec3(1.0);
     specular_color = vec3(1.0);
