@@ -219,6 +219,7 @@ void CuboidRenderer::Draw() {
 void CuboidRenderer::Destroy(void* cuboid_void) {
   Cuboid* cuboid_ptr = reinterpret_cast<Cuboid*>(cuboid_void);
   cuboids_.erase(cuboid_ptr);
+  delete cuboid_ptr;
 }
 
 
