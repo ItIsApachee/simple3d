@@ -1,7 +1,6 @@
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODEL_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODEL_H_
 
-#include <iostream>
 #include <vector>
 #include <memory>
 #include <type_traits>
@@ -75,7 +74,6 @@ template <typename M>
 Model<M>::~Model() {
   if (model_ == nullptr)
     return;
-  std::cout << "delete model" << std::endl;
   if (auto renderer = renderer_.lock()) {
     renderer->Destroy(reinterpret_cast<void*>(model_));
   }
