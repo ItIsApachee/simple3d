@@ -1,3 +1,3 @@
 add_executable(interactive_scene main.cc)
 
-target_link_libraries(interactive_scene simple3d)
+target_link_libraries(interactive_scene simple3d simple3d-imgui)

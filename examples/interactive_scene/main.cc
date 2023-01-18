@@ -5,48 +5,51 @@
 
 #include <glad/gles2.h>
 
+#include <imgui.h>
+
 #include <simple3d/simple3d.h>
 #include <simple3d/graphics/model.h>
 #include <simple3d/graphics/camera.h>
 #include <simple3d/graphics/models/cuboid.h>
 #include <simple3d/graphics/internal/shader.h>
 #include <simple3d/utils/fps_camera.h>
+#include <simple3d/imgui/imgui.h>
 
 int main() {
-	using namespace Simple3D;
-
-	auto app_init_error = App::Init();
+	auto app_init_error = Simple3D::App::Init();
     if (!app_init_error.IsOk()) {
         std::cerr << "initialization failed: " << app_init_error.description << std::endl;
         return -1;
     }
 
+    Simple3D::ImGui::CreateContext();
+
     std::cout << "init succ" << std::endl;
     
-	View view{};
-	Scene scene{};
+	Simple3D::View view{};
+	Simple3D::Scene scene{};
 
-    auto camera = std::make_shared<Camera>();
+    auto camera = std::make_shared<Simple3D::Camera>();
     scene.SetCamera(camera);
 
-    FpsCameraConfig cfg{};
+    Simple3D::FpsCameraConfig cfg{};
     cfg.raw_motion_enabled = true;
-    cfg.window = App::GetGLFWwindow();
-    auto cam_handler = std::make_shared<FpsCameraInputHandler>(cfg);
-    App::EnableInputHandler(cam_handler);
-    App::EnableWindowInputHandler(cam_handler);
-    cam_handler->Enable(camera);
+    cfg.window = Simple3D::App::GetGLFWwindow();
+    auto cam_handler = std::make_shared<Simple3D::FpsCameraInputHandler>(cfg);
+    Simple3D::App::EnableInputHandler(cam_handler);
+    Simple3D::App::EnableWindowInputHandler(cam_handler);
+    // cam_handler->Enable(camera);
 
-    std::vector<Model<Cuboid>> cubes;
+    std::vector<Simple3D::Model<Simple3D::Cuboid>> cubes;
     int v = 1;
     float stride = 1.5f;
     for (int i = -v; i <= v; i++) {
         for (int j = -v; j <= v; j++) {
             for (int k = -v; k <= v; k++) {
-                cubes.push_back(scene.Create<Cuboid>(stride*j, stride*i, stride*k));
+                cubes.push_back(scene.Create<Simple3D::Cuboid>(stride*j, stride*i, stride*k));
             }
         }
-        App::PollEvents();
+        Simple3D::App::PollEvents();
         std::cout << (i + v + 1) << " / " << (2*v+1) << std::endl;
     }
     std::cout << "cubes: " << cubes.size() << std::endl;
@@ -56,8 +59,8 @@ int main() {
     float dist = 10.0f;
     auto start = std::chrono::high_resolution_clock::now();
     auto prev = start;
-	while (!App::ShouldClose()) {
-		App::PollEvents();
+	while (!Simple3D::App::ShouldClose()) {
+		Simple3D::App::PollEvents();
 
         auto now = std::chrono::high_resolution_clock::now();
         auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(now - start);
@@ -77,9 +80,18 @@ int main() {
         angle = millis.count() / 5000.0f;
 
 		view.Draw(scene);
-        App::SwapBuffers();
+
+        Simple3D::ImGui::NewFrame();
+
+        ImGui::ShowDemoWindow();
+
+        Simple3D::ImGui::Render();
+
+        Simple3D::App::SwapBuffers();
 	}
 
-    App::Destroy();
+    Simple3D::ImGui::DestroyContext();
+
+    Simple3D::App::Destroy();
     return 0;
 }
