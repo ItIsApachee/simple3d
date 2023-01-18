@@ -40,7 +40,7 @@ void Scene::RemoveDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_
 }
 
 void Scene::SetAmbientLight(const glm::vec3& light) {
-  ambient_light = light;
+  ambient_light_ = light;
 }
 
 

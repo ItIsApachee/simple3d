@@ -109,7 +109,7 @@ class Scene {
   std::shared_ptr<ICamera> active_camera_{};
 
   std::unordered_set<std::shared_ptr<DirectionalLight>> directional_lights_{};
-  glm::vec3 ambient_light = glm::vec3(kDefaultAmbientLight);
+  glm::vec3 ambient_light_ = glm::vec3(kDefaultAmbientLight);
 };
 
 
