@@ -135,7 +135,7 @@ std::shared_ptr<IRenderer>& Scene::GetIRendererShared() {
   }
 
   auto& shader_renderers = renderers_it->second.renderers;
-  auto it = shader_renderers.find(shader_type);
+  auto it = shader_renderers.find(renderer_type);
   if (it == shader_renderers.end()) {
     it = shader_renderers.emplace(renderer_type, std::make_shared<R>()).first;
   }
