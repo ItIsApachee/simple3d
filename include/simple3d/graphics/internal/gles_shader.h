@@ -33,13 +33,12 @@ class GlesShader {
  public:
   friend GlesShaderBuilder;
 
-  // FIXME: default move ctors/= work not as intended
   GlesShader() = default;
   GlesShader(const GlesShader&) = delete;
-  GlesShader(GlesShader&&) = default;
+  GlesShader(GlesShader&&);
 
   GlesShader& operator=(const GlesShader&) = delete;
-  GlesShader& operator=(GlesShader&&) = default;
+  GlesShader& operator=(GlesShader&&);
 
   // FIXME: delete shader on destruction
   ~GlesShader() = default;

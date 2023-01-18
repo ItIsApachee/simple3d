@@ -117,6 +117,24 @@ GlesShader GlesShaderBuilder::Build(Error* error) {
 
 GLuint GlesShader::active_shader_id_{kGlesInvalidShader};
 
+GlesShader::GlesShader(GlesShader&& other) : shader_id_{other.shader_id_} {
+  other.shader_id_ = kGlesInvalidShader;
+}
+
+GlesShader& GlesShader::operator=(GlesShader&& other) {
+  if (&other == this)
+    return *this;
+  
+  if (shader_id_ != kGlesInvalidShader) {
+    GlesShader tmp{std::move(*this)};
+  }  // tmp is destroyed
+
+  shader_id_ = other.shader_id_;
+  other.shader_id_ = kGlesInvalidShader;
+
+  return *this;
+}
+
 void GlesShader::Use() const {
   if (active_shader_id_ != shader_id_) {
     glUseProgram(shader_id_);
