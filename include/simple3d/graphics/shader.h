@@ -14,7 +14,8 @@ namespace Simple3D {
 
 
 
-// support at least 8 lights
+constexpr int kMinimumDirectionalLights = 8;
+
 class IShader {
  public:
   IShader() = default;
