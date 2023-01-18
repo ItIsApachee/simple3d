@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <cmath>
+#include <unordered_set>
 #include <chrono>
 
 #include <glad/gles2.h>
@@ -11,6 +12,7 @@
 #include <simple3d/context/input.h>
 #include <simple3d/graphics/model.h>
 #include <simple3d/graphics/camera.h>
+#include <simple3d/graphics/light.h>
 #include <simple3d/graphics/models/cuboid.h>
 #include <simple3d/utils/fps_camera.h>
 #include <simple3d/imgui/imgui.h>
@@ -53,6 +55,29 @@ int main() {
   
   Simple3D::View view{};
   Simple3D::Scene scene{};
+
+  scene.SetAmbientLight(glm::vec3(0.5f, 0.5f, 0.5f));
+  using light_t = Simple3D::DirectionalLight;
+  std::unordered_set<std::shared_ptr<light_t>> lights = {
+    std::shared_ptr<light_t>(new light_t{
+      glm::normalize(glm::vec3(1.0f, -1.0f, 0.0f)),
+      glm::vec3(1.0f, 0.0f, 0.0f) * 0.3f,
+      glm::vec3(1.0f, 0.0f, 0.0f) * 0.2f}),
+    std::shared_ptr<light_t>(new light_t{
+      glm::normalize(glm::vec3(0.0f, -1.0f, 1.0f)),
+      glm::vec3(0.0f, 1.0f, 0.0f) * 0.3f,
+      glm::vec3(0.0f, 1.0f, 0.0f) * 0.2f}),
+    std::shared_ptr<light_t>(new light_t{
+      glm::normalize(glm::vec3(-1.0f, -1.0f, 0.0f)),
+      glm::vec3(0.0f, 0.0f, 1.0f) * 0.3f,
+      glm::vec3(0.0f, 0.0f, 1.0f) * 0.2f}),
+    std::shared_ptr<light_t>(new light_t{
+      glm::normalize(glm::vec3(0.0f, -1.0f, -1.0f)),
+      glm::vec3(1.0f, 0.3f, 0.4f) * 0.3f,
+      glm::vec3(1.0f, 0.3f, 0.4f) * 0.2f}),
+  };
+  for (auto &light : lights)
+    scene.AddDirectionalLight(light);
 
   auto camera = std::make_shared<Simple3D::Camera>();
   scene.SetCamera(camera);
