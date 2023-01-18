@@ -19,7 +19,7 @@ namespace Simple3D {
 
 Scene::Scene()
     : renderers_{}, 
-      active_camera_{new ICamera()}, 
+      active_camera_{std::make_shared<ICamera>()}, 
       directional_lights_{} {
 }
 
