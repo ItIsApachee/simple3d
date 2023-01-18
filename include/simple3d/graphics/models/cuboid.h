@@ -2,7 +2,6 @@
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_
 
 #include <unordered_set>
-#include <chrono>
 #include <utility>
 
 #include <glm/vec3.hpp>
@@ -66,9 +65,6 @@ class CuboidRenderer : public IRenderer {
   std::size_t instances_vbo_capacity_{0};
 
   Internal::VertexArrayObject vao_{};
-
-  // // TODO(apachee): remove
-  decltype(std::chrono::high_resolution_clock::now()) start_time_{};
 };
 
 

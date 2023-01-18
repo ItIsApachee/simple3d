@@ -148,8 +148,7 @@ CuboidRenderer::CuboidRenderer()
       instances_vbo_(),
       instances_vbo_capacity_{0},
       ebo_(),
-      cuboids_(),
-      start_time_(std::chrono::high_resolution_clock::now()) {
+      cuboids_() {
   vao_.Bind();
 
   verices_vbo_ = Internal::VertexBufferObject(sizeof(Internal::Vertex)*kCuboidVertices.size(), 
