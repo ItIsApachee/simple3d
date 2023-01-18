@@ -42,40 +42,6 @@ class Model {
   // std::uint64_t id_{0};
 };
 
-// TODO(apachee): add is_primitive trait
-// FIXME(apachee): remove test primitive
-// struct TestPrimitive;
-// class TestPrimitiveRenderer;
-
-// class TestPrimitiveRenderer : public IRenderer {
-//  public:
-//   TestPrimitiveRenderer() = default;
-//   TestPrimitiveRenderer(const TestPrimitiveRenderer&) = delete;
-//   TestPrimitiveRenderer(TestPrimitiveRenderer&&) = default;
-//   TestPrimitiveRenderer& operator=(const TestPrimitiveRenderer&) = delete;
-//   TestPrimitiveRenderer& operator=(TestPrimitiveRenderer&&) = default;
-//   ~TestPrimitiveRenderer();
-
-
-//   template <typename T>
-//   TestPrimitive* Create();
-//   template <>
-//   TestPrimitive* Create<TestPrimitive>();
-
-//   TestPrimitive* Create(int);
-
-//   void Draw() override;
-//   void Destroy(Scene* scene) override;
-//  private:
-//   std::vector<TestPrimitive*> primitives_{};
-// };
-
-// struct TestPrimitive {
-//  public:
-//   using Renderer = TestPrimitiveRenderer;
-//   int id{0};
-// };
-
 // implementation
 template <typename M>
 Model<M>::Model(M* p_, std::weak_ptr<IRenderer> renderer)
