@@ -51,25 +51,26 @@ FpsCameraInputHandler::KeyStates FpsCameraInputHandler::GetKeyStates() {
 }
 
 void FpsCameraInputHandler::Update(const std::chrono::milliseconds& delta) {
-  if (!camera_ && !focused_)
+  if (!focused_)
     return;
-  
-  constexpr float kMillisPerSecond = 1000.0F;
-  float mult = cfg_.movement_speed * (float)delta.count() / kMillisPerSecond;
+  if (camera_) {
+    constexpr float kMillisPerSecond = 1000.0F;
+    float mult = cfg_.movement_speed * (float)delta.count() / kMillisPerSecond;
 
-  auto key_states = GetKeyStates();
+    auto key_states = GetKeyStates();
 
-  glm::vec3 cam_front{-glm::sin(-camera_->yaw), 0.0F, -glm::cos(-camera_->yaw)};
-  float front_mult = mult * (key_states.forwards - key_states.backwards);
-  camera_->pos += front_mult * cam_front;
+    glm::vec3 cam_front{-glm::sin(-camera_->yaw), 0.0F, -glm::cos(-camera_->yaw)};
+    float front_mult = mult * (key_states.forwards - key_states.backwards);
+    camera_->pos += front_mult * cam_front;
 
-  glm::vec3 cam_right{glm::cos(-camera_->yaw), 0.0F, -glm::sin(-camera_->yaw)};
-  float right_mult = mult * (key_states.right - key_states.left);
-  camera_->pos += right_mult * cam_right;
+    glm::vec3 cam_right{glm::cos(-camera_->yaw), 0.0F, -glm::sin(-camera_->yaw)};
+    float right_mult = mult * (key_states.right - key_states.left);
+    camera_->pos += right_mult * cam_right;
 
-  glm::vec3 cam_up{0.0F, 1.0F, 0.0F};
-  float up_mult = mult * (key_states.up - key_states.down);
-  camera_->pos += up_mult * cam_up;
+    glm::vec3 cam_up{0.0F, 1.0F, 0.0F};
+    float up_mult = mult * (key_states.up - key_states.down);
+    camera_->pos += up_mult * cam_up;
+  }
 }
 
 FpsCameraInputHandler::FpsCameraInputHandler(const FpsCameraConfig& cfg)
@@ -78,35 +79,36 @@ FpsCameraInputHandler::FpsCameraInputHandler(const FpsCameraConfig& cfg)
 }
 
 void FpsCameraInputHandler::CursorPosCallback(double xpos, double ypos) {
-  if (!camera_ || !focused_)
+  if (!focused_)
     return;
 
-  const double pixels_to_radians = glm::radians(0.25f);
+  if (camera_) {
+    const double pixels_to_radians = glm::radians(0.25f);
 
-  float xdiff = (float)(xpos - prev_xpos_);
-  xdiff *= pixels_to_radians;
-  using yaw_t = decltype(camera_->yaw);
-  camera_->yaw += cfg_.sensitivity * xdiff;
-  camera_->yaw = std::fmod(camera_->yaw, glm::two_pi<yaw_t>());
+    float xdiff = (float)(xpos - prev_xpos_);
+    xdiff *= pixels_to_radians;
+    using yaw_t = decltype(camera_->yaw);
+    camera_->yaw += cfg_.sensitivity * xdiff;
+    camera_->yaw = std::fmod(camera_->yaw, glm::two_pi<yaw_t>());
 
-  float ydiff = (float)(ypos - prev_ypos_);
-  ydiff *= pixels_to_radians;
-  using pitch_t = decltype(camera_->pitch);
-  camera_->pitch += cfg_.sensitivity * ydiff;
-  camera_->pitch = std::clamp<pitch_t>(
-      camera_->pitch, -glm::half_pi<pitch_t>(), glm::half_pi<pitch_t>());
+    float ydiff = (float)(ypos - prev_ypos_);
+    ydiff *= pixels_to_radians;
+    using pitch_t = decltype(camera_->pitch);
+    camera_->pitch += cfg_.sensitivity * ydiff;
+    camera_->pitch = std::clamp<pitch_t>(
+        camera_->pitch, -glm::half_pi<pitch_t>(), glm::half_pi<pitch_t>());
 
-  prev_xpos_ = xpos;
-  prev_ypos_ = ypos;
+    prev_xpos_ = xpos;
+    prev_ypos_ = ypos;
+  }
 }
 
 void FpsCameraInputHandler::WindowFocusCallback(int focused) {
   focused_ = focused == GLFW_TRUE;
 }
 void FpsCameraInputHandler::FramebufferSizeCallback(int width, int height) {
-  if (!camera_)
-    return;
-  camera_->aspect_ratio = (float)width / (float)height;
+  if (camera_)
+    camera_->aspect_ratio = (float)width / (float)height;
 }
 
 }  // namespace Simple3D
