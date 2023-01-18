@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <chrono>
+#include <optional>
 
 #include <GLFW/glfw3.h>
 #include <glm/vec3.hpp>
@@ -15,7 +16,6 @@ namespace Simple3D {
 
 struct FpsCameraConfig {
  public:
-  GLFWwindow* window{nullptr};
   float sensitivity{1.0F};
   bool raw_motion_enabled{false};
 
@@ -27,26 +27,29 @@ struct FpsCameraConfig {
   int right_key{GLFW_KEY_D};
   int up_key{GLFW_KEY_SPACE};
   int down_key{GLFW_KEY_LEFT_SHIFT};
+
+  std::optional<int> escape_key{};
 };
 
 class FpsCameraInputHandler : public IInputHandler, public IWindowInputHandler {
  public:
-  FpsCameraInputHandler() = default;
+  FpsCameraInputHandler();
   FpsCameraInputHandler(const FpsCameraConfig& cfg);
   ~FpsCameraInputHandler() override = default;
 
-  // TODO(apachee): set prev_xpos, prev_ypos to curr pos
-  void Enable(const std::shared_ptr<Camera>& camera);
+
+  void Enable(const std::shared_ptr<Camera>&);
   void Disable();
 
-  void Update(const std::chrono::milliseconds& delta);
+  bool IsEnabled();
+  bool Update(const std::chrono::milliseconds& delta);
 
-  // void KeyCallback(int key, 
-  //     int scancode, int action, int mods) override;
   void CursorPosCallback(double xpos, double ypos) override;
 
   void WindowFocusCallback(int focused) override;
   void FramebufferSizeCallback(int width, int height) override;
+
+  FpsCameraConfig cfg{};
 
  private:
   struct KeyStates {
@@ -56,13 +59,15 @@ class FpsCameraInputHandler : public IInputHandler, public IWindowInputHandler {
     char right{0};
     char up{0};
     char down{0};
+    bool escape{0};
   };
 
   KeyStates GetKeyStates();
 
+  GLFWwindow* window_{nullptr};
+
   std::shared_ptr<Camera> camera_{};
 
-  FpsCameraConfig cfg_{};
 
   bool focused_{false};
   double prev_xpos_{0.0f};
