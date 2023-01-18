@@ -63,8 +63,9 @@ Model<M>& Model<M>::operator=(Model&& other) {
   }  // destructor is called and model_ is freed
   // *this is now empty
 
-  std::swap(model_, other.model_);
-  std::swap(renderer_, other.renderer_);
+  model_ = other.model_;
+  other.model_ = nullptr;
+  renderer_ std::move(other.renderer_);
   // other is empty
 
   return *this;
