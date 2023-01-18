@@ -9,6 +9,9 @@ CPMAddPackage("gh:g-truc/glm#0.9.9.8")
 # Library setup
 add_subdirectory(graphics/internal)
 
+# simple3d-imgui setup
+add_subdirectory(imgui)
+
 # set(simple3d_SOURCES simple3d.cc)
 # set(simple3d_SOURCES ${simple3d_SOURCES} shader/shader.cc)
 
