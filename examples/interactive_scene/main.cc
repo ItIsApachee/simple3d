@@ -58,10 +58,10 @@ int main() {
   auto camera = std::make_shared<Simple3D::Camera>();
   scene.SetCamera(camera);
 
-  Simple3D::FpsCameraConfig cfg{};
-  cfg.raw_motion_enabled = true;
-  cfg.escape_key = GLFW_KEY_ESCAPE;
-  auto cam_handler = std::make_shared<Simple3D::FpsCameraInputHandler>(cfg);
+  Simple3D::FpsCameraConfig default_cfg{};
+  default_cfg.raw_motion_enabled = true;
+  default_cfg.escape_key = GLFW_KEY_ESCAPE;
+  auto cam_handler = std::make_shared<Simple3D::FpsCameraInputHandler>(default_cfg);
   // Simple3D::App::EnableInputHandler(cam_handler);
   // Simple3D::App::EnableWindowInputHandler(cam_handler);
   imgui_handler->EnableInputHandler(cam_handler);
@@ -116,7 +116,27 @@ int main() {
     view.Draw(scene);
 
     Simple3D::ImGui::NewFrame();
+
     ImGui::ShowDemoWindow();
+
+    ImGui::Begin("Position");
+    static_assert(std::is_same_v<decltype(camera->pos.x), float>);
+    ImGui::InputFloat("x", &camera->pos.x);
+    ImGui::InputFloat("y", &camera->pos.y);
+    ImGui::InputFloat("z", &camera->pos.z);
+    ImGui::End();
+
+    ImGui::Begin("Camera controls");
+    auto& cfg = cam_handler->cfg;
+    ImGui::SliderFloat("Sensitivity", &cfg.sensitivity, 0.1f, 3.0f);
+    ImGui::SliderFloat("Movement speed", &cfg.movement_speed, 1.0f, 100.0f);
+    if (ImGui::RadioButton("Raw inputs", cfg.raw_motion_enabled)) {
+      cfg.raw_motion_enabled = !cfg.raw_motion_enabled;
+    }
+    if (ImGui::Button("Reset to default"))
+      cfg = default_cfg;
+    ImGui::End();
+
     Simple3D::ImGui::Render();
 
     Simple3D::App::SwapBuffers();
