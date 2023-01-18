@@ -15,26 +15,37 @@ in vec3 specular_color;
 out vec4 frag_color;
 
 uniform vec3 view_pos;
-// uniform vec3 ambient_light;
-// #define DIRECTIONAL_LIGHTS 1
-// uniform DirectionalLight directional_light[DIRECTIONAL_LIGHTS]
+
+uniform vec3 ambient_light;
+
+uniform int directional_light_count;
+#define DIRECTIONAL_LIGHTS 8
+uniform DirectionalLight directional_light[DIRECTIONAL_LIGHTS];
+
+// should I include normal & view_pos here?
+vec3 calc_dir_light(DirectionalLight light, vec3 view_dir) {
+  const float kDefaultShininess = 16.0;
+
+  vec3 diffuse = light.diffuse * max(dot(normal, -light.direction), 0.0) * diffuse_color;
+
+  vec3 reflect_dir = reflect(light.direction, normal);
+
+  float specular_mult = pow(max(dot(view_dir, reflect_dir), 0.0), kDefaultShininess);
+  vec3 specular = specular_mult * light.specular * specular_color;
+  return (diffuse + specular);
+}
 
 void main() {
-    vec3 ambient_light = vec3(1.0) * 0.3;
-    DirectionalLight directional_light = DirectionalLight(
-        normalize(vec3(0.2, 0.4, -1.0)),
-        vec3(1.0) * 0.5,
-        vec3(1.0) * 0.3
-    );
+  vec3 ambient = ambient_light * diffuse_color;
 
-    vec3 ambient = ambient_light * diffuse_color;
-    vec3 diffuse = directional_light.diffuse * max(dot(normal, -directional_light.direction), 0.0) * diffuse_color;
+  vec3 cum_frag_color = vec3(0.0);
+  cum_frag_color += ambient;
 
-    vec3 reflect_dir = reflect(directional_light.direction, normal);
-    vec3 view_dir = normalize(view_pos - pos);
-    float specular_mult = pow(max(dot(view_dir, reflect_dir), 0.0), 16.0);
-    vec3 specular = specular_mult * directional_light.specular * specular_color;
-    // vec3 specular = pow(max(dot(view_dir, reflect_dir), 0.0), 16) * 0.5 * directional_light.specular * specular_color;
+  vec3 view_dir = normalize(view_pos - pos);
+  int directional_light_count_ = min(directional_light_count, DIRECTIONAL_LIGHTS);
+  for (int i = 0; i < directional_light_count_; i++) {
+    cum_frag_color += calc_dir_light(directional_light[i], view_dir);
+  }
 
-    frag_color = vec4(ambient + diffuse + specular, 1.0);
+  frag_color = vec4(cum_frag_color, 1.0);
 }
