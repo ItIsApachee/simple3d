@@ -1,6 +1,7 @@
 #include <simple3d/graphics/models/cuboid.h>
 
 #include <cstddef>
+// FIXME: remove iostream
 #include <iostream>
 #include <array>
 // #include <chrono>
@@ -30,6 +31,7 @@ struct CuboidInstance {
   glm::mat4 model;
   glm::vec3 diffuse_color;
   glm::vec3 specular_color;
+  float shininess;
 };
 
 void CuboidInstance::BindAttributes() {
@@ -55,12 +57,21 @@ void CuboidInstance::BindAttributes() {
   glEnableVertexAttribArray(diffuse_color_layout_index);
   glVertexAttribDivisor(diffuse_color_layout_index, 1);
 
-  constexpr auto specular_color_layout_inedx = 11;
+  constexpr auto specular_color_layout_index = 11;
   glVertexAttribPointer(
-    specular_color_layout_inedx, 3, GL_FLOAT, GL_FALSE,
+    specular_color_layout_index, 3, GL_FLOAT, GL_FALSE,
     sizeof(CuboidInstance),
     reinterpret_cast<void*>(offsetof(CuboidInstance, specular_color)));
-
+  glEnableVertexAttribArray(specular_color_layout_index);
+  glVertexAttribDivisor(specular_color_layout_index, 1);
+  
+  constexpr auto shininess_layout_index = 12;
+  glVertexAttribPointer(
+    shininess_layout_index, 1, GL_FLOAT, GL_FALSE,
+    sizeof(CuboidInstance),
+    reinterpret_cast<void*>(offsetof(CuboidInstance, shininess)));
+  glEnableVertexAttribArray(shininess_layout_index);
+  glVertexAttribDivisor(shininess_layout_index, 1);
 }
 
 static constexpr auto GenVertices() {
@@ -174,9 +185,7 @@ CuboidRenderer::~CuboidRenderer() {
 }
 
 void CuboidRenderer::Draw() {
-  // std::cout << "Draw()" << std::endl;
   if (cuboids_.empty()) {
-    // std::cout << "wtf" << std::endl;
     return;
   }
 
@@ -184,18 +193,11 @@ void CuboidRenderer::Draw() {
     instances_vbo_.SetData(cuboids_.size()*sizeof(CuboidInstance), nullptr, kInstanceVboUsage);
     instances_vbo_capacity_ = cuboids_.size();
   }
-
-  // auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(
-  //   std::chrono::high_resolution_clock::now() - start_time_);
-  
-  // glm::mat4 transform(1.0f);
-  // transform = glm::rotate(transform, elapsed.count() / 1000.f, glm::normalize(glm::vec3{.1, .2, .4}));
   
   std::size_t instances_cnt = cuboids_.size();
 
   std::vector<CuboidInstance> instances;
   instances.reserve(instances_cnt);
-  // std::cerr << "debug: " << std::endl;
 
   for (const auto cuboid_ptr: cuboids_) {
     auto& cuboid = *cuboid_ptr;
@@ -203,50 +205,14 @@ void CuboidRenderer::Draw() {
     glm::mat4 model(1.0f);
     glm::vec3 pos(cuboid.pos);
     model = glm::translate(model, pos);
-    // model = model * transform;
 
-    // glm::vec3 color(cuboid.r, cuboid.g, cuboid.b);
-
-    // std::cerr << "Cube({" << std::endl;
-    // for (int i = 0; i < 4; i++) {
-    //   std::cerr << '\t';
-    //   for (int j = 0; j < 4; j++) {
-    //     std::cerr << model[i][j] << ", ";
-    //   }
-    //   std::cerr << std::endl;
-    // }
-    // std::cerr << std::endl << "}, {" << color.x << ", " << color.y << ", " << color.z << "}" << std::endl << ")" << std::endl;
-
-    instances.push_back(CuboidInstance{model,
-        cuboid.diffuse_color, cuboid.specular_color});
+    instances.push_back(CuboidInstance{model, cuboid.diffuse_color,
+        cuboid.specular_color, cuboid.shininess});
   }
   instances_vbo_.SubData(0, instances_cnt * sizeof(CuboidInstance),
       (const std::byte*)instances.data());
 
-
-  // CuboidInstance inst{transform};
-  // instances_vbo_.SubData(0, sizeof(CuboidInstance), (std::byte*)&inst);
   vao_.Bind();
-
-
-  // ModelShader::GetInstance().shader().SetUniformMat4fv("model", transform);
-
-  // ModelShader::GetInstance().shader().SetUniformMat4fv("model_test", transform);
-
-  // glm::mat4 view(1.0f);
-  // view = glm::translate(view, glm::vec3(0.0f, 0.0f, -350.0f));
-  // view = glm::rotate(view, elapsed.count() / 25000.0f, glm::vec3(1.0f, 0.0f, 0.0f));
-  // view = glm::rotate(view, elapsed.count() / 4000.0f, glm::vec3(0.0f, 1.0f, 0.0f));
-
-  // ModelShader::GetInstance().shader().SetUniformMat4fv("view", view);
-
-  // glm::mat4 projection = glm::perspective(glm::radians(45.0f), 16.0f/9.0f, 0.1f, 1000.0f);
-  // glm::mat4 projection(1.0f);
-  // ModelShader::GetInstance().shader().SetUniformMat4fv("projection", projection);
-
-  // glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, static_cast<void*>(0));
-  // std::cerr << "instances_cnt: " << instances_cnt << std::endl;
-  // vao_.BindEbo(ebo_);
   glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)0, static_cast<GLsizei>(instances_cnt));
   vao_.Unbind();
 }

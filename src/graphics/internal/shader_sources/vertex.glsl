@@ -9,11 +9,13 @@ layout (location = 2) in mat4 model_in;
 
 layout (location = 10) in vec3 diffuse_color_in;
 layout (location = 11) in vec3 specular_color_in;
+layout (location = 12) in float shininess_in;
 
 out vec3 pos;
 out vec3 normal;
 out vec3 diffuse_color;
 out vec3 specular_color;
+out float shininess;
 
 uniform mat4 view;
 uniform mat4 projection;
@@ -28,4 +30,5 @@ void main() {
 
     diffuse_color = diffuse_color_in;
     specular_color = specular_color_in;
+    shininess = shininess_in;
 }

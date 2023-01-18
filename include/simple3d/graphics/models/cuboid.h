@@ -7,6 +7,7 @@
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
+#include <glad/gles2.h>
 
 #include <simple3d/types.h>
 #include <simple3d/graphics/renderer.h>
@@ -27,9 +28,10 @@ struct Cuboid {
   // coordinates
   glm::vec3 pos = glm::vec3(0.0f);
 
-  // colors
+  // material
   glm::vec3 diffuse_color = glm::vec3(1.0f);
   glm::vec3 specular_color = glm::vec3(1.0f);
+  GLfloat shininess{16.0f};
 
   // TODO(apachee): add rotation
   // // rotation

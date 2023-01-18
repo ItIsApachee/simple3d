@@ -11,6 +11,7 @@ in vec3 pos;
 in vec3 normal;
 in vec3 diffuse_color;
 in vec3 specular_color;
+in float shininess;
 
 out vec4 frag_color;
 
@@ -24,13 +25,11 @@ uniform DirectionalLight directional_light[DIRECTIONAL_LIGHTS];
 
 // should I include normal & view_pos here?
 vec3 calc_dir_light(DirectionalLight light, vec3 view_dir) {
-  const float kDefaultShininess = 16.0;
-
   vec3 diffuse = light.diffuse * max(dot(normal, -light.direction), 0.0) * diffuse_color;
 
   vec3 reflect_dir = reflect(light.direction, normal);
 
-  float specular_mult = pow(max(dot(view_dir, reflect_dir), 0.0), kDefaultShininess);
+  float specular_mult = pow(max(dot(view_dir, reflect_dir), 0.0), shininess);
   vec3 specular = specular_mult * light.specular * specular_color;
   return (diffuse + specular);
 }
