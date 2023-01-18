@@ -28,6 +28,8 @@ namespace Simple3D {
 
 
 
+const float kDefaultAmbientLight = 0.1f;
+
 // definition
 /** \class Scene simple3d/graphics/scene.h
  * \brief Container for light sources, and cameras.
@@ -107,7 +109,7 @@ class Scene {
   std::shared_ptr<ICamera> active_camera_{};
 
   std::unordered_set<std::shared_ptr<DirectionalLight>> directional_lights_{};
-  glm::vec3 ambient_light = glm::vec3(0.0f);
+  glm::vec3 ambient_light = glm::vec3(kDefaultAmbientLight);
 };
 
 
