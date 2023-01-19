@@ -84,6 +84,10 @@ void TexturedModelShader::SetAmbientLight(const glm::vec3& ambient_light) {
   }
 }
 
+const Internal::GlesShader& TexturedModelShader::shader() const {
+  return shader_;
+}
+
 
 
 }  // namespace Simple3D

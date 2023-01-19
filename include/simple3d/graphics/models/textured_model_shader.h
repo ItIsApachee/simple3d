@@ -32,6 +32,8 @@ class TexturedModelShader : public IShader {
       const std::unordered_set<std::shared_ptr<DirectionalLight>>&) override;
   void SetAmbientLight(const glm::vec3&) override;
 
+  const Internal::GlesShader& shader() const;
+
  private:
   Internal::GlesShader shader_{};
   glm::mat4 view_{0.0f};
