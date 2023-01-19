@@ -1,3 +1,5 @@
+project(imgui-simple3d)
+
 # imgui setup
 set(imgui_SOURCES imgui.cpp imgui_demo.cpp imgui_draw.cpp
     imgui_tables.cpp imgui_widgets.cpp)
@@ -15,8 +17,6 @@ add_library(imgui-glfw STATIC ${imgui-glfw_SOURCES})
 
 target_link_libraries(imgui-glfw PUBLIC imgui glfw)
 
-target_include_directories(imgui-glfw PUBLIC ${imgui_SOURCE_DIR})
-
 # imgui-gles3 setup
 set(imgui-gles3_SOURCES imgui-gles3/imgui_impl_gles3.cpp)
 
@@ -24,4 +24,4 @@ add_library(imgui-gles3 STATIC ${imgui-gles3_SOURCES})
 
 target_link_libraries(imgui-gles3 PUBLIC imgui glad)
 
-target_include_directories(imgui-gles3 PUBLIC ${imgui_SOURCE_DIR} .)
+target_include_directories(imgui-gles3 PUBLIC .)
