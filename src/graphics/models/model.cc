@@ -199,7 +199,7 @@ class Mesh {
   Mesh& operator=(Mesh&&) = default;
   ~Mesh() = default;
 
-  void Draw(Internal::GlesShader& shader) {
+  void Draw(const Internal::GlesShader& shader) const {
     shader.Use();
 
     // naming scheme:
@@ -215,13 +215,13 @@ class Mesh {
       glActiveTexture((GLenum)(GL_TEXTURE0 + i));
 
       std::string num{};
-      std::string& name = textures[i].type;
+      const std::string& name = textures[i].type;
       if (name == kDiffuseTexture) {
         num = std::to_string(diffuse_textures_cnt++);
       } else if (name == kSpecularTexture) {
         num = std::to_string(specular_textures_cnt++);
       } else {
-        // error handling
+        assert(false);  // shouldn't be happening
       }
 
       shader.SetUniform1i(texture_prefix + name + num, i);
@@ -280,6 +280,12 @@ std::shared_ptr<Model> Model::Load(const std::filesystem::path& model_path,
   }
 
   return model;
+}
+
+void Model::Draw(const Internal::GlesShader& shader) const {
+  for (const auto& mesh : meshes) {
+    mesh.Draw(shader);
+  }
 }
 
 

@@ -6,6 +6,8 @@
 #include <memory>
 #include <vector>
 
+#include <simple3d/graphics/internal/gles_shader.h>
+
 namespace Simple3D {
 
 class Mesh;
@@ -20,7 +22,7 @@ class Model {
   Model& operator=(const Model&) = delete;
   Model& operator=(Model&&) = default;
 
-  void Draw() const;
+  void Draw(const Internal::GlesShader&) const;
 
  private:
   Model() = default;
