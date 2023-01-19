@@ -16,8 +16,8 @@ namespace Simple3D {
 ModelShader::ModelShader() {
   Error err;
   shader_ = Internal::GlesShaderBuilder()
-    .FragmentShaderSource(Internal::kFragmentShader)
-    .VertexShaderSource(Internal::kVertexShader)
+    .FragmentShaderSource(Internal::kDefaultFragmentShader)
+    .VertexShaderSource(Internal::kDefaultVertexShader)
     .Build(&err);
 
   // FIXME
