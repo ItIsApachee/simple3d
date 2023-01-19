@@ -38,21 +38,21 @@ uniform Material material;
 
 // should I include normal & view_pos here?
 vec3 calc_dir_light(DirectionalLight light, vec3 view_dir) {
-  const float kDefaultShininess;
+  const float kDefaultShininess = 16.0;
 
   vec3 diffuse = light.diffuse * max(dot(normal, -light.direction), 0.0)
-      * texture(material.texture_diffuse_1, tex_coord);
+      * vec3(texture(material.texture_diffuse_1, tex_coord));
 
   vec3 reflect_dir = reflect(light.direction, normal);
 
   float specular_mult = pow(max(dot(view_dir, reflect_dir), 0.0), kDefaultShininess);
   vec3 specular = specular_mult * light.specular
-      * texture(material.texture_specular_1, tex_coord);
+      * vec3(texture(material.texture_specular_1, tex_coord));
   return (diffuse + specular);
 }
 
 void main() {
-  vec3 ambient = ambient_light * texture(material.texture_diffuse_1, tex_coord);
+  vec3 ambient = ambient_light * vec3(texture(material.texture_diffuse_1, tex_coord));
 
   vec3 cum_frag_color = vec3(0.0);
   cum_frag_color += ambient;

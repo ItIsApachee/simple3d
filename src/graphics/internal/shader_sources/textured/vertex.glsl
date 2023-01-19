@@ -24,14 +24,14 @@ uniform mat4 projection;
 void main() {
     gl_Position = projection * view * model * vec4(pos_in, 1.0);
 
-    pos = vec3(model_in * vec4(pos_in, 1.0));
+    pos = vec3(model * vec4(pos_in, 1.0));
 
     // FIXME: scaling breaks normals
-    normal = vec3(model_in * vec4(normal_in, 0.0));
+    normal = vec3(model * vec4(normal_in, 0.0));
 
     tex_coord = tex_coord_in;
 
-    diffuse_color = diffuse_color_in;
-    specular_color = specular_color_in;
-    shininess = shininess_in;
+    // diffuse_color = diffuse_color_in;
+    // specular_color = specular_color_in;
+    // shininess = shininess_in;
 }
