@@ -55,38 +55,42 @@ class Scene {
   // template <typename P, typename... Args>
   // Model<P> Create(Args... args);
   template <typename M, typename... Args>
-  auto Create(Args... args)
+  auto Create(Args&&... args)
     -> std::enable_if_t<
       std::is_same_v<
         decltype(
-          std::declval<typename M::Renderer>().template Create<M>(args...)),
+          std::declval<typename M::Renderer>().template Create<M>(
+            std::forward<Args>(args)...)),
         M*>,
       Model<M>>;
 
   template <typename M, typename... Args>
-  auto Create(Args... args)
+  auto Create(Args&&... args)
     -> std::enable_if_t<
       std::is_same_v<
         decltype(
-          std::declval<typename M::Renderer>().Create(args...)),
+          std::declval<typename M::Renderer>().Create(
+            std::forward<Args>(args)...)),
         M*>,
       Model<M>>;
 
   template <typename M, typename R, typename... Args>
-  auto Create(Args... args)
+  auto Create(Args&&... args)
     -> std::enable_if_t<
       std::is_same_v<
         decltype(
-          std::declval<R>().template Create<M>(args...)),
+          std::declval<R>().template Create<M>(
+            std::forward<Args>(args)...)),
         M*>,
       Model<M>>;
 
   template <typename M, typename R, typename... Args>
-  auto Create(Args... args)
+  auto Create(Args&&... args)
     -> std::enable_if_t<
       std::is_same_v<
         decltype(
-          std::declval<R>().Create(args...)),
+          std::declval<R>().Create(
+            std::forward<Args>(args)...)),
         M*>,
       Model<M>>;
 
@@ -150,33 +154,36 @@ R& Scene::GetRendererRef() {
 }
 
 template <typename M, typename... Args>
-auto Scene::Create(Args... args)
+auto Scene::Create(Args&&... args)
   -> std::enable_if_t<
     std::is_same_v<
       decltype(
-        std::declval<typename M::Renderer>().template Create<M>(args...)),
+        std::declval<typename M::Renderer>().template Create<M>(
+          std::forward<Args>(args)...)),
       M*>,
     Model<M>> {
     return Scene::Create<M, typename M::Renderer>(args...);
 }
 
 template <typename M, typename... Args>
-auto Scene::Create(Args... args)
+auto Scene::Create(Args&&... args)
   -> std::enable_if_t<
     std::is_same_v<
       decltype(
-        std::declval<typename M::Renderer>().Create(args...)),
+        std::declval<typename M::Renderer>().Create(
+          std::forward<Args>(args)...)),
       M*>,
     Model<M>> {
     return Scene::Create<M, typename M::Renderer>(args...);
 }
 
 template <typename M, typename R, typename... Args>
-auto Scene::Create(Args... args)
+auto Scene::Create(Args&&... args)
   -> std::enable_if_t<
     std::is_same_v<
       decltype(
-        std::declval<R>().template Create<M>(args...)),
+        std::declval<R>().template Create<M>(
+          std::forward<Args>(args)...)),
       M*>,
     Model<M>> {
   using Renderer = R;
@@ -184,15 +191,19 @@ auto Scene::Create(Args... args)
   auto renderer = GetIRendererShared<R>();
   R& renderer_ref = *dynamic_cast<R*>(renderer.get());
 
-  return Model{renderer_ref.template Create<M>(args...), std::move(renderer)};
+  return Model{
+    renderer_ref.template Create<M>(std::forward<Args>(args)...),
+    std::move(renderer)
+  };
 }
 
 template <typename M, typename R, typename... Args>
-auto Scene::Create(Args... args)
+auto Scene::Create(Args&&... args)
   -> std::enable_if_t<
     std::is_same_v<
       decltype(
-        std::declval<R>().Create(args...)),
+        std::declval<R>().Create(
+          std::forward<Args>(args)...)),
       M*>,
     Model<M>> {
   using Renderer = R;
@@ -200,7 +211,10 @@ auto Scene::Create(Args... args)
   auto renderer = GetIRendererShared<R>();
   R& renderer_ref = *dynamic_cast<R*>(renderer.get());
 
-  return Model{renderer_ref.Create(args...), std::move(renderer)};
+  return Model{
+    renderer_ref.Create(std::forward<Args>(args)...),
+    std::move(renderer)
+  };
 }
 
 
