@@ -1,4 +1,4 @@
-#include <simple3d/graphics/model.h>
+#include <simple3d/graphics/models/model.h>
 
 #include <vector>
 #include <unordered_map>

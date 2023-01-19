@@ -24,8 +24,7 @@ set(simple3d_SOURCES ${simple3d_SOURCES} context/context.cc context/window.cc
 
 # src/graphics/
 set(simple3d_SOURCES ${simple3d_SOURCES} graphics/scene.cc graphics/view.cc
-    graphics/model.cc graphics/model_handle.cc graphics/camera.cc
-    graphics/shader_storage.cc)
+    graphics/model_handle.cc graphics/camera.cc graphics/shader_storage.cc)
 
 # /src/graphics/internal/
 set(simple3d_SOURCES ${simple3d_SOURCES}
@@ -37,10 +36,9 @@ set(simple3d_SOURCES ${simple3d_SOURCES}
     graphics/internal/vertex.cc)
 
 # /src/graphics/models/
-set(simple3d_SOURCES ${simple3d_SOURCES}
-    graphics/models/cuboid.cc
-    graphics/models/model_shader.cc
-    graphics/models/textured_model_shader.cc)
+set(simple3d_SOURCES ${simple3d_SOURCES} graphics/models/cuboid.cc
+    graphics/models/model_shader.cc graphics/models/textured_model_shader.cc
+    graphics/models/model.cc)
 
 # /src/utils/
 set(simple3d_SOURCES ${simple3d_SOURCES}

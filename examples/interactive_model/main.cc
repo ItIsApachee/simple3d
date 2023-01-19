@@ -11,7 +11,7 @@
 #include <simple3d/simple3d.h>
 #include <simple3d/context/input.h>
 #include <simple3d/graphics/model_handle.h>
-#include <simple3d/graphics/model.h>
+#include <simple3d/graphics/models/model.h>
 #include <simple3d/graphics/camera.h>
 #include <simple3d/graphics/light.h>
 #include <simple3d/graphics/models/cuboid.h>
