@@ -23,7 +23,7 @@ class IRenderer {
   IRenderer() = default;
   virtual ~IRenderer() = default;
 
-  virtual void Draw() = 0;
+  virtual void Draw(IShader&) = 0;
 
   virtual void NotifyUpdated(void*) = 0;
   virtual void Destroy(void*) = 0;

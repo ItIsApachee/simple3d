@@ -12,6 +12,7 @@
 
 #include <simple3d/types.h>
 #include <simple3d/graphics/renderer.h>
+#include <simple3d/graphics/shader.h>
 #include <simple3d/graphics/internal/element_buffer_object.h>
 #include <simple3d/graphics/internal/vertex_buffer_object.h>
 #include <simple3d/graphics/internal/vertex_array_object.h>
@@ -57,7 +58,7 @@ class CuboidRenderer : public IRenderer {
   template <typename... Args>
   Cuboid* Create(Args&&... args);
 
-  void Draw() override;
+  void Draw(IShader&) override;
 
   void NotifyUpdated(void*) override;
   void Destroy(void*) override;

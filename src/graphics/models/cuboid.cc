@@ -181,7 +181,7 @@ CuboidRenderer::CuboidRenderer()
 //   // }
 // }
 
-void CuboidRenderer::Draw() {
+void CuboidRenderer::Draw(IShader& shader_) {
   if (cuboids_.empty()) {
     return;
   }
