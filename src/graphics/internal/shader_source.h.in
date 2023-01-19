@@ -5,9 +5,9 @@ namespace Simple3D::Internal {
 
 
 
-const char* kVertexShader = R"(@SIMPLE3D_SHADER_VERTEX_GLSL@)";
+const char* kVertexShader = R"(@SIMPLE3D_SHADER_DEFAULT_VERTEX_GLSL@)";
 
-const char* kFragmentShader = R"(@SIMPLE3D_SHADER_FRAGMENT_GLSL@)";
+const char* kFragmentShader = R"(@SIMPLE3D_SHADER_DEFAULT_FRAGMENT_GLSL@)";
 
 
 
