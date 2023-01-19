@@ -11,6 +11,8 @@
 
 #include <stb/stb_image.h>
 #include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <glad/gles2.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -288,6 +290,63 @@ void Model::Draw(const Internal::GlesShader& shader) const {
   }
 }
 
+ModelInstance* ModelRenderer::Create(const std::shared_ptr<Model>& model,
+    const glm::vec3& pos) {
+
+  auto model_group_it = models_.find(model.get());
+  if (model_group_it == models_.end()) {
+    model_group_it = models_.emplace(model.get(), ModelGroup{model}).first;
+  }
+
+
+  ModelInstance* model_instance_ptr{nullptr};
+  {
+    std::unique_ptr<ModelInstance> model_instance{new ModelInstance{pos}};
+    model_instance_ptr = model_instance.get();
+    model_group_it->second.instances.emplace(model_instance_ptr,
+        std::move(model_instance));
+  }
+
+  reverse_lookup_[model_instance_ptr] = model.get();
+
+  return model_instance_ptr;
+}
+
+void ModelRenderer::Draw(IShader& shader_interface) {
+  auto& shader = dynamic_cast<TexturedModelShader&>(shader_interface);
+  for (auto& [model_ptr_, model_group] : models_) {
+    auto& [model, instances] = model_group;
+    for (auto& [instance_ptr_, instance] : instances) {
+      // setup instance vertex data
+
+      glm::mat4 transform(1.0f);
+      transform = glm::translate(transform, instance->pos);
+      shader.shader().SetUniformMat4fv("model", transform);
+      model->Draw(shader.shader());
+    }
+  }
+}
+
+void ModelRenderer::NotifyUpdated(void*) {
+  // currently there is nothing it can do
+}
+
+void ModelRenderer::Destroy(void* model_instance_void) {
+  ModelInstance* model_instance_ptr =
+      reinterpret_cast<ModelInstance*>(model_instance_void);
+  
+  auto model_it = reverse_lookup_.find(model_instance_ptr);
+  assert(model_it != reverse_lookup_.end());
+
+  auto model_group_it = models_.find(model_it->second);
+  assert(model_group_it != models_.end());
+
+  auto& instances = model_group_it->second.instances;
+  auto model_instance_it = instances.find(model_instance_ptr);
+  assert(model_instance_it != instances.end());
+  
+  instances.erase(model_instance_it);
+}
 
 
 }  // namespace Simple3D
