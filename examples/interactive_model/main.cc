@@ -98,6 +98,9 @@ int main() {
 
   auto model = Simple3D::Model::Load(".\\Minecraft_Grass_Block_OBJ"
       "\\Grass_Block.obj");
+  
+  // Simple3D::ModelRenderer();
+  auto minecraft_cube = scene.Create<Simple3D::ModelInstance, Simple3D::ModelRenderer>(model, glm::vec3(1.0f));
 
   auto prev = std::chrono::high_resolution_clock::now();
   while (!Simple3D::App::ShouldClose()) {
