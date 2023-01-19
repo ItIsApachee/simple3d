@@ -1,1 +1,2 @@
 add_subdirectory(interactive_scene)
+add_subdirectory(interactive_model)
