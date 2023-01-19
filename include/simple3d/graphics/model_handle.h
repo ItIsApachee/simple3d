@@ -1,5 +1,5 @@
-#ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODEL_H_
-#define INCLUDE_SIMPLE3D_GRAPHICS_MODEL_H_
+#ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODEL_HANDLE_H_
+#define INCLUDE_SIMPLE3D_GRAPHICS_MODEL_HANDLE_H_
 
 #include <vector>
 #include <memory>
@@ -16,16 +16,16 @@ namespace Simple3D {
 
 // definition
 template <typename M>
-class Model {
+class ModelHandle {
  public:
-  Model(M* p_, std::weak_ptr<IRenderer> renderer);
-  Model() = default;
-  Model(const Model&) = delete;
-  Model(Model&&);
-  Model& operator=(const Model&) = delete;
-  Model& operator=(Model&&);
+  ModelHandle(M* p_, std::weak_ptr<IRenderer> renderer);
+  ModelHandle() = default;
+  ModelHandle(const ModelHandle&) = delete;
+  ModelHandle(ModelHandle&&);
+  ModelHandle& operator=(const ModelHandle&) = delete;
+  ModelHandle& operator=(ModelHandle&&);
 
-  ~Model();
+  ~ModelHandle();
 
   M& operator*();
   const M& operator*() const;
@@ -43,22 +43,22 @@ class Model {
 
 // implementation
 template <typename M>
-Model<M>::Model(M* p_, std::weak_ptr<IRenderer> renderer)
+ModelHandle<M>::ModelHandle(M* p_, std::weak_ptr<IRenderer> renderer)
     : model_{p_}, renderer_{std::move(renderer)} {}
 
 template <typename M>
-Model<M>::Model(Model&& other)
+ModelHandle<M>::ModelHandle(ModelHandle&& other)
     : model_{other.model_}, renderer_{std::move(other.renderer_)} {
   other.model_ = nullptr;
 }
 
 template <typename M>
-Model<M>& Model<M>::operator=(Model&& other) {
+ModelHandle<M>& ModelHandle<M>::operator=(ModelHandle&& other) {
   if (std::addressof(other) == this)
     return *this;
   
   if (model_ != nullptr) {
-    Model<M> temp = std::move(this);
+    ModelHandle<M> temp = std::move(this);
   }  // destructor is called and model_ is freed
   // *this is now empty
 
@@ -71,7 +71,7 @@ Model<M>& Model<M>::operator=(Model&& other) {
 }
 
 template <typename M>
-Model<M>::~Model() {
+ModelHandle<M>::~ModelHandle() {
   if (model_ == nullptr)
     return;
   if (auto renderer = renderer_.lock()) {
@@ -80,7 +80,7 @@ Model<M>::~Model() {
 }
 
 template <typename M>
-M& Model<M>::operator*() {
+M& ModelHandle<M>::operator*() {
   if (auto renderer = renderer_.lock()) {
     renderer->NotifyUpdated(reinterpret_cast<void*>(model_));
   }
@@ -88,17 +88,17 @@ M& Model<M>::operator*() {
 }
 
 template <typename M>
-const M& Model<M>::operator*() const {
+const M& ModelHandle<M>::operator*() const {
   return *model_;
 }
 
 template <typename M>
-M* Model<M>::operator->() {
+M* ModelHandle<M>::operator->() {
   return model_;
 }
 
 template <typename M>
-const M* Model<M>::operator->() const {
+const M* ModelHandle<M>::operator->() const {
   return model_;
 }
 
@@ -113,4 +113,4 @@ const M* Model<M>::operator->() const {
 
 }  // namespace Simple3D
 
-#endif  // INCLUDE_SIMPLE3D_GRAPHICS_MODEL_H_
+#endif  // INCLUDE_SIMPLE3D_GRAPHICS_MODEL_HANDLE_H_

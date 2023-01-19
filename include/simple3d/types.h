@@ -16,7 +16,7 @@ class IInputHandler;
 class IWindowInputHandler;
 // graphics
 template <class M>
-class Model;
+class ModelHandle;
 class Scene;
 class IRenderer;
 class Camera;

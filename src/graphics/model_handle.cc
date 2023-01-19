@@ -1,4 +1,4 @@
-#include <simple3d/graphics/model.h>
+#include <simple3d/graphics/model_handle.h>
 
 #include <memory>
 #include <utility>

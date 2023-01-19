@@ -18,7 +18,7 @@
 #include <simple3d/types.h>
 #include <simple3d/graphics/view.h>
 #include <simple3d/graphics/renderer.h>
-#include <simple3d/graphics/model.h>
+#include <simple3d/graphics/model_handle.h>
 #include <simple3d/graphics/camera.h>
 #include <simple3d/graphics/shader.h>
 #include <simple3d/graphics/shader_storage.h>
@@ -62,7 +62,7 @@ class Scene {
           std::declval<typename M::Renderer>().template Create<M>(
             std::forward<Args>(args)...)),
         M*>,
-      Model<M>>;
+      ModelHandle<M>>;
 
   template <typename M, typename... Args>
   auto Create(Args&&... args)
@@ -72,7 +72,7 @@ class Scene {
           std::declval<typename M::Renderer>().Create(
             std::forward<Args>(args)...)),
         M*>,
-      Model<M>>;
+      ModelHandle<M>>;
 
   template <typename M, typename R, typename... Args>
   auto Create(Args&&... args)
@@ -82,7 +82,7 @@ class Scene {
           std::declval<R>().template Create<M>(
             std::forward<Args>(args)...)),
         M*>,
-      Model<M>>;
+      ModelHandle<M>>;
 
   template <typename M, typename R, typename... Args>
   auto Create(Args&&... args)
@@ -92,7 +92,7 @@ class Scene {
           std::declval<R>().Create(
             std::forward<Args>(args)...)),
         M*>,
-      Model<M>>;
+      ModelHandle<M>>;
 
   void AddDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_light);
   void RemoveDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_light);
@@ -161,7 +161,7 @@ auto Scene::Create(Args&&... args)
         std::declval<typename M::Renderer>().template Create<M>(
           std::forward<Args>(args)...)),
       M*>,
-    Model<M>> {
+    ModelHandle<M>> {
     return Scene::Create<M, typename M::Renderer>(args...);
 }
 
@@ -173,7 +173,7 @@ auto Scene::Create(Args&&... args)
         std::declval<typename M::Renderer>().Create(
           std::forward<Args>(args)...)),
       M*>,
-    Model<M>> {
+    ModelHandle<M>> {
     return Scene::Create<M, typename M::Renderer>(args...);
 }
 
@@ -185,13 +185,13 @@ auto Scene::Create(Args&&... args)
         std::declval<R>().template Create<M>(
           std::forward<Args>(args)...)),
       M*>,
-    Model<M>> {
+    ModelHandle<M>> {
   using Renderer = R;
   // auto& renderer = GetRendererRef<R>();
   auto renderer = GetIRendererShared<R>();
   R& renderer_ref = *dynamic_cast<R*>(renderer.get());
 
-  return Model{
+  return ModelHandle{
     renderer_ref.template Create<M>(std::forward<Args>(args)...),
     std::move(renderer)
   };
@@ -205,13 +205,13 @@ auto Scene::Create(Args&&... args)
         std::declval<R>().Create(
           std::forward<Args>(args)...)),
       M*>,
-    Model<M>> {
+    ModelHandle<M>> {
   using Renderer = R;
   // auto& renderer = GetRendererRef<R>();
   auto renderer = GetIRendererShared<R>();
   R& renderer_ref = *dynamic_cast<R*>(renderer.get());
 
-  return Model{
+  return ModelHandle{
     renderer_ref.Create(std::forward<Args>(args)...),
     std::move(renderer)
   };

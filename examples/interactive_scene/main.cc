@@ -10,7 +10,7 @@
 
 #include <simple3d/simple3d.h>
 #include <simple3d/context/input.h>
-#include <simple3d/graphics/model.h>
+#include <simple3d/graphics/model_handle.h>
 #include <simple3d/graphics/camera.h>
 #include <simple3d/graphics/light.h>
 #include <simple3d/graphics/models/cuboid.h>
@@ -95,7 +95,7 @@ int main() {
   imgui_handler->EnableInputHandler(std::make_shared<FocusFpsCam>(
     cam_handler, camera));
 
-  std::vector<Simple3D::Model<Simple3D::Cuboid>> cubes;
+  std::vector<Simple3D::ModelHandle<Simple3D::Cuboid>> cubes;
   int v = 50;
   float stride = 1.5f;
   for (int i = -v; i <= v; i++) {
