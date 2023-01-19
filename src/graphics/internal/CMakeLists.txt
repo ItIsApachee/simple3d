@@ -9,6 +9,8 @@ configure_file(
     ${simple3d_BINARY_DIR}/include/simple3d/graphics/internal/shader_source.h
 )
 
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS shader_source.h.in)
+
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS shader_sources/default/vertex.glsl)
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS shader_sources/default/fragment.glsl)
 
