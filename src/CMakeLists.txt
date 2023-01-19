@@ -6,6 +6,9 @@ CPMAddPackage("gh:glfw/glfw#3.3.8")
 # GLM setup
 CPMAddPackage("gh:g-truc/glm#0.9.9.8")
 
+# assimp setup
+CPMAddPackage("gh:assimp/assimp@5.2.5")
+
 # Library setup
 add_subdirectory(graphics/internal)
 
@@ -16,10 +19,13 @@ add_subdirectory(imgui)
 # set(simple3d_SOURCES ${simple3d_SOURCES} shader/shader.cc)
 
 # src/context/
-set(simple3d_SOURCES ${simple3d_SOURCES} context/context.cc context/window.cc context/input.cc)
+set(simple3d_SOURCES ${simple3d_SOURCES} context/context.cc context/window.cc
+    context/input.cc)
+
 # src/graphics/
 set(simple3d_SOURCES ${simple3d_SOURCES} graphics/scene.cc graphics/view.cc
-    graphics/model_handle.cc graphics/camera.cc graphics/shader_storage.cc)
+    graphics/model.cc graphics/model_handle.cc graphics/camera.cc
+    graphics/shader_storage.cc)
 
 # /src/graphics/internal/
 set(simple3d_SOURCES ${simple3d_SOURCES}
@@ -46,6 +52,7 @@ target_link_libraries(
     PUBLIC glfw
     PUBLIC glad
     PUBLIC glm
+    PRIVATE assimp stb-image
 )
 
 target_include_directories(
