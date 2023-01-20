@@ -1,13 +1,9 @@
-include(${PROJECT_SOURCE_DIR}/cmake/CPM.cmake)
 
-# GLFW setup
-CPMAddPackage("gh:glfw/glfw#3.3.8")
 
-# GLM setup
-CPMAddPackage("gh:g-truc/glm#0.9.9.8")
 
-# assimp setup
-CPMAddPackage("gh:assimp/assimp@5.2.5")
+# ANGLE setup
+message("debug: toolchain_file - ${CMAKE_TOOLCHAIN_FILE}")
+message("debug: ${CMAKE_PREFIX_PATH}")
 
 # Library setup
 add_subdirectory(graphics/internal)
@@ -48,10 +44,9 @@ add_library(simple3d STATIC ${simple3d_SOURCES})
 
 target_link_libraries(
     simple3d
-    PUBLIC glfw
-    PUBLIC glad
-    PUBLIC glm
+    PUBLIC glfw glad glm
     PRIVATE assimp stb-image
+    PRIVATE unofficial::angle::libEGL unofficial::angle::libANGLE unofficial::angle::libGLESv2 unofficial::angle::angle_common
 )
 
 target_include_directories(
