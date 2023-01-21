@@ -56,6 +56,8 @@ class App {
  private:
   App() = default;
 
+  bool test() {}
+
   bool is_init{false};
   Window window_{};
 };
