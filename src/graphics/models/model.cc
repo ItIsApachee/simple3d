@@ -254,8 +254,7 @@ std::shared_ptr<Model> Model::Load(const std::filesystem::path& model_path,
   if (!scene || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE)
       || !scene->mRootNode) {
     // TODO(apachee): add handling
-    std::cerr << importer.GetErrorString() << std::endl;
-    return {};  // error
+    assert(false);
   }
 
   std::filesystem::path textures_path = textures_path_opt.value_or(
