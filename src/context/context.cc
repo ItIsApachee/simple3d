@@ -1,18 +1,16 @@
+#include <GLFW/glfw3.h>
+#include <glad/gles2.h>
 #include <simple3d/context/context.h>
+#include <simple3d/context/window.h>
+#include <simple3d/graphics/internal/gles_shader.h>
+#include <simple3d/graphics/internal/misc.h>
+#include <simple3d/misc/error.h>
 
 #include <iostream>
-#include <string>
 #include <memory>
-
-#include <glad/gles2.h>
-#include <GLFW/glfw3.h>
-
-#include <simple3d/misc/error.h>
-#include <simple3d/context/window.h>
+#include <string>
 
 namespace Simple3D {
-
-
 
 // FIXME(apachee): provide better error handling
 static void error_callback(int code, const char* description) {
@@ -29,7 +27,7 @@ App& App::GetInstance() {
 
 Error App::Init() {
   App& ctx = GetInstance();
-  if (ctx.is_init) {
+  if (ctx.ctx_id_ != 0) {
     return Error(ErrorType::kInitFailed, "already initialized");
   }
   int glfw_init_error = glfwInit();
@@ -50,7 +48,8 @@ Error App::Init() {
 
   // std::cerr << "window creation succ" << std::endl;
 
-  ctx.is_init = true;
+  ctx.last_ctx_id_ += 1;
+  ctx.ctx_id_ = ctx.last_ctx_id_;
 
   return Error::Ok();
 }
@@ -58,30 +57,26 @@ Error App::Init() {
 void App::Destroy() {
   App& ctx = GetInstance();
 
-  if (ctx.is_init) {
+  if (ctx.ctx_id_ != 0) {
     Internal::UnsetInputHandler();
     Internal::UnsetWindowInputHandler();
+
+    Internal::GlesShader::active_shader_id_ = Internal::kGlesInvalidShader;
     {
       Window window = std::move(ctx.window_);
       ctx.window_ = Window{};
       // window is destroyed once out of scope
     }
     glfwTerminate();
-    ctx.is_init = false;
+    ctx.ctx_id_ = 0;
   }
 }
 
-bool App::ShouldClose() {
-  return GetInstance().window_.ShouldClose();
-}
+bool App::ShouldClose() { return GetInstance().window_.ShouldClose(); }
 
-void App::SwapBuffers() {
-  GetInstance().window_.SwapBuffers();
-}
+void App::SwapBuffers() { GetInstance().window_.SwapBuffers(); }
 
-void App::PollEvents() {
-  glfwPollEvents();
-}
+void App::PollEvents() { glfwPollEvents(); }
 
 void App::EnableInputHandler(std::shared_ptr<IInputHandler> input_handler) {
   GetInstance().window_.EnableInputHandler(input_handler);
@@ -98,10 +93,8 @@ void App::DisableWindowInputHandler(
   GetInstance().window_.DisableWindowInputHandler(window_input_handler);
 }
 
-GLFWwindow* App::GetGLFWwindow() {
-  return GetInstance().window_.window_;
-}
+GLFWwindow* App::GetGLFWwindow() { return GetInstance().window_.window_; }
 
-
+std::int64_t App::GetCtxId() { return GetInstance().ctx_id_; }
 
 }  // namespace Simple3D

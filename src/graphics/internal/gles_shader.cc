@@ -1,8 +1,10 @@
 #include <glad/gles2.h>
+#include <simple3d/context/context.h>
 #include <simple3d/graphics/internal/gles_shader.h>
 #include <simple3d/graphics/internal/misc.h>
 #include <simple3d/misc/error.h>
 
+#include <cstdint>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
@@ -41,17 +43,20 @@ GlesShader GlesShaderBuilder::Build() {
 }
 
 GlesShader GlesShaderBuilder::Build(Error* error) {
-  // TODO(apachee): check if context is loaded
-  GlesShader result = GlesShader();
+  if (App::GetCtxId() == 0) {
+    return {};
+  }
+
+  // GlesShader result = GlesShader();
   if (!vertex_shader_src_) {
     *error = Error(ErrorType::kShaderCompilationFailed,
                    "shader compilation failed: no vertex shader");
-    return result;
+    return {};
   }
   if (!fragment_shader_src_) {
     *error = Error(ErrorType::kShaderCompilationFailed,
                    "shader compilation failed: no fragment shader");
-    return result;
+    return {};
   }
 
   constexpr int INFO_LOG_MAX_SIZE = 512;
@@ -70,7 +75,7 @@ GlesShader GlesShaderBuilder::Build(Error* error) {
     std::ostringstream error_out;
     error_out << "vertex shader coompilation failed: " << info_log;
     *error = Error(ErrorType::kShaderCompilationFailed, error_out.str());
-    return result;
+    return {};
   }
 
   unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -85,7 +90,7 @@ GlesShader GlesShaderBuilder::Build(Error* error) {
     std::ostringstream error_out;
     error_out << "vertex shader coompilation failed: " << info_log;
     *error = Error(ErrorType::kShaderCompilationFailed, error_out.str());
-    return result;
+    return {};
   }
 
   unsigned int shader_program = glCreateProgram();
@@ -100,34 +105,45 @@ GlesShader GlesShaderBuilder::Build(Error* error) {
     std::ostringstream error_out;
     error_out << "vertex shader coompilation failed: " << info_log;
     *error = Error(ErrorType::kShaderCompilationFailed, error_out.str());
-    return result;
+    return {};
   }
 
   glDeleteShader(vertex_shader);
   glDeleteShader(fragment_shader);
 
-  result.shader_id_ = shader_program;
   *error = Error(ErrorType::kOk);
-  return result;
+  return GlesShader(shader_program, App::GetCtxId());
 }
 
 GLuint GlesShader::active_shader_id_{kGlesInvalidShader};
 
-GlesShader::GlesShader(GlesShader&& other) : shader_id_{other.shader_id_} {
-  other.shader_id_ = kGlesInvalidShader;
+GlesShader::GlesShader(GLuint shader_id, std::int64_t ctx_id)
+    : shader_id_{shader_id}, ctx_id_{ctx_id} {}
+
+GlesShader::GlesShader(GlesShader&& other) : GlesShader{} {
+  std::swap(shader_id_, other.shader_id_);
+  std::swap(ctx_id_, other.ctx_id_);
 }
 
 GlesShader& GlesShader::operator=(GlesShader&& other) {
   if (&other == this) return *this;
 
-  if (shader_id_ != kGlesInvalidShader) {
-    GlesShader tmp{std::move(*this)};
-  }  // tmp is destroyed
+  if (shader_id_ != kGlesInvalidShader && ctx_id_ == App::GetCtxId()) {
+    glDeleteProgram(shader_id_);
+  }
 
   shader_id_ = other.shader_id_;
   other.shader_id_ = kGlesInvalidShader;
 
+  ctx_id_ = other.ctx_id_;
+  other.ctx_id_ = 0;
+
   return *this;
+}
+
+GlesShader::~GlesShader() {
+  if (shader_id_ != kGlesInvalidShader && ctx_id_ == App::GetCtxId())
+    glDeleteProgram(shader_id_);
 }
 
 void GlesShader::Use() const {

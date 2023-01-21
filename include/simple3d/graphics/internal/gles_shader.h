@@ -13,6 +13,7 @@
 #include <simple3d/misc/error.h>
 #include <simple3d/types.h>
 
+#include <cstdint>
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 #include <optional>
@@ -28,6 +29,7 @@ namespace Simple3D::Internal {
  */
 class GlesShader {
  public:
+  friend App;
   friend GlesShaderBuilder;
 
   GlesShader() = default;
@@ -37,8 +39,7 @@ class GlesShader {
   GlesShader& operator=(const GlesShader&) = delete;
   GlesShader& operator=(GlesShader&&);
 
-  // FIXME: delete shader on destruction
-  ~GlesShader() = default;
+  ~GlesShader();
 
   void Use() const;
   unsigned int GetID() const;
@@ -54,7 +55,10 @@ class GlesShader {
  private:
   static GLuint active_shader_id_;
 
+  GlesShader(GLuint shader_id, std::int64_t ctx_id);
+
   GLuint shader_id_{kGlesInvalidShader};
+  std::int64_t ctx_id_{0};
 };
 
 /** \class GlesShaderBuilder simple3d/shader/shader.h

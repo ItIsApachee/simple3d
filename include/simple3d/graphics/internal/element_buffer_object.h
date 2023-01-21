@@ -6,6 +6,7 @@
 #include <simple3d/types.h>
 
 #include <cstddef>
+#include <cstdint>
 
 namespace Simple3D::Internal {
 
@@ -36,36 +37,22 @@ class ElementBufferObject {
   friend ElementBufferObjectBuilder;
 
   ElementBufferObject() = default;
-  //   explicit ElementBufferObject(bool generate = false,
-  //       GLenum usage = kDefaultUsage);
-  //   ElementBufferObject(std::size_t size); TODO(apachee): preallocating
-  //   buffer ElementBufferObject(std::size_t size, std::uint32_t* data =
-  //   nullptr,
-  //       GLenum usage = kDefaultUsage);
   ElementBufferObject(ElementBufferObject&&);
   ElementBufferObject& operator=(ElementBufferObject&&);
   ElementBufferObject(const ElementBufferObject&) = delete;
   ElementBufferObject& operator=(const ElementBufferObject&) = delete;
   ~ElementBufferObject();
 
-  // TODO(apachee): add buffer manipulation (currently buffer is immutable)
-  // deprecated: binding should be done through VAO
-  //   void Bind();
-  //   static void Unbind();
-
   GLuint ebo() const;
   GLenum usage() const;
 
  private:
-  ElementBufferObject(GLuint ebo, std::size_t size, GLenum usage);
+  ElementBufferObject(GLuint ebo, std::int64_t ctx_id, std::size_t size, GLenum usage);
 
   GLuint ebo_{kGlesInvalidBuffer};  // handle for OpenGL buffer
   GLenum usage_{kDefaultUsage};     // usage of the buffer
   std::size_t size_{0};             // capacity of OpenGL buffer
-
-  // maybe storing buffer is bad:
-  // duplication of the same information
-  // std::vector<std::uint32_t> buffer_{};
+  std::int64_t ctx_id_{0};
 };
 
 }  // namespace Simple3D::Internal

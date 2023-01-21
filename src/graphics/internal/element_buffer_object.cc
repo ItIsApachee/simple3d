@@ -1,9 +1,11 @@
 #include <glad/gles2.h>
+#include <simple3d/context/context.h>
 #include <simple3d/graphics/internal/element_buffer_object.h>
 #include <simple3d/graphics/internal/misc.h>
 #include <simple3d/graphics/internal/vertex_array_object.h>
 
 #include <cstddef>
+#include <cstdint>
 #include <utility>
 
 namespace Simple3D::Internal {
@@ -24,6 +26,9 @@ ElementBufferObjectBuilder& ElementBufferObjectBuilder::Usage(GLenum usage) {
 
 ElementBufferObject ElementBufferObjectBuilder::Build(
     const VertexArrayObject& vao) {
+  if (vao.ctx_id_ == 0 || vao.ctx_id_ != App::GetCtxId()) {
+    return {};
+  }
   GLuint ebo{kGlesInvalidBuffer};
   glGenBuffers(1, &ebo);
 
@@ -32,107 +37,33 @@ ElementBufferObject ElementBufferObjectBuilder::Build(
 
   glBufferData(kEboTarget, size_, static_cast<const void*>(data_), usage_);
 
-  return ElementBufferObject(ebo, size_, usage_);
+  return ElementBufferObject(ebo, vao.ctx_id_, size_, usage_);
 }
 
-// deprecated: no reason to use other than default constructor
-// ElementBufferObject::ElementBufferObject(bool generate, GLenum usage)
-//     : size_{0}, usage_{usage} {
-//   if (generate)
-//     glGenBuffers(1, &ebo_);
-// }
-
-// deprecated: can't bind without an active VAO
-// solution: create EBO using builder (or something similar), that binds VAO
-// at creation of EBO
-// ElementBufferObject::ElementBufferObject(
-//     std::size_t size, std::uint32_t* data, GLenum usage)
-//     : size_{size}, usage_{usage} {
-//   glGenBuffers(1, &ebo_);
-//   static_assert(false, "can't bind EBO when VAO isn't bound");
-//   Bind();
-//   glBufferData(
-//     kEboTarget, size, static_cast<void*>(data), usage_);
-//   Unbind();
-// }
-
-// deprecated: copy ctor overcomplicates everything
-// reason: VAO should be bound for any EBO binding
-// ElementBufferObject::ElementBufferObject(const ElementBufferObject& other)
-//     : size_{other.size_}, usage_{other.usage_} {
-//   if (other.ebo_ == kGlesInvalidBuffer) {
-//     // constructing from empty buffer creates empty buffer
-//     ebo_ = kGlesInvalidBuffer;
-//     return;
-//   }
-
-//   // other is not an empty buffer
-//   glGenBuffers(1, &ebo_);
-//   static_assert(false, "can't bind EBO when VAO isn't bound");
-//   Bind();
-//   glBufferData(kEboTarget, size_, nullptr, usage_);
-//   Unbind();
-
-//   CopyBuffer(other.ebo_, ebo_, 0, 0, size_);
-// }
-
-ElementBufferObject::ElementBufferObject(GLuint ebo, std::size_t size,
-                                         GLenum usage)
-    : ebo_{ebo}, size_{size}, usage_{usage} {}
+ElementBufferObject::ElementBufferObject(GLuint ebo, std::int64_t ctx_id,
+                                         std::size_t size, GLenum usage)
+    : ebo_{ebo}, ctx_id_{ctx_id}, size_{size}, usage_{usage} {}
 
 ElementBufferObject::ElementBufferObject(ElementBufferObject&& other)
     : ElementBufferObject() {
   std::swap(ebo_, other.ebo_);
+  std::swap(ctx_id_, other.ctx_id_);
   std::swap(size_, other.size_);
   std::swap(usage_, other.usage_);
 }
 
-// deprecated: copy assignment overcomplicates everything
-// reason: VAO should be bound for any EBO binding
-// ElementBufferObject& ElementBufferObject::operator=(
-//     const ElementBufferObject& other) {
-//   if (&other == this)
-//     return *this;
-//   if (other.ebo_ == kGlesInvalidBuffer) {
-//     // copying empty buffer creates empty buffer
-//     // and destroys previous buffer if `this` is not an empty buffer
-//     if (ebo != kGlesInvalidBuffer) {
-//       glDeleteBuffers(1, &ebo_);
-//       ebo_ = kGlesInvalidBuffer;
-//     }
-//     size_ = other.size_;
-//     usage_ = other.usage_;
-//   }
-
-//   // other is NOT an empty buffer
-
-//   // reuse existing buffer instead of deleting & generating
-//   if (ebo_ == kGlesInvalidBuffer) {
-//     glGenBuffers(1, &ebo_);
-//   }
-//   if (size_ != other.size_ || usage_ != other.usage_) {
-//     static_assert(false, "can't bind EBO when VAO isn't bound");
-//     Bind();
-//     glBufferData(
-//       kEboTarget, other.size_, nullptr, other.usage_);
-//     Unbind();
-//     size_ = other.size_;
-//     usage_ = other.usage_;
-//   }
-
-//   CopyBuffer(other.ebo_, ebo_, 0, 0, size_);
-//   return *this;
-// }
-
 ElementBufferObject& ElementBufferObject::operator=(
     ElementBufferObject&& other) {
   if (&other == this) return *this;
-  if (ebo_ != kGlesInvalidBuffer) {
+  if (ebo_ != kGlesInvalidBuffer && ctx_id_ == App::GetCtxId()) {
     glDeleteBuffers(1, &ebo_);
   }
 
   ebo_ = other.ebo_;
   other.ebo_ = kGlesInvalidBuffer;
+
+  ctx_id_ = other.ctx_id_;
+  other.ctx_id_ = 0;
 
   size_ = other.size_;
   other.size_ = 0;
@@ -144,20 +75,10 @@ ElementBufferObject& ElementBufferObject::operator=(
 }
 
 ElementBufferObject::~ElementBufferObject() {
-  if (ebo_ != kGlesInvalidBuffer) {
+  if (ebo_ != kGlesInvalidBuffer && ctx_id_ == App::GetCtxId()) {
     glDeleteBuffers(1, &ebo_);
   }
 }
-
-// void ElementBufferObject::Bind() {
-//   static_assert(false, "can't bind EBO when VAO isn't bound");
-//   if (ebo_ != kGlesInvalidBuffer)
-//     BindBuffer(kEboTarget, ebo_);
-// }
-
-// void ElementBufferObject::Unbind() {
-//   UnbindBuffer(kEboTarget);
-// }
 
 GLuint ElementBufferObject::ebo() const { return ebo_; }
 

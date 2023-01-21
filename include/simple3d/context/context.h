@@ -16,6 +16,7 @@
 #include <simple3d/types.h>
 
 #include <memory>
+#include <cstdint>
 #include <string>
 #include <unordered_set>
 
@@ -46,6 +47,8 @@ class App {
 
   static GLFWwindow* App::GetGLFWwindow();
 
+  static std::int64_t GetCtxId();
+
   App(const App&) = delete;
   App(App&&) = delete;
   App& operator=(const App&) = delete;
@@ -58,7 +61,10 @@ class App {
 
   bool test() {}
 
-  bool is_init{false};
+  //bool is_init{false};
+  std::int64_t ctx_id_{0};
+  std::int64_t last_ctx_id_{0};
+
   Window window_{};
 };
 

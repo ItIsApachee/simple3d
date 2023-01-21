@@ -2,16 +2,17 @@
 #define INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_VERTEX_ARRAY_OBJECT_H_
 
 #include <glad/gles2.h>
-
-#include <simple3d/types.h>
 #include <simple3d/graphics/internal/misc.h>
+#include <simple3d/types.h>
+
+#include <cstdint>
 
 namespace Simple3D::Internal {
 
-
-
 class VertexArrayObject {
  public:
+  friend class ElementBufferObjectBuilder;
+
   VertexArrayObject();
   VertexArrayObject(VertexArrayObject&&);
   VertexArrayObject& operator=(VertexArrayObject&&);
@@ -35,9 +36,8 @@ class VertexArrayObject {
   static GLuint active_vao_;
 
   GLuint vao_{kGlesDefaultVao};
+  std::int64_t ctx_id_{0};
 };
-
-
 
 }  // namespace Simple3D::Internal
 
