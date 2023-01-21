@@ -4,6 +4,7 @@
 #include <glad/gles2.h>
 #include <simple3d/graphics/internal/misc.h>
 #include <simple3d/types.h>
+#include <simple3d/context/context.h>
 
 #include <cstdint>
 
@@ -12,6 +13,7 @@ namespace Simple3D::Internal {
 class VertexArrayObject {
  public:
   friend class ElementBufferObjectBuilder;
+  friend void ResetActiveBindings();
 
   VertexArrayObject();
   VertexArrayObject(VertexArrayObject&&);

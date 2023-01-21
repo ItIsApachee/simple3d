@@ -29,8 +29,8 @@ namespace Simple3D::Internal {
  */
 class GlesShader {
  public:
-  friend App;
   friend GlesShaderBuilder;
+  friend void ResetActiveBindings();
 
   GlesShader() = default;
   GlesShader(const GlesShader&) = delete;

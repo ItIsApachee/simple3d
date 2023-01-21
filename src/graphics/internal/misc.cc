@@ -1,4 +1,6 @@
 #include <simple3d/graphics/internal/misc.h>
+#include <simple3d/graphics/internal/gles_shader.h>
+#include <simple3d/graphics/internal/vertex_array_object.h>
 
 #include <glad/gles2.h>
 
@@ -27,6 +29,11 @@ void CopyBuffer(GLuint from, GLuint to,
     kCopyReadBuf, kCopyWriteBuf, from_offset, to_offset, size);
   UnbindBuffer(kCopyReadBuf);
   UnbindBuffer(kCopyWriteBuf);
+}
+
+void ResetActiveBindings() {
+  GlesShader::active_shader_id_ = kGlesInvalidShader;
+  VertexArrayObject::active_vao_ = kGlesInvalidBuffer;
 }
 
 

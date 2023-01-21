@@ -22,6 +22,7 @@ void UnbindBuffer(GLuint target);
 void CopyBuffer(GLuint from, GLuint to,
     GLintptr from_offset, GLintptr to_offset,
     GLsizeiptr size);
+void ResetActiveBindings();
 
 
 

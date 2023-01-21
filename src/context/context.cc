@@ -61,7 +61,7 @@ void App::Destroy() {
     Internal::UnsetInputHandler();
     Internal::UnsetWindowInputHandler();
 
-    Internal::GlesShader::active_shader_id_ = Internal::kGlesInvalidShader;
+    Internal::ResetActiveBindings();
     {
       Window window = std::move(ctx.window_);
       ctx.window_ = Window{};
