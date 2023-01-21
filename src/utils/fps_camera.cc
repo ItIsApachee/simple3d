@@ -123,7 +123,7 @@ void FpsCameraInputHandler::WindowFocusCallback(int focused) {
   focused_ = focused == GLFW_TRUE;
 }
 void FpsCameraInputHandler::FramebufferSizeCallback(int width, int height) {
-  if (camera_) camera_->aspect_ratio = float{width} / float{height};
+  if (camera_) camera_->aspect_ratio = float(width) / float(height);
 }
 
 }  // namespace Simple3D

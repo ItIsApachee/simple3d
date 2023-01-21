@@ -270,7 +270,7 @@ std::shared_ptr<Model> Model::Load(
 
     for (std::int64_t i = 0; i < node->mNumMeshes; i++) {
       aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-      model->meshes.push_back(Mesh::LoadMesh(mesh, scene, texture_loader));
+      model->meshes.push_back(Mesh::LoadMesh(mesh, scene, &texture_loader));
     }
 
     for (std::int64_t i = 0; i < node->mNumChildren; i++) {
