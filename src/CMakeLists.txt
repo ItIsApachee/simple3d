@@ -1,10 +1,3 @@
-
-
-
-# ANGLE setup
-message("debug: toolchain_file - ${CMAKE_TOOLCHAIN_FILE}")
-message("debug: ${CMAKE_PREFIX_PATH}")
-
 # Library setup
 add_subdirectory(graphics/internal)
 
@@ -46,7 +39,6 @@ target_link_libraries(
     simple3d
     PUBLIC glfw glad glm
     PRIVATE assimp stb-image
-    PRIVATE unofficial::angle::libEGL unofficial::angle::libANGLE unofficial::angle::libGLESv2 unofficial::angle::angle_common
 )
 
 target_include_directories(

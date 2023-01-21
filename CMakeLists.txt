@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.21)
 
 set(VCPKG_MANIFEST_MODE ON)
 set(VCPKG_MANIFEST_INSTALL ON)
-# set(VCPKG_MANIFEST_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
 project(simple3d)
 
@@ -20,6 +19,9 @@ CPMAddPackage("gh:glfw/glfw#3.3.8")
 CPMAddPackage("gh:g-truc/glm#0.9.9.8")
 
 # assimp setup
+set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
+set(ASSIMP_BUILD_ASSIMP_VIEW OFF CACHE BOOL "" FORCE)
 CPMAddPackage("gh:assimp/assimp@5.2.5")
 
 find_package(ZLIB REQUIRED)
@@ -29,15 +31,29 @@ add_subdirectory(thirdparty)
 add_subdirectory(src)
 add_subdirectory(examples)
 
+# TODO: add targets for ANGLE, and try using install(EXPORT)
 install(TARGETS
-    examples::interactive_scene examples::interactive_model
-    RUNTIME
-        COMPONENT Development)
-file(GLOB_RECURSE VCPKG_INSTALLED_BINARIES ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/*)
+            simple3d-interactive-scene simple3d-interactive-model
+        RUNTIME
+            DESTINATION bin/
+            CONFIGURATIONS Debug)
+install(TARGETS
+            simple3d-interactive-scene simple3d-interactive-model
+        RUNTIME
+            DESTINATION bin/
+            CONFIGURATIONS Release RelWithDebInfo MinSizeRel)
+
+file(GLOB_RECURSE VCPKG_INSTALLED_BINARIES_DEBUG ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin/*)
+file(GLOB_RECURSE VCPKG_INSTALLED_BINARIES_RELEASE ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/*)
+
 install(FILES
-    ${VCPKG_INSTALLED_BINARIES}
-    TYPE BIN
-    COMPONENT Development)
+        ${VCPKG_INSTALLED_BINARIES_DEBUG}
+        TYPE BIN
+        CONFIGURATIONS Debug)
+install(FILES
+        ${VCPKG_INSTALLED_BINARIES_RELEASE}
+        TYPE BIN
+        CONFIGURATIONS Release RelWithDebInfo MinSizeRel)
 
 find_package(Doxygen)
 if (DOXYGEN_FOUND)
