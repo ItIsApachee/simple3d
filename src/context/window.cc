@@ -1,18 +1,14 @@
+#include <GLFW/glfw3.h>
+#include <glad/gles2.h>
+#include <simple3d/context/input.h>
 #include <simple3d/context/window.h>
+#include <simple3d/misc/error.h>
 
 #include <memory>
 #include <unordered_map>
 #include <utility>
 
-#include <glad/gles2.h>
-#include <GLFW/glfw3.h>
-
-#include <simple3d/context/input.h>
-#include <simple3d/misc/error.h>
-
 namespace Simple3D {
-
-
 
 class FramebufferSizeHandler : public IWindowInputHandler {
  public:
@@ -23,7 +19,8 @@ class FramebufferSizeHandler : public IWindowInputHandler {
     glViewport(0, 0, width, height);
   }
 };
-// static void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+// static void framebuffer_size_callback(GLFWwindow* window, int width, int
+// height) {
 //   glViewport(0, 0, width, height);
 // }
 
@@ -38,12 +35,12 @@ Window Window::Create(Error* error) {
   // doesn't work with ANGLE for some reason
   // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
 
-  GLFWwindow* glfw_window = glfwCreateWindow(
-    800, 800, "test (FIXME)", nullptr, nullptr);
+  GLFWwindow* glfw_window =
+      glfwCreateWindow(800, 800, "test (FIXME)", nullptr, nullptr);
 
   if (glfw_window == nullptr) {
-    *error = Error(ErrorType::kWindowCreationFailed,
-        "glfw failed to create window");
+    *error =
+        Error(ErrorType::kWindowCreationFailed, "glfw failed to create window");
     return Window{};
   }
 
@@ -58,22 +55,21 @@ Window Window::Create(Error* error) {
   return Window(glfw_window);
 }
 
-Window::Window(GLFWwindow* window): window_{window} {
-  EnableWindowInputHandler(
-    std::dynamic_pointer_cast<IWindowInputHandler>(std::make_shared<FramebufferSizeHandler>()));
+Window::Window(GLFWwindow* window) : window_{window} {
+  EnableWindowInputHandler(std::dynamic_pointer_cast<IWindowInputHandler>(
+      std::make_shared<FramebufferSizeHandler>()));
 }
 
 Window::Window(Window&& window)
-    : window_{window.window_}, 
-      input_handlers_{std::move(window.input_handlers_)}, 
+    : window_{window.window_},
+      input_handlers_{std::move(window.input_handlers_)},
       window_input_handlers_{std::move(window.window_input_handlers_)} {
   window_ = nullptr;
 }
 
 Window& Window::operator=(Window&& window) {
-  if (&window == this)
-    return *this;
-  
+  if (&window == this) return *this;
+
   if (window_ != nullptr) {
     glfwDestroyWindow(window_);
     window_ = nullptr;
@@ -93,15 +89,12 @@ Window::~Window() {
   }
 }
 
-void Window::SwapBuffers() {
-  glfwSwapBuffers(window_);
-}
+void Window::SwapBuffers() { glfwSwapBuffers(window_); }
 
-bool Window::ShouldClose() {
-  return glfwWindowShouldClose(window_);
-}
+bool Window::ShouldClose() { return glfwWindowShouldClose(window_); }
 
-void Window::EnableInputHandler(const std::shared_ptr<IInputHandler>& input_handler) {
+void Window::EnableInputHandler(
+    const std::shared_ptr<IInputHandler>& input_handler) {
   input_handlers_.insert(input_handler);
 }
 
@@ -110,7 +103,8 @@ void Window::EnableWindowInputHandler(
   window_input_handlers_.insert(window_input_handler);
 }
 
-void Window::DisableInputHandler(const std::shared_ptr<IInputHandler>& input_handler) {
+void Window::DisableInputHandler(
+    const std::shared_ptr<IInputHandler>& input_handler) {
   input_handlers_.erase(input_handler);
 }
 
@@ -118,8 +112,6 @@ void Window::DisableWindowInputHandler(
     const std::shared_ptr<IWindowInputHandler>& window_input_handler) {
   window_input_handlers_.erase(window_input_handler);
 }
-
-
 
 void Window::KeyCallback(int key, int scancode, int action, int mods) {
   for (auto& input_handler : input_handlers_) {
@@ -161,8 +153,6 @@ void Window::DropCallback(int path_count, const char* paths[]) {
     input_handler->DropCallback(path_count, paths);
   }
 }
-
-
 
 void Window::WindowPosCallback(int xpos, int ypos) {
   for (auto& window_input_handler : window_input_handlers_) {
@@ -209,7 +199,5 @@ void Window::WindowContentScaleCallback(float xscale, float yscale) {
     window_input_handler->WindowContentScaleCallback(xscale, yscale);
   }
 }
-
-
 
 }  // namespace Simple3D

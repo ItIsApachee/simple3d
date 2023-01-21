@@ -1,17 +1,15 @@
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_SHADER_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_SHADER_H_
 
-#include <unordered_set>
-
-#include <glm/vec3.hpp>
-#include <glm/mat4x4.hpp>
-
 #include <simple3d/graphics/internal/gles_shader.h>
 #include <simple3d/graphics/shader.h>
 
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
+#include <memory>
+#include <unordered_set>
+
 namespace Simple3D {
-
-
 
 // singletone of shader program used by primitives
 class ModelShader : public IShader {
@@ -41,8 +39,6 @@ class ModelShader : public IShader {
   std::unordered_set<std::shared_ptr<DirectionalLight>> directional_lights_{};
   glm::vec3 ambient_light_{};
 };
-
-
 
 }  // namespace Simple3D
 

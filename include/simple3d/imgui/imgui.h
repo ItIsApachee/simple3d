@@ -1,14 +1,12 @@
 #ifndef INCLUDE_SIMPLE3D_IMGUI_IMGUI_H_
 #define INCLUDE_SIMPLE3D_IMGUI_IMGUI_H_
 
+#include <simple3d/context/input.h>
+
 #include <memory>
 #include <unordered_set>
 
-#include <simple3d/context/input.h>
-
 namespace Simple3D::ImGui {
-
-
 
 void CreateContext();
 void NewFrame();
@@ -74,10 +72,9 @@ class InputHandler : public IInputHandler, public IWindowInputHandler {
   bool enabled{true};
 
   std::unordered_set<std::shared_ptr<IInputHandler>> input_handlers_{};
-  std::unordered_set<std::shared_ptr<IWindowInputHandler>> window_input_handlers_{};
+  std::unordered_set<std::shared_ptr<IWindowInputHandler>>
+      window_input_handlers_{};
 };
-
-
 
 }  // namespace Simple3D::ImGui
 

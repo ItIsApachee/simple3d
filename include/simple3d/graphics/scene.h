@@ -1,39 +1,36 @@
 /** \file
  * \brief Definition of Simple3D::Scene
-*/
+ */
 
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_SCENE_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_SCENE_H_
 
-#include <vector>
-#include <unordered_map>
-#include <unordered_set>
-#include <type_traits>
-#include <memory>
-#include <utility>
-#include <typeindex>
-
-#include <glm/vec3.hpp>
-
-#include <simple3d/types.h>
-#include <simple3d/graphics/view.h>
-#include <simple3d/graphics/renderer.h>
-#include <simple3d/graphics/model_handle.h>
 #include <simple3d/graphics/camera.h>
+#include <simple3d/graphics/light.h>
+#include <simple3d/graphics/model_handle.h>
+#include <simple3d/graphics/renderer.h>
 #include <simple3d/graphics/shader.h>
 #include <simple3d/graphics/shader_storage.h>
-#include <simple3d/graphics/light.h>
+#include <simple3d/graphics/view.h>
+#include <simple3d/types.h>
+
+#include <glm/vec3.hpp>
+#include <memory>
+#include <type_traits>
+#include <typeindex>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <vector>
 
 namespace Simple3D {
-
-
 
 const float kDefaultAmbientLight = 0.1f;
 
 // definition
 /** \class Scene simple3d/graphics/scene.h
  * \brief Container for light sources, and cameras.
-*/
+ */
 class Scene {
  public:
   friend class View;
@@ -55,47 +52,36 @@ class Scene {
   // template <typename P, typename... Args>
   // Model<P> Create(Args... args);
   template <typename M, typename... Args>
-  auto Create(Args&&... args)
-    -> std::enable_if_t<
+  auto Create(Args&&... args) -> std::enable_if_t<
       std::is_same_v<
-        decltype(
-          std::declval<typename M::Renderer>().template Create<M>(
-            std::forward<Args>(args)...)),
-        M*>,
+          decltype(std::declval<typename M::Renderer>().template Create<M>(
+              std::forward<Args>(args)...)),
+          M*>,
       ModelHandle<M>>;
 
   template <typename M, typename... Args>
-  auto Create(Args&&... args)
-    -> std::enable_if_t<
-      std::is_same_v<
-        decltype(
-          std::declval<typename M::Renderer>().Create(
-            std::forward<Args>(args)...)),
-        M*>,
+  auto Create(Args&&... args) -> std::enable_if_t<
+      std::is_same_v<decltype(std::declval<typename M::Renderer>().Create(
+                         std::forward<Args>(args)...)),
+                     M*>,
       ModelHandle<M>>;
 
   template <typename M, typename R, typename... Args>
-  auto Create(Args&&... args)
-    -> std::enable_if_t<
-      std::is_same_v<
-        decltype(
-          std::declval<R>().template Create<M>(
-            std::forward<Args>(args)...)),
-        M*>,
+  auto Create(Args&&... args) -> std::enable_if_t<
+      std::is_same_v<decltype(std::declval<R>().template Create<M>(
+                         std::forward<Args>(args)...)),
+                     M*>,
       ModelHandle<M>>;
 
   template <typename M, typename R, typename... Args>
-  auto Create(Args&&... args)
-    -> std::enable_if_t<
+  auto Create(Args&&... args) -> std::enable_if_t<
       std::is_same_v<
-        decltype(
-          std::declval<R>().Create(
-            std::forward<Args>(args)...)),
-        M*>,
+          decltype(std::declval<R>().Create(std::forward<Args>(args)...)), M*>,
       ModelHandle<M>>;
 
   void AddDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_light);
-  void RemoveDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_light);
+  void RemoveDirectionalLight(
+      const std::shared_ptr<DirectionalLight>& dir_light);
   void SetAmbientLight(const glm::vec3& light);
 
  private:
@@ -119,8 +105,6 @@ class Scene {
   glm::vec3 ambient_light_ = glm::vec3(kDefaultAmbientLight);
 };
 
-
-
 // implementation
 template <typename R>
 std::shared_ptr<IRenderer>& Scene::GetIRendererShared() {
@@ -131,10 +115,8 @@ std::shared_ptr<IRenderer>& Scene::GetIRendererShared() {
 
   auto renderers_it = renderers_.find(shader_type);
   if (renderers_it == renderers_.end()) {
-    auto& cell = ShaderCell{
-      ShaderStorage::GetInstance().GetShader<Shader>(),
-      {}
-    };
+    auto& cell =
+        ShaderCell{ShaderStorage::GetInstance().GetShader<Shader>(), {}};
     renderers_it = renderers_.emplace(shader_type, std::move(cell)).first;
   }
 
@@ -143,7 +125,7 @@ std::shared_ptr<IRenderer>& Scene::GetIRendererShared() {
   if (it == shader_renderers.end()) {
     it = shader_renderers.emplace(renderer_type, std::make_shared<R>()).first;
   }
-  
+
   auto& renderer_ptr = it->second;
   return renderer_ptr;
 }
@@ -154,37 +136,29 @@ R& Scene::GetRendererRef() {
 }
 
 template <typename M, typename... Args>
-auto Scene::Create(Args&&... args)
-  -> std::enable_if_t<
+auto Scene::Create(Args&&... args) -> std::enable_if_t<
     std::is_same_v<
-      decltype(
-        std::declval<typename M::Renderer>().template Create<M>(
-          std::forward<Args>(args)...)),
-      M*>,
+        decltype(std::declval<typename M::Renderer>().template Create<M>(
+            std::forward<Args>(args)...)),
+        M*>,
     ModelHandle<M>> {
-    return Scene::Create<M, typename M::Renderer>(args...);
+  return Scene::Create<M, typename M::Renderer>(args...);
 }
 
 template <typename M, typename... Args>
-auto Scene::Create(Args&&... args)
-  -> std::enable_if_t<
-    std::is_same_v<
-      decltype(
-        std::declval<typename M::Renderer>().Create(
-          std::forward<Args>(args)...)),
-      M*>,
+auto Scene::Create(Args&&... args) -> std::enable_if_t<
+    std::is_same_v<decltype(std::declval<typename M::Renderer>().Create(
+                       std::forward<Args>(args)...)),
+                   M*>,
     ModelHandle<M>> {
-    return Scene::Create<M, typename M::Renderer>(args...);
+  return Scene::Create<M, typename M::Renderer>(args...);
 }
 
 template <typename M, typename R, typename... Args>
-auto Scene::Create(Args&&... args)
-  -> std::enable_if_t<
-    std::is_same_v<
-      decltype(
-        std::declval<R>().template Create<M>(
-          std::forward<Args>(args)...)),
-      M*>,
+auto Scene::Create(Args&&... args) -> std::enable_if_t<
+    std::is_same_v<decltype(std::declval<R>().template Create<M>(
+                       std::forward<Args>(args)...)),
+                   M*>,
     ModelHandle<M>> {
   using Renderer = R;
   // auto& renderer = GetRendererRef<R>();
@@ -192,32 +166,23 @@ auto Scene::Create(Args&&... args)
   R& renderer_ref = *dynamic_cast<R*>(renderer.get());
 
   return ModelHandle{
-    renderer_ref.template Create<M>(std::forward<Args>(args)...),
-    std::move(renderer)
-  };
+      renderer_ref.template Create<M>(std::forward<Args>(args)...),
+      std::move(renderer)};
 }
 
 template <typename M, typename R, typename... Args>
-auto Scene::Create(Args&&... args)
-  -> std::enable_if_t<
+auto Scene::Create(Args&&... args) -> std::enable_if_t<
     std::is_same_v<
-      decltype(
-        std::declval<R>().Create(
-          std::forward<Args>(args)...)),
-      M*>,
+        decltype(std::declval<R>().Create(std::forward<Args>(args)...)), M*>,
     ModelHandle<M>> {
   using Renderer = R;
   // auto& renderer = GetRendererRef<R>();
   auto renderer = GetIRendererShared<R>();
   R& renderer_ref = *dynamic_cast<R*>(renderer.get());
 
-  return ModelHandle{
-    renderer_ref.Create(std::forward<Args>(args)...),
-    std::move(renderer)
-  };
+  return ModelHandle{renderer_ref.Create(std::forward<Args>(args)...),
+                     std::move(renderer)};
 }
-
-
 
 }  // namespace Simple3D
 

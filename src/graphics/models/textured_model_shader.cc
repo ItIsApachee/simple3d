@@ -1,33 +1,29 @@
+#include <simple3d/graphics/internal/gles_shader.h>
+#include <simple3d/graphics/internal/shader_source.h>
 #include <simple3d/graphics/models/textured_model_shader.h>
+#include <simple3d/misc/error.h>
 
 #include <cassert>
-#include <string>
 #include <iostream>
-
-#include <simple3d/misc/error.h>
-#include <simple3d/graphics/internal/shader_source.h>
-#include <simple3d/graphics/internal/gles_shader.h>
+#include <string>
 
 namespace Simple3D {
-
-
 
 // FIXME: make string constants for shader fields
 TexturedModelShader::TexturedModelShader() {
   Error err;
   shader_ = Internal::GlesShaderBuilder()
-    .FragmentShaderSource(Internal::kTexturedFragmentShader)
-    .VertexShaderSource(Internal::kTexturedVertexShader)
-    .Build(&err);
-  
+                .FragmentShaderSource(Internal::kTexturedFragmentShader)
+                .VertexShaderSource(Internal::kTexturedVertexShader)
+                .Build(&err);
+
   // FIXME
-  std::cerr << "is_ok: " << err.IsOk() << ", desc: " << err.description << std::endl;
+  std::cerr << "is_ok: " << err.IsOk() << ", desc: " << err.description
+            << std::endl;
   assert(err.IsOk());
 }
 
-void TexturedModelShader::Use() {
-  shader_.Use();
-}
+void TexturedModelShader::Use() { shader_.Use(); }
 
 void TexturedModelShader::SetView(const glm::mat4& view) {
   Use();
@@ -61,7 +57,8 @@ void TexturedModelShader::SetDirectionalLights(
 
     int directional_light_count = 0;
     auto it = dir_lights.begin();
-    while (directional_light_count < kMinimumDirectionalLights && it != dir_lights.end()) {
+    while (directional_light_count < kMinimumDirectionalLights &&
+           it != dir_lights.end()) {
       std::string name = "directional_light[";
       name += std::to_string(directional_light_count++);
       name += "]";
@@ -87,7 +84,5 @@ void TexturedModelShader::SetAmbientLight(const glm::vec3& ambient_light) {
 const Internal::GlesShader& TexturedModelShader::shader() const {
   return shader_;
 }
-
-
 
 }  // namespace Simple3D

@@ -1,14 +1,11 @@
+#include <glad/gles2.h>
 #include <simple3d/graphics/internal/vertex_buffer_object.h>
 
-#include <cstddef>
 #include <cassert>
+#include <cstddef>
 #include <utility>
 
-#include <glad/gles2.h>
-
 namespace Simple3D::Internal {
-
-
 
 constexpr auto kVboTarget = GL_ARRAY_BUFFER;
 
@@ -20,7 +17,8 @@ constexpr auto kVboTarget = GL_ARRAY_BUFFER;
 // }
 
 VertexBufferObject::VertexBufferObject(std::size_t size, const std::byte* data,
-    GLenum usage) : size_{size}, usage_{usage} {
+                                       GLenum usage)
+    : size_{size}, usage_{usage} {
   glGenBuffers(1, &vbo_);
 
   Bind();
@@ -90,8 +88,7 @@ VertexBufferObject::VertexBufferObject(VertexBufferObject&& other)
 // }
 
 VertexBufferObject& VertexBufferObject::operator=(VertexBufferObject&& other) {
-  if (&other == this)
-    return *this;
+  if (&other == this) return *this;
   if (vbo_ != kGlesInvalidBuffer) {
     glDeleteBuffers(1, &vbo_);
   }
@@ -109,12 +106,11 @@ VertexBufferObject& VertexBufferObject::operator=(VertexBufferObject&& other) {
 }
 
 VertexBufferObject::~VertexBufferObject() {
-  if (vbo_ != kGlesInvalidBuffer)
-    glDeleteBuffers(1, &vbo_);
+  if (vbo_ != kGlesInvalidBuffer) glDeleteBuffers(1, &vbo_);
 }
 
 void VertexBufferObject::SetData(std::size_t size, const std::byte* data,
-    GLenum usage) {
+                                 GLenum usage) {
   size_ = size;
   usage_ = usage;
 
@@ -123,33 +119,25 @@ void VertexBufferObject::SetData(std::size_t size, const std::byte* data,
 }
 
 void VertexBufferObject::SubData(std::size_t offset, std::size_t size,
-    const std::byte* data) {
+                                 const std::byte* data) {
   assert(offset + size <= size_);
   Bind();
-  glBufferSubData(kVboTarget, offset, size, reinterpret_cast<const void*>(data));
+  glBufferSubData(kVboTarget, offset, size,
+                  reinterpret_cast<const void*>(data));
 }
 
 void VertexBufferObject::Bind() const {
-  if (vbo_ != kGlesInvalidBuffer)
-    BindBuffer(kVboTarget, vbo_);
+  if (vbo_ != kGlesInvalidBuffer) BindBuffer(kVboTarget, vbo_);
 }
 
 // void VertexBufferObject::Unbind() {
 //   UnbindBuffer(kVboTarget);
 // }
 
-GLuint VertexBufferObject::vbo() const {
-  return vbo_;
-}
+GLuint VertexBufferObject::vbo() const { return vbo_; }
 
-std::size_t VertexBufferObject::size() const {
-  return size_;
-}
+std::size_t VertexBufferObject::size() const { return size_; }
 
-GLenum VertexBufferObject::usage() const {
-  return usage_;
-}
-
-
+GLenum VertexBufferObject::usage() const { return usage_; }
 
 }  // namespace Simple3D::Internal

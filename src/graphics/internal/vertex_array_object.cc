@@ -1,22 +1,16 @@
+#include <glad/gles2.h>
+#include <simple3d/graphics/internal/element_buffer_object.h>
+#include <simple3d/graphics/internal/misc.h>
 #include <simple3d/graphics/internal/vertex_array_object.h>
+#include <simple3d/types.h>
 
 #include <utility>
 
-#include <glad/gles2.h>
-
-#include <simple3d/types.h>
-#include <simple3d/graphics/internal/misc.h>
-#include <simple3d/graphics/internal/element_buffer_object.h>
-
 namespace Simple3D::Internal {
-
-
 
 GLuint VertexArrayObject::active_vao_{kGlesDefaultVao};
 
-VertexArrayObject::VertexArrayObject() {
-  glGenVertexArrays(1, &vao_);
-}
+VertexArrayObject::VertexArrayObject() { glGenVertexArrays(1, &vao_); }
 
 VertexArrayObject::VertexArrayObject(VertexArrayObject&& other)
     : vao_{kGlesDefaultVao} {
@@ -24,8 +18,7 @@ VertexArrayObject::VertexArrayObject(VertexArrayObject&& other)
 }
 
 VertexArrayObject& VertexArrayObject::operator=(VertexArrayObject&& other) {
-  if (vao_ != kGlesDefaultVao)
-    glDeleteVertexArrays(1, &vao_);
+  if (vao_ != kGlesDefaultVao) glDeleteVertexArrays(1, &vao_);
   vao_ = other.vao_;
   other.vao_ = kGlesDefaultVao;
 
@@ -33,8 +26,7 @@ VertexArrayObject& VertexArrayObject::operator=(VertexArrayObject&& other) {
 }
 
 VertexArrayObject::~VertexArrayObject() {
-  if (vao_ != kGlesDefaultVao)
-    glDeleteVertexArrays(1, &vao_);
+  if (vao_ != kGlesDefaultVao) glDeleteVertexArrays(1, &vao_);
 }
 
 void VertexArrayObject::BindEbo(const ElementBufferObject& ebo) const {
@@ -57,6 +49,4 @@ void VertexArrayObject::Unbind() {
   }
 }
 
-
-
-}
+}  // namespace Simple3D::Internal

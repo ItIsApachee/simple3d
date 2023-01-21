@@ -1,16 +1,15 @@
 #ifndef INCLUDE_SIMPLE3D_UTILS_FPS_CAMERA_H_
 #define INCLUDE_SIMPLE3D_UTILS_FPS_CAMERA_H_
 
-#include <memory>
-#include <chrono>
-#include <optional>
-
 #include <GLFW/glfw3.h>
-#include <glm/vec3.hpp>
-#include <glm/mat4x4.hpp>
-
-#include <simple3d/graphics/camera.h>
 #include <simple3d/context/input.h>
+#include <simple3d/graphics/camera.h>
+
+#include <chrono>
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
+#include <memory>
+#include <optional>
 
 namespace Simple3D {
 
@@ -34,9 +33,8 @@ struct FpsCameraConfig {
 class FpsCameraInputHandler : public IInputHandler, public IWindowInputHandler {
  public:
   FpsCameraInputHandler();
-  FpsCameraInputHandler(const FpsCameraConfig& cfg);
+  explicit FpsCameraInputHandler(const FpsCameraConfig& cfg);
   ~FpsCameraInputHandler() override = default;
-
 
   void Enable(const std::shared_ptr<Camera>&);
   void Disable();
@@ -67,7 +65,6 @@ class FpsCameraInputHandler : public IInputHandler, public IWindowInputHandler {
   GLFWwindow* window_{nullptr};
 
   std::shared_ptr<Camera> camera_{};
-
 
   bool focused_{false};
   double prev_xpos_{0.0f};

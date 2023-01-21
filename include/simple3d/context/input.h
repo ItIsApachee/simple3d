@@ -5,8 +5,6 @@
 
 namespace Simple3D {
 
-
-
 class IInputHandler {
  public:
   IInputHandler() = default;
@@ -48,8 +46,6 @@ void UnsetWindowInputHandler();
 
 }  // namespace Internal
 
+}  // namespace Simple3D
 
-
-}
-
-#endif
+#endif  // INCLUDE_SIMPLE3D_CONTEXT_INPUT_H_

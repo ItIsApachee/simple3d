@@ -1,18 +1,14 @@
+#include <glad/gles2.h>
+#include <simple3d/graphics/camera.h>
+#include <simple3d/graphics/scene.h>
+#include <simple3d/graphics/shader.h>
 #include <simple3d/graphics/view.h>
+#include <simple3d/misc/error.h>
 
+#include <glm/mat4x4.hpp>
 #include <sstream>
 
-#include <glad/gles2.h>
-#include <glm/mat4x4.hpp>
-
-#include <simple3d/misc/error.h>
-#include <simple3d/graphics/scene.h>
-#include <simple3d/graphics/camera.h>
-#include <simple3d/graphics/shader.h>
-
 namespace Simple3D {
-
-
 
 View::View() {
   // FIXME(apachee): create framebuffer
@@ -22,7 +18,7 @@ View::~View() {
   // FIXME(apachee): destroy framebuffer
 }
 
-Error View::Draw(const Scene &scene) {
+Error View::Draw(const Scene& scene) {
   // FIXME(apachee): bind framebuffer
   glEnable(GL_DEPTH_TEST);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -35,7 +31,6 @@ Error View::Draw(const Scene &scene) {
   auto& directional_lights = scene.directional_lights_;
   auto& ambient_light = scene.ambient_light_;
 
-
   for (auto& [cell_type, cell] : scene.renderers_) {
     if (auto shader_ptr = cell.shader.lock(); shader_ptr) {
       shader_ptr->SetProj(proj);
@@ -45,7 +40,7 @@ Error View::Draw(const Scene &scene) {
       shader_ptr->SetAmbientLight(ambient_light);
 
       shader_ptr->Use();
-      for (auto& [renderer_type, renderer]: cell.renderers) {
+      for (auto& [renderer_type, renderer] : cell.renderers) {
         renderer->Draw(*shader_ptr);
       }
     } else {
@@ -59,7 +54,5 @@ Error View::Draw(const Scene &scene) {
 
   return Error::Ok();
 }
-
-
 
 }  // namespace Simple3D

@@ -1,32 +1,29 @@
 #include <simple3d/graphics/models/model.h>
 
-#include <vector>
-#include <unordered_map>
-#include <string>
 #include <cstdint>
 #include <queue>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 // FIXME: remove
-#include <iostream>
-
-#include <stb/stb_image.h>
-#include <glm/vec3.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glad/gles2.h>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
 #include <assimp/postprocess.h>
-
-#include <simple3d/graphics/internal/vertex.h>
-#include <simple3d/graphics/internal/vertex_buffer_object.h>
-#include <simple3d/graphics/internal/vertex_array_object.h>
+#include <assimp/scene.h>
+#include <glad/gles2.h>
 #include <simple3d/graphics/internal/element_buffer_object.h>
 #include <simple3d/graphics/internal/gles_shader.h>
+#include <simple3d/graphics/internal/vertex.h>
+#include <simple3d/graphics/internal/vertex_array_object.h>
+#include <simple3d/graphics/internal/vertex_buffer_object.h>
+#include <stb/stb_image.h>
+
+#include <assimp/Importer.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
+#include <iostream>
 
 namespace Simple3D {
-
-
 
 // TODO(apachee): add Internal::Texture class
 constexpr char kDiffuseTexture[] = "texture_diffuse";
@@ -41,15 +38,14 @@ struct Texture {
 class TextureLoader {
  public:
   TextureLoader(const aiScene* scene,
-      const std::filesystem::path& textures_path)
-      : scene{scene},
-        textures_path{textures_path} {}
+                const std::filesystem::path& textures_path)
+      : scene{scene}, textures_path{textures_path} {}
   TextureLoader(const TextureLoader&) = default;
   TextureLoader& operator=(const TextureLoader&) = default;
   ~TextureLoader() = default;
 
   std::vector<Texture> LoadTextures(aiMaterial* mat, aiTextureType type,
-      const std::string& type_name) {
+                                    const std::string& type_name) {
     std::vector<Texture> textures;
     for (std::int64_t i = 0; i < mat->GetTextureCount(type); i++) {
       aiString ai_str;
@@ -71,9 +67,8 @@ class TextureLoader {
 
       int width, height, channels;
       std::string filename = (textures_path / ai_str.C_Str()).string();
-      unsigned char* data = stbi_load(
-          filename.c_str(), &width, &height,
-          &channels, 0);
+      unsigned char* data =
+          stbi_load(filename.c_str(), &width, &height, &channels, 0);
 
       GLenum format{};
       if (channels == 1) {
@@ -90,14 +85,15 @@ class TextureLoader {
 
       glBindTexture(GL_TEXTURE_2D, texture.id);
       glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format,
-          GL_UNSIGNED_BYTE, data);
+                   GL_UNSIGNED_BYTE, data);
       glGenerateMipmap(GL_TEXTURE_2D);
 
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                      GL_LINEAR_MIPMAP_LINEAR);
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-      
+
       stbi_image_free(data);
 
       texture.type = type_name;
@@ -119,14 +115,14 @@ class TextureLoader {
 class Mesh {
  public:
   static Mesh LoadMesh(aiMesh* mesh, const aiScene* scene,
-      TextureLoader& texture_loader) {
+                       TextureLoader* texture_loader) {
     std::vector<Internal::TexturedVertex> vertices;
     std::vector<GLuint> indices;
     std::vector<Texture> textures;
 
     for (std::int64_t i = 0; i < mesh->mNumVertices; i++) {
       Internal::TexturedVertex vertex{};
-      
+
       // position
       vertex.position.x = mesh->mVertices[i].x;
       vertex.position.y = mesh->mVertices[i].y;
@@ -159,13 +155,13 @@ class Mesh {
     if (mesh->mMaterialIndex >= 0) {
       aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 
-      for (auto& diffuse_texture : texture_loader.LoadTextures(
-          material, aiTextureType_DIFFUSE, kDiffuseTexture)) {
+      for (auto& diffuse_texture : texture_loader->LoadTextures(
+               material, aiTextureType_DIFFUSE, kDiffuseTexture)) {
         textures.push_back(std::move(diffuse_texture));
       }
 
-      for (auto& specular_texture : texture_loader.LoadTextures(
-          material, aiTextureType_SPECULAR, kSpecularTexture)) {
+      for (auto& specular_texture : texture_loader->LoadTextures(
+               material, aiTextureType_SPECULAR, kSpecularTexture)) {
         textures.push_back(std::move(specular_texture));
       }
     }
@@ -175,23 +171,23 @@ class Mesh {
 
   Mesh() = default;
   Mesh(const std::vector<Internal::TexturedVertex>& vertices,
-      const std::vector<GLuint>& indices,
-      const std::vector<Texture>& textures)
+       const std::vector<GLuint>& indices, const std::vector<Texture>& textures)
       : textures{textures}, indices_size{(std::int64_t)indices.size()} {
     vertex_array_.Bind();
 
     vertex_buffer_ = Internal::VertexBufferObject(
-        sizeof(Internal::TexturedVertex)*vertices.size(),
+        sizeof(Internal::TexturedVertex) * vertices.size(),
         reinterpret_cast<const std::byte*>(vertices.data()));
     vertex_buffer_.Bind();
     Internal::TexturedVertex::BindAttributes();
 
-    indices_data_ = Internal::ElementBufferObjectBuilder()
-        .Data(sizeof(GLuint)*indices.size(),
-        reinterpret_cast<const std::byte*>(indices.data()))
-        .Build(vertex_array_);
+    indices_data_ =
+        Internal::ElementBufferObjectBuilder()
+            .Data(sizeof(GLuint) * indices.size(),
+                  reinterpret_cast<const std::byte*>(indices.data()))
+            .Build(vertex_array_);
     vertex_array_.BindEbo(indices_data_);
-    
+
     vertex_array_.Unbind();
   }
 
@@ -245,21 +241,23 @@ class Mesh {
   std::vector<Texture> textures;
 };
 
-std::shared_ptr<Model> Model::Load(const std::filesystem::path& model_path,
+std::shared_ptr<Model> Model::Load(
+    const std::filesystem::path& model_path,
     std::optional<std::filesystem::path> textures_path_opt) {
   Assimp::Importer importer{};
-  const aiScene *scene = importer.ReadFile(model_path.string(),
+  const aiScene* scene = importer.ReadFile(
+      model_path.string(),
       aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
-  
-  if (!scene || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE)
-      || !scene->mRootNode) {
+
+  if (!scene || (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) ||
+      !scene->mRootNode) {
     // TODO(apachee): add handling
     assert(false);
   }
 
   std::filesystem::path textures_path = textures_path_opt.value_or(
       std::filesystem::path(model_path).remove_filename());
-  
+
   std::shared_ptr<Model> model{new Model{}};
   TextureLoader texture_loader(scene, textures_path);
 
@@ -290,20 +288,18 @@ void Model::Draw(const Internal::GlesShader& shader) const {
 }
 
 ModelInstance* ModelRenderer::Create(const std::shared_ptr<Model>& model,
-    const glm::vec3& pos) {
-
+                                     const glm::vec3& pos) {
   auto model_group_it = models_.find(model.get());
   if (model_group_it == models_.end()) {
     model_group_it = models_.emplace(model.get(), ModelGroup{model}).first;
   }
-
 
   ModelInstance* model_instance_ptr{nullptr};
   {
     std::unique_ptr<ModelInstance> model_instance{new ModelInstance{pos}};
     model_instance_ptr = model_instance.get();
     model_group_it->second.instances.emplace(model_instance_ptr,
-        std::move(model_instance));
+                                             std::move(model_instance));
   }
 
   reverse_lookup_[model_instance_ptr] = model.get();
@@ -333,7 +329,7 @@ void ModelRenderer::NotifyUpdated(void*) {
 void ModelRenderer::Destroy(void* model_instance_void) {
   ModelInstance* model_instance_ptr =
       reinterpret_cast<ModelInstance*>(model_instance_void);
-  
+
   auto model_it = reverse_lookup_.find(model_instance_ptr);
   assert(model_it != reverse_lookup_.end());
 
@@ -343,9 +339,8 @@ void ModelRenderer::Destroy(void* model_instance_void) {
   auto& instances = model_group_it->second.instances;
   auto model_instance_it = instances.find(model_instance_ptr);
   assert(model_instance_it != instances.end());
-  
+
   instances.erase(model_instance_it);
 }
-
 
 }  // namespace Simple3D
