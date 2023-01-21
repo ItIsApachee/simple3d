@@ -1,38 +1,26 @@
+#include <GLFW/glfw3.h>
+#include <backends/imgui_impl_glfw.h>
+#include <imgui-gles3/imgui_impl_gles3.h>
+#include <imgui.h>
+#include <simple3d/context/context.h>
+#include <simple3d/context/input.h>
 #include <simple3d/imgui/imgui.h>
 
 #include <memory>
 
-#include <imgui.h>
-#include <backends/imgui_impl_glfw.h>
-#include <imgui-gles3/imgui_impl_gles3.h>
-#include <GLFW/glfw3.h>
-
-#include <simple3d/context/context.h>
-#include <simple3d/context/input.h>
-
 // can't call macro in Simple3D::ImGui
 // because of the ImGui part of the namespace
-static void check_version() {
-  IMGUI_CHECKVERSION();
-}
+static void check_version() { IMGUI_CHECKVERSION(); }
 
 namespace Simple3D::ImGui {
 
-void CreateContext() {
-  Context::GetInstance().CreateContext();
-}
+void CreateContext() { Context::GetInstance().CreateContext(); }
 
-void NewFrame() {
-  Context::GetInstance().NewFrame();
-}
+void NewFrame() { Context::GetInstance().NewFrame(); }
 
-void Render() {
-  Context::GetInstance().Render();
-}
+void Render() { Context::GetInstance().Render(); }
 
-void DestroyContext() {
-  Context::GetInstance().DestroyContext();
-}
+void DestroyContext() { Context::GetInstance().DestroyContext(); }
 
 Context& Context::GetInstance() {
   static Context ctx{};
@@ -71,11 +59,10 @@ void Context::DestroyContext() {
 
 InputHandler::InputHandler() : window{App::GetGLFWwindow()} {}
 
-void InputHandler::ToggleInputs(bool enable) {
-  enabled = enable;
-}
+void InputHandler::ToggleInputs(bool enable) { enabled = enable; }
 
-void InputHandler::EnableInputHandler(const std::shared_ptr<IInputHandler>& input_handler) {
+void InputHandler::EnableInputHandler(
+    const std::shared_ptr<IInputHandler>& input_handler) {
   input_handlers_.insert(input_handler);
 }
 
@@ -84,7 +71,8 @@ void InputHandler::EnableWindowInputHandler(
   window_input_handlers_.insert(window_input_handler);
 }
 
-void InputHandler::DisableInputHandler(const std::shared_ptr<IInputHandler>& input_handler) {
+void InputHandler::DisableInputHandler(
+    const std::shared_ptr<IInputHandler>& input_handler) {
   input_handlers_.erase(input_handler);
 }
 
@@ -92,8 +80,6 @@ void InputHandler::DisableWindowInputHandler(
     const std::shared_ptr<IWindowInputHandler>& window_input_handler) {
   window_input_handlers_.erase(window_input_handler);
 }
-
-
 
 void InputHandler::KeyCallback(int key, int scancode, int action, int mods) {
   if (enabled) {
@@ -167,8 +153,6 @@ void InputHandler::DropCallback(int path_count, const char* paths[]) {
   }
 }
 
-
-
 void InputHandler::WindowPosCallback(int xpos, int ypos) {
   for (auto& window_input_handler : window_input_handlers_) {
     window_input_handler->WindowPosCallback(xpos, ypos);
@@ -215,7 +199,5 @@ void InputHandler::WindowContentScaleCallback(float xscale, float yscale) {
     window_input_handler->WindowContentScaleCallback(xscale, yscale);
   }
 }
-
-
 
 }  // namespace Simple3D::ImGui

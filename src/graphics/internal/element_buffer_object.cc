@@ -1,21 +1,17 @@
-#include <simple3d/graphics/internal/element_buffer_object.h>
-
-#include <utility>
-#include <cstddef>
-
 #include <glad/gles2.h>
-
+#include <simple3d/graphics/internal/element_buffer_object.h>
 #include <simple3d/graphics/internal/misc.h>
 #include <simple3d/graphics/internal/vertex_array_object.h>
 
+#include <cstddef>
+#include <utility>
+
 namespace Simple3D::Internal {
-
-
 
 constexpr auto kEboTarget = GL_ELEMENT_ARRAY_BUFFER;
 
-ElementBufferObjectBuilder& ElementBufferObjectBuilder::Data(std::size_t size,
-    const std::byte* data) {
+ElementBufferObjectBuilder& ElementBufferObjectBuilder::Data(
+    std::size_t size, const std::byte* data) {
   size_ = size;
   data_ = data;
   return *this;
@@ -27,16 +23,15 @@ ElementBufferObjectBuilder& ElementBufferObjectBuilder::Usage(GLenum usage) {
 }
 
 ElementBufferObject ElementBufferObjectBuilder::Build(
-      const VertexArrayObject& vao) {
+    const VertexArrayObject& vao) {
   GLuint ebo{kGlesInvalidBuffer};
   glGenBuffers(1, &ebo);
 
   vao.Bind();
   BindBuffer(kEboTarget, ebo);
 
-  glBufferData(
-      kEboTarget, size_, static_cast<const void*>(data_), usage_);
-  
+  glBufferData(kEboTarget, size_, static_cast<const void*>(data_), usage_);
+
   return ElementBufferObject(ebo, size_, usage_);
 }
 
@@ -82,7 +77,8 @@ ElementBufferObject ElementBufferObjectBuilder::Build(
 // }
 
 ElementBufferObject::ElementBufferObject(GLuint ebo, std::size_t size,
-    GLenum usage) : ebo_{ebo}, size_{size}, usage_{usage} {}
+                                         GLenum usage)
+    : ebo_{ebo}, size_{size}, usage_{usage} {}
 
 ElementBufferObject::ElementBufferObject(ElementBufferObject&& other)
     : ElementBufferObject() {
@@ -130,8 +126,7 @@ ElementBufferObject::ElementBufferObject(ElementBufferObject&& other)
 
 ElementBufferObject& ElementBufferObject::operator=(
     ElementBufferObject&& other) {
-  if (&other == this)
-    return *this;
+  if (&other == this) return *this;
   if (ebo_ != kGlesInvalidBuffer) {
     glDeleteBuffers(1, &ebo_);
   }
@@ -164,14 +159,8 @@ ElementBufferObject::~ElementBufferObject() {
 //   UnbindBuffer(kEboTarget);
 // }
 
-GLuint ElementBufferObject::ebo() const {
-  return ebo_;
-}
+GLuint ElementBufferObject::ebo() const { return ebo_; }
 
-GLenum ElementBufferObject::usage() const {
-  return usage_;
-}
-
-
+GLenum ElementBufferObject::usage() const { return usage_; }
 
 }  // namespace Simple3D::Internal

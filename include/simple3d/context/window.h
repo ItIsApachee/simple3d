@@ -1,22 +1,19 @@
 /**
  * \file
  * \brief Window handling
-*/
+ */
 
 #ifndef INCLUDE_SIMPLE3D_CONTEXT_WINDOW_H_
 #define INCLUDE_SIMPLE3D_CONTEXT_WINDOW_H_
 
-#include <unordered_set>
-#include <memory>
-
 #include <GLFW/glfw3.h>
-
-#include <simple3d/types.h>
 #include <simple3d/context/input.h>
+#include <simple3d/types.h>
+
+#include <memory>
+#include <unordered_set>
 
 namespace Simple3D {
-
-
 
 class Window : public IInputHandler, public IWindowInputHandler {
  public:
@@ -60,17 +57,16 @@ class Window : public IInputHandler, public IWindowInputHandler {
   void SwapBuffers();
   void EnableInputHandler(const std::shared_ptr<IInputHandler>& input_handler);
   void EnableWindowInputHandler(
-    const std::shared_ptr<IWindowInputHandler>& window_input_handler);
+      const std::shared_ptr<IWindowInputHandler>& window_input_handler);
   void DisableInputHandler(const std::shared_ptr<IInputHandler>& input_handler);
   void DisableWindowInputHandler(
-    const std::shared_ptr<IWindowInputHandler>& window_input_handler);
+      const std::shared_ptr<IWindowInputHandler>& window_input_handler);
 
   GLFWwindow* window_{nullptr};
   std::unordered_set<std::shared_ptr<IInputHandler>> input_handlers_{};
-  std::unordered_set<std::shared_ptr<IWindowInputHandler>> window_input_handlers_{};
+  std::unordered_set<std::shared_ptr<IWindowInputHandler>>
+      window_input_handlers_{};
 };
-
-
 
 }  // namespace Simple3D
 

@@ -1,33 +1,30 @@
 /**
  * \dir
  * \brief Managing resources
-*/
+ */
 /** \file
  * \brief Context object
-*/
+ */
 
 #ifndef INCLUDE_SIMPLE3D_CONTEXT_CONTEXT_H_
 #define INCLUDE_SIMPLE3D_CONTEXT_CONTEXT_H_
 
-#include <unordered_set>
-#include <string>
-#include <memory>
-
-#include <glad/gles2.h>
 #include <GLFW/glfw3.h>
-
-#include <simple3d/types.h>
-#include <simple3d/misc/error.h>
+#include <glad/gles2.h>
 #include <simple3d/context/window.h>
+#include <simple3d/misc/error.h>
+#include <simple3d/types.h>
+
+#include <memory>
+#include <string>
+#include <unordered_set>
 
 namespace Simple3D {
-
-
 
 // TODO(apachee): implement mechanism to close the window
 /** \class Context simple3d/context/context.h
  * \brief Class representing application
-*/
+ */
 class App {
  public:
   static App& GetInstance();
@@ -49,7 +46,6 @@ class App {
 
   static GLFWwindow* App::GetGLFWwindow();
 
-
   App(const App&) = delete;
   App(App&&) = delete;
   App& operator=(const App&) = delete;
@@ -60,11 +56,11 @@ class App {
  private:
   App() = default;
 
+  bool test() {}
+
   bool is_init{false};
   Window window_{};
 };
-
-
 
 }  // namespace Simple3D
 

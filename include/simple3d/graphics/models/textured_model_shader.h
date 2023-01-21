@@ -2,6 +2,7 @@
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_TEXTURED_MODEL_SHADER_H_
 
 #include <unordered_set>
+#include <memory>
 
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
@@ -48,4 +49,4 @@ class TexturedModelShader : public IShader {
 
 }  // namespace Simple3D
 
-#endif  // INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_SHADER_H_
+#endif  // INCLUDE_SIMPLE3D_GRAPHICS_MODELS_TEXTURED_MODEL_SHADER_H_

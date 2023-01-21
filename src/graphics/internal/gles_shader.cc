@@ -1,23 +1,20 @@
-#include <simple3d/graphics/internal/gles_shader.h>
-
-#include <string>
-#include <sstream>
-#include <optional>
-#include <utility>
-
 #include <glad/gles2.h>
-#include <glm/vec3.hpp>
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include <simple3d/misc/error.h>
+#include <simple3d/graphics/internal/gles_shader.h>
 #include <simple3d/graphics/internal/misc.h>
+#include <simple3d/misc/error.h>
+
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/vec3.hpp>
+#include <optional>
+#include <sstream>
+#include <string>
+#include <utility>
 
 namespace Simple3D::Internal {
 
-
-
-GlesShaderBuilder& GlesShaderBuilder::VertexShaderSource(const std::string& src) {
+GlesShaderBuilder& GlesShaderBuilder::VertexShaderSource(
+    const std::string& src) {
   vertex_shader_src_ = src;
   return *this;
 }
@@ -27,7 +24,8 @@ GlesShaderBuilder& GlesShaderBuilder::VertexShaderSource(std::string&& src) {
   return *this;
 }
 
-GlesShaderBuilder& GlesShaderBuilder::FragmentShaderSource(const std::string& src) {
+GlesShaderBuilder& GlesShaderBuilder::FragmentShaderSource(
+    const std::string& src) {
   fragment_shader_src_ = src;
   return *this;
 }
@@ -46,15 +44,13 @@ GlesShader GlesShaderBuilder::Build(Error* error) {
   // TODO(apachee): check if context is loaded
   GlesShader result = GlesShader();
   if (!vertex_shader_src_) {
-    *error = Error(
-      ErrorType::kShaderCompilationFailed,
-      "shader compilation failed: no vertex shader");
+    *error = Error(ErrorType::kShaderCompilationFailed,
+                   "shader compilation failed: no vertex shader");
     return result;
   }
   if (!fragment_shader_src_) {
-    *error = Error(
-      ErrorType::kShaderCompilationFailed,
-      "shader compilation failed: no fragment shader");
+    *error = Error(ErrorType::kShaderCompilationFailed,
+                   "shader compilation failed: no fragment shader");
     return result;
   }
 
@@ -122,9 +118,8 @@ GlesShader::GlesShader(GlesShader&& other) : shader_id_{other.shader_id_} {
 }
 
 GlesShader& GlesShader::operator=(GlesShader&& other) {
-  if (&other == this)
-    return *this;
-  
+  if (&other == this) return *this;
+
   if (shader_id_ != kGlesInvalidShader) {
     GlesShader tmp{std::move(*this)};
   }  // tmp is destroyed
@@ -142,13 +137,9 @@ void GlesShader::Use() const {
   }
 }
 
-unsigned int GlesShader::GetID() const {
-  return shader_id_;
-}
+unsigned int GlesShader::GetID() const { return shader_id_; }
 
-bool GlesShader::IsValid() const {
-  return shader_id_ != 0;
-}
+bool GlesShader::IsValid() const { return shader_id_ != 0; }
 
 void GlesShader::Delete() {
   if (IsValid()) {
@@ -157,8 +148,8 @@ void GlesShader::Delete() {
   }
 }
 
-Error GlesShader::SetUniformMat4fv(
-    const std::string& name, const glm::mat4& matrix) const {
+Error GlesShader::SetUniformMat4fv(const std::string& name,
+                                   const glm::mat4& matrix) const {
   int location = glGetUniformLocation(shader_id_, name.c_str());
   if (location == -1) {
     std::string desc = "uniform not found, name=\"";
@@ -170,8 +161,8 @@ Error GlesShader::SetUniformMat4fv(
   return Error(ErrorType::kOk);
 }
 
-Error GlesShader::SetUniform3fv(
-    const std::string& name, const glm::vec3& vec) const {
+Error GlesShader::SetUniform3fv(const std::string& name,
+                                const glm::vec3& vec) const {
   int location = glGetUniformLocation(shader_id_, name.c_str());
   if (location == -1) {
     std::string desc = "uniform not found, name=\"";
@@ -183,8 +174,8 @@ Error GlesShader::SetUniform3fv(
   return Error(ErrorType::kOk);
 }
 
-Error GlesShader::SetUniform1i(
-    const std::string& name, const GLint& val) const {
+Error GlesShader::SetUniform1i(const std::string& name,
+                               const GLint& val) const {
   int location = glGetUniformLocation(shader_id_, name.c_str());
   if (location == -1) {
     std::string desc = "uniform not found, name=\"";
@@ -195,7 +186,5 @@ Error GlesShader::SetUniform1i(
   glUniform1i(location, val);
   return Error(ErrorType::kOk);
 }
-
-
 
 }  // namespace Simple3D::Internal

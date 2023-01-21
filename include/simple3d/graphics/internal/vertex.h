@@ -2,11 +2,10 @@
 #define INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_VERTEX_H_
 
 #include <glad/gles2.h>
+
 #include <glm/glm.hpp>
 
 namespace Simple3D::Internal {
-
-
 
 struct Vertex {
  public:
@@ -26,8 +25,6 @@ struct TexturedVertex {
   glm::vec2 texture_coords{0.f, 0.f};
 };
 
-
-
-}
+}  // namespace Simple3D::Internal
 
 #endif  // INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_VERTEX_H_

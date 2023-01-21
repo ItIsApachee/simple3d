@@ -1,18 +1,17 @@
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODEL_HANDLE_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODEL_HANDLE_H_
 
-#include <vector>
-#include <memory>
-#include <type_traits>
-#include <cstdint>
-
-#include <simple3d/types.h>
 #include <simple3d/graphics/renderer.h>
 #include <simple3d/graphics/scene.h>
+#include <simple3d/types.h>
+
+#include <cstdint>
+#include <memory>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
 namespace Simple3D {
-
-
 
 // definition
 template <typename M>
@@ -54,9 +53,8 @@ ModelHandle<M>::ModelHandle(ModelHandle&& other)
 
 template <typename M>
 ModelHandle<M>& ModelHandle<M>::operator=(ModelHandle&& other) {
-  if (std::addressof(other) == this)
-    return *this;
-  
+  if (std::addressof(other) == this) return *this;
+
   if (model_ != nullptr) {
     ModelHandle<M> temp = std::move(this);
   }  // destructor is called and model_ is freed
@@ -72,8 +70,7 @@ ModelHandle<M>& ModelHandle<M>::operator=(ModelHandle&& other) {
 
 template <typename M>
 ModelHandle<M>::~ModelHandle() {
-  if (model_ == nullptr)
-    return;
+  if (model_ == nullptr) return;
   if (auto renderer = renderer_.lock()) {
     renderer->Destroy(reinterpret_cast<void*>(model_));
   }
@@ -108,8 +105,6 @@ const M* ModelHandle<M>::operator->() const {
 //   primitives_.push_back(new TestPrimitive{-1});
 //   return primitives_.back();
 // }
-
-
 
 }  // namespace Simple3D
 

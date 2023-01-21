@@ -1,5 +1,5 @@
-#ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODEL_H_
-#define INCLUDE_SIMPLE3D_GRAPHICS_MODEL_H_
+#ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_H_
+#define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_H_
 
 #include <filesystem>
 #include <optional>
@@ -87,4 +87,4 @@ class ModelRenderer : public IRenderer {
 
 }  // namespace Simple3D
 
-#endif  // INCLUDE_SIMPLE3D_GRAPHICS_MODEL_H_
+#endif  // INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_H_
