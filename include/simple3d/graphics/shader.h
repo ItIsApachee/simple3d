@@ -26,7 +26,7 @@ class IShader {
       const std::unordered_set<std::shared_ptr<DirectionalLight>>&) = 0;
   virtual void SetAmbientLight(const glm::vec3&) = 0;
 
-  virtual void Use() = 0;
+  virtual void Use() const = 0;
 };
 
 }  // namespace Simple3D

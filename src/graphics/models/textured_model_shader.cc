@@ -23,7 +23,7 @@ TexturedModelShader::TexturedModelShader() {
   assert(err.IsOk());
 }
 
-void TexturedModelShader::Use() { shader_.Use(); }
+void TexturedModelShader::Use() const { shader_.Use(); }
 
 void TexturedModelShader::SetView(const glm::mat4& view) {
   Use();

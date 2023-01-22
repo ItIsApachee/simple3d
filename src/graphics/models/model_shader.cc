@@ -23,7 +23,7 @@ ModelShader::ModelShader() {
   assert(err.IsOk());
 }
 
-void ModelShader::Use() { shader_.Use(); }
+void ModelShader::Use() const { shader_.Use(); }
 
 void ModelShader::SetView(const glm::mat4& view) {
   Use();

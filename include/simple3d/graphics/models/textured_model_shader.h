@@ -24,7 +24,7 @@ class TexturedModelShader : public IShader {
   TexturedModelShader& operator=(TexturedModelShader&&) = delete;
   ~TexturedModelShader() override = default;
 
-  void Use() override;
+  void Use() const override;
   void SetView(const glm::mat4& view) override;
   void SetProj(const glm::mat4& proj) override;
   void SetViewPos(const glm::vec3& view_pos) override;
