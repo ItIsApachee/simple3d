@@ -37,13 +37,13 @@ struct Material {
 uniform Material material;
 
 // should I include normal & view_pos here?
-vec3 calc_dir_light(DirectionalLight light, vec3 view_dir) {
+vec3 calc_dir_light(DirectionalLight light, vec3 normal_, vec3 view_dir) {
   const float kDefaultShininess = 16.0;
 
-  vec3 diffuse = light.diffuse * max(dot(normal, -light.direction), 0.0)
+  vec3 diffuse = light.diffuse * max(dot(normal_, -light.direction), 0.0)
       * vec3(texture(material.texture_diffuse_1, tex_coord));
 
-  vec3 reflect_dir = reflect(light.direction, normal);
+  vec3 reflect_dir = reflect(light.direction, normal_);
 
   float specular_mult = pow(max(dot(view_dir, reflect_dir), 0.0), kDefaultShininess);
   vec3 specular = specular_mult * light.specular
@@ -58,9 +58,10 @@ void main() {
   cum_frag_color += ambient;
 
   vec3 view_dir = normalize(view_pos - pos);
+  vec3 normal_ = normalize(normal);
   int directional_light_count_ = min(directional_light_count, DIRECTIONAL_LIGHTS);
   for (int i = 0; i < directional_light_count_; i++) {
-    cum_frag_color += calc_dir_light(directional_light[i], view_dir);
+    cum_frag_color += calc_dir_light(directional_light[i], normal_, view_dir);
   }
 
   frag_color = vec4(cum_frag_color, 1.0);
