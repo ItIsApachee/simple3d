@@ -37,4 +37,8 @@ void Scene::RemoveDirectionalLight(
 
 void Scene::SetAmbientLight(const glm::vec3& light) { ambient_light_ = light; }
 
+void Scene::SetBackgroundColor(const glm::vec3& bg_color) {
+  background_color_ = bg_color;
+}
+
 }  // namespace Simple3D

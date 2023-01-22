@@ -22,7 +22,8 @@ Error View::Draw(const Scene& scene) {
   // FIXME(apachee): bind framebuffer
   glEnable(GL_DEPTH_TEST);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glClearColor(0., 0., 0., 1.0f);
+  const glm::vec3& bg_color = scene.background_color_;
+  glClearColor(bg_color.r, bg_color.g, bg_color.b, 1.0f);
 
   auto& cam = scene.active_camera_;
   auto proj = cam->GetProj();
