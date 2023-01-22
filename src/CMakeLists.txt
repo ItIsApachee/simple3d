@@ -27,7 +27,7 @@ set(simple3d_SOURCES ${simple3d_SOURCES}
 # /src/graphics/models/
 set(simple3d_SOURCES ${simple3d_SOURCES} graphics/models/cuboid.cc
     graphics/models/model_shader.cc graphics/models/textured_model_shader.cc
-    graphics/models/model.cc)
+    graphics/models/model.cc graphics/models/primitive_renderer.cc)
 
 # /src/utils/
 set(simple3d_SOURCES ${simple3d_SOURCES}
