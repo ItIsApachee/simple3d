@@ -47,28 +47,9 @@ class Scene {
   // TODO(apachee): add ability to initialize renderer like
   // Scene::AddRenerer<R>(R&& renderer)
 
-  // usage example: group objects in separate renderers with different
-  // configuration
-  // template <typename P, typename... Args>
-  // Model<P> Create(Args... args);
-  template <typename M, typename... Args>
-  auto Create(Args&&... args) -> std::enable_if_t<
-      std::is_same_v<
-          decltype(std::declval<typename M::Renderer>().template Create<M>(
-              std::forward<Args>(args)...)),
-          M*>,
-      ModelHandle<M>>;
-
   template <typename M, typename... Args>
   auto Create(Args&&... args) -> std::enable_if_t<
       std::is_same_v<decltype(std::declval<typename M::Renderer>().Create(
-                         std::forward<Args>(args)...)),
-                     M*>,
-      ModelHandle<M>>;
-
-  template <typename M, typename R, typename... Args>
-  auto Create(Args&&... args) -> std::enable_if_t<
-      std::is_same_v<decltype(std::declval<R>().template Create<M>(
                          std::forward<Args>(args)...)),
                      M*>,
       ModelHandle<M>>;
@@ -141,37 +122,11 @@ R& Scene::GetRendererRef() {
 
 template <typename M, typename... Args>
 auto Scene::Create(Args&&... args) -> std::enable_if_t<
-    std::is_same_v<
-        decltype(std::declval<typename M::Renderer>().template Create<M>(
-            std::forward<Args>(args)...)),
-        M*>,
-    ModelHandle<M>> {
-  return Scene::Create<M, typename M::Renderer>(args...);
-}
-
-template <typename M, typename... Args>
-auto Scene::Create(Args&&... args) -> std::enable_if_t<
     std::is_same_v<decltype(std::declval<typename M::Renderer>().Create(
                        std::forward<Args>(args)...)),
                    M*>,
     ModelHandle<M>> {
   return Scene::Create<M, typename M::Renderer>(args...);
-}
-
-template <typename M, typename R, typename... Args>
-auto Scene::Create(Args&&... args) -> std::enable_if_t<
-    std::is_same_v<decltype(std::declval<R>().template Create<M>(
-                       std::forward<Args>(args)...)),
-                   M*>,
-    ModelHandle<M>> {
-  using Renderer = R;
-  // auto& renderer = GetRendererRef<R>();
-  auto renderer = GetIRendererShared<R>();
-  R& renderer_ref = *dynamic_cast<R*>(renderer.get());
-
-  return ModelHandle{
-      renderer_ref.template Create<M>(std::forward<Args>(args)...),
-      std::move(renderer)};
 }
 
 template <typename M, typename R, typename... Args>
