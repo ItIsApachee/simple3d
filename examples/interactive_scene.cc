@@ -85,7 +85,9 @@ class InteractiveCubes {
         glm::vec3 front(0.0f, 0.0f, -1.0f);
         front = glm::mat3(glm::inverse(camera_->GetView())) * front;
         glm::vec3 pos = camera_->GetViewPos() + front * 5.0f;
-        temp_cube_ = scene_->Create<Simple3D::Cuboid>(front, glm::vec3(0.5f),
+        if (snap_to_the_grid_)
+          for (int i = 0; i < 3; i++) pos[i] -= std::fmod(pos[i], 1.0f);
+        temp_cube_ = scene_->Create<Simple3D::Cuboid>(pos, glm::vec3(0.5f),
                                                       glm::vec3(0.5f));
       }
       cubes.emplace(id, std::move(temp_cube_.value()));
@@ -96,11 +98,17 @@ class InteractiveCubes {
         glm::vec3 front(0.0f, 0.0f, -1.0f);
         front = glm::mat3(glm::inverse(camera_->GetView())) * front;
         glm::vec3 pos = camera_->GetViewPos() + front * 5.0f;
+        if (snap_to_the_grid_)
+          for (int i = 0; i < 3; i++) pos[i] -= std::fmod(pos[i], 1.0f);
         temp_cube_ = scene_->Create<Simple3D::Cuboid>(pos, glm::vec3(0.5f),
                                                       glm::vec3(0.5f));
       }
     } else {
       temp_cube_ = {};
+    }
+
+    if (ImGui::RadioButton("Snap to the grid", snap_to_the_grid_)) {
+      snap_to_the_grid_ = !snap_to_the_grid_;
     }
 
     ImGui::End();
@@ -115,6 +123,8 @@ class InteractiveCubes {
   std::optional<Simple3D::ModelHandle<Simple3D::Cuboid>> temp_cube_{};
   std::unordered_map<std::int64_t, Simple3D::ModelHandle<Simple3D::Cuboid>>
       cubes;
+
+  bool snap_to_the_grid_{false};
 };
 
 int main() {
