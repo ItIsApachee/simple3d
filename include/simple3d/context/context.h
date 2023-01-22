@@ -15,8 +15,8 @@
 #include <simple3d/misc/error.h>
 #include <simple3d/types.h>
 
-#include <memory>
 #include <cstdint>
+#include <memory>
 #include <string>
 #include <unordered_set>
 
@@ -61,7 +61,7 @@ class App {
 
   bool test() {}
 
-  //bool is_init{false};
+  // bool is_init{false};
   std::int64_t ctx_id_{0};
   std::int64_t last_ctx_id_{0};
 
