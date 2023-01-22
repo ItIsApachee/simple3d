@@ -1,9 +1,7 @@
 #include <simple3d/graphics/models/cuboid.h>
 
-#include <cstddef>
-// FIXME: remove iostream
 #include <array>
-#include <iostream>
+#include <cstddef>
 
 // FIXME: don't include everything
 #include <simple3d/graphics/internal/element_buffer_object.h>
