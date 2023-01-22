@@ -56,13 +56,13 @@ ModelHandle<M>& ModelHandle<M>::operator=(ModelHandle&& other) {
   if (std::addressof(other) == this) return *this;
 
   if (model_ != nullptr) {
-    ModelHandle<M> temp = std::move(this);
+    ModelHandle<M> temp = std::move(*this);
   }  // destructor is called and model_ is freed
   // *this is now empty
 
   model_ = other.model_;
   other.model_ = nullptr;
-  renderer_ std::move(other.renderer_);
+  renderer_ = std::move(other.renderer_);
   // other is empty
 
   return *this;
@@ -91,6 +91,9 @@ const M& ModelHandle<M>::operator*() const {
 
 template <typename M>
 M* ModelHandle<M>::operator->() {
+  if (auto renderer = renderer_.lock()) {
+    renderer->NotifyUpdated(reinterpret_cast<void*>(model_));
+  }
   return model_;
 }
 
