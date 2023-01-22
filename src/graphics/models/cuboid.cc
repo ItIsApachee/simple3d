@@ -249,18 +249,19 @@ void CuboidRenderer::Draw(IShader& shader_) {
   }
   updated_cuboids.clear();
 
-  if (flag_full_sub_data) {
-    instances_vbo_.SubData(0, instances_cnt * sizeof(CuboidInstance),
-                           (const std::byte*)instances_.data());
-  } else {
-    std::int64_t updated_size =
-        (instances_.size() - prev_size) * sizeof(CuboidInstance);
-    const std::byte* ptr =
-        reinterpret_cast<const std::byte*>(instances_.data());
-    ptr += updated_size;
-    instances_vbo_.SubData(prev_size * sizeof(CuboidInstance), updated_size,
-                           ptr);
-  }
+  // TODO(apachee): optimize memory copies
+  instances_vbo_.SubData(0, instances_cnt * sizeof(CuboidInstance),
+                         (const std::byte*)instances_.data());
+  // if (flag_full_sub_data) {
+  // } else {
+  //   std::int64_t updated_size =
+  //       (instances_.size() - prev_size) * sizeof(CuboidInstance);
+  //   const std::byte* ptr =
+  //       reinterpret_cast<const std::byte*>(instances_.data());
+  //   ptr += updated_size;
+  //   instances_vbo_.SubData(prev_size * sizeof(CuboidInstance), updated_size,
+  //                          ptr);
+  // }
 
   vao_.Bind();
   glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT,
