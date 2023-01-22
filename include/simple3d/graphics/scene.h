@@ -83,7 +83,7 @@ class Scene {
   void RemoveDirectionalLight(
       const std::shared_ptr<DirectionalLight>& dir_light);
   void SetAmbientLight(const glm::vec3& light);
-  
+
   void SetBackgroundColor(const glm::vec3& bg_color);
 
  private:
