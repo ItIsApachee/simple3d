@@ -47,7 +47,8 @@ class ElementBufferObject {
   GLenum usage() const;
 
  private:
-  ElementBufferObject(GLuint ebo, std::int64_t ctx_id, std::size_t size, GLenum usage);
+  ElementBufferObject(GLuint ebo, std::int64_t ctx_id, std::size_t size,
+                      GLenum usage);
 
   GLuint ebo_{kGlesInvalidBuffer};  // handle for OpenGL buffer
   GLenum usage_{kDefaultUsage};     // usage of the buffer
