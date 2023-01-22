@@ -2,12 +2,7 @@
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_
 
 #include <glad/gles2.h>
-#include <simple3d/graphics/internal/element_buffer_object.h>
-#include <simple3d/graphics/internal/vertex_array_object.h>
-#include <simple3d/graphics/internal/vertex_buffer_object.h>
-#include <simple3d/graphics/models/model_shader.h>
-#include <simple3d/graphics/renderer.h>
-#include <simple3d/graphics/shader.h>
+#include <simple3d/graphics/models/primitive_renderer.h>
 #include <simple3d/types.h>
 
 #include <cstdint>
@@ -21,9 +16,22 @@
 namespace Simple3D {
 
 struct Cuboid {
+ public:
   // TODO(apachee): add ability to change face's color
+  using Renderer = PrimitiveRenderer<Cuboid>;
 
-  using Renderer = CuboidRenderer;
+  static const std::vector<Internal::Vertex>& GetVertices();
+  static const std::vector<GLuint>& GetIndices();
+
+  Cuboid(const glm::vec3& pos = glm::vec3(0.0f),
+         const glm::vec3& diffuse_color = glm::vec3(1.0f),
+         const glm::vec3& specular_color = glm::vec3(1.0f),
+         const GLfloat& shininess = 16.0f);
+  Cuboid(const Cuboid&) = default;
+  Cuboid& operator=(const Cuboid&) = default;
+  ~Cuboid() = default;
+
+  explicit operator Internal::PrimitiveInstance() const;
 
   // coordinates
   glm::vec3 pos = glm::vec3(0.0f);
@@ -40,57 +48,58 @@ struct Cuboid {
   // float yaw{0.};
 };
 
-struct CuboidInstance;
-
-class CuboidRenderer : public IRenderer {
- public:
-  using Shader = ModelShader;
-
-  CuboidRenderer();
-  CuboidRenderer(const CuboidRenderer&) = delete;
-  CuboidRenderer(CuboidRenderer&&) = default;
-  CuboidRenderer& operator=(const CuboidRenderer) = delete;
-  CuboidRenderer& operator=(CuboidRenderer&&) = default;
-  ~CuboidRenderer() override = default;
-
-  template <typename... Args>
-  Cuboid* Create(Args&&... args);
-
-  void Draw(IShader&) override;
-
-  void NotifyUpdated(void*) override;
-  void Destroy(void*) override;
-
- private:
-  bool reinitialize_instances{false};
-  std::vector<Cuboid*> updated_cuboids{};
-
-  std::unordered_map<Cuboid*, std::pair<std::unique_ptr<Cuboid>, std::int64_t>>
-      cuboids_{};
-
-  Internal::ElementBufferObject ebo_{};
-  Internal::VertexBufferObject verices_vbo_{};
-
-  Internal::VertexBufferObject instances_vbo_{};
-  std::size_t instances_vbo_capacity_{0};
-
-  std::vector<CuboidInstance> instances_{};
-
-  Internal::VertexArrayObject vao_{};
-};
-
-// implementation
-template <typename... Args>
-Cuboid* CuboidRenderer::Create(Args&&... args) {
-  // Cuboid* cuboid_ptr =  new Cuboid{std::forward<Args>(args)...};
-  auto cuboid_ptr =
-      std::unique_ptr<Cuboid>(new Cuboid{std::forward<Args>(args)...});
-  auto cuboid_ptr_val = cuboid_ptr.get();
-  cuboids_.emplace(cuboid_ptr_val, std::pair{std::move(cuboid_ptr), -1});
-  updated_cuboids.push_back(cuboid_ptr_val);
-
-  return cuboid_ptr_val;
-}
+// struct CuboidInstance;
+//
+// class CuboidRenderer : public IRenderer {
+//  public:
+//   using Shader = ModelShader;
+//
+//   CuboidRenderer();
+//   CuboidRenderer(const CuboidRenderer&) = delete;
+//   CuboidRenderer(CuboidRenderer&&) = default;
+//   CuboidRenderer& operator=(const CuboidRenderer) = delete;
+//   CuboidRenderer& operator=(CuboidRenderer&&) = default;
+//   ~CuboidRenderer() override = default;
+//
+//   template <typename... Args>
+//   Cuboid* Create(Args&&... args);
+//
+//   void Draw(IShader&) override;
+//
+//   void NotifyUpdated(void*) override;
+//   void Destroy(void*) override;
+//
+//  private:
+//   bool reinitialize_instances{false};
+//   std::vector<Cuboid*> updated_cuboids{};
+//
+//   std::unordered_map<Cuboid*, std::pair<std::unique_ptr<Cuboid>,
+//   std::int64_t>>
+//       cuboids_{};
+//
+//   Internal::ElementBufferObject ebo_{};
+//   Internal::VertexBufferObject verices_vbo_{};
+//
+//   Internal::VertexBufferObject instances_vbo_{};
+//   std::size_t instances_vbo_capacity_{0};
+//
+//   std::vector<CuboidInstance> instances_{};
+//
+//   Internal::VertexArrayObject vao_{};
+// };
+//
+//// implementation
+// template <typename... Args>
+// Cuboid* CuboidRenderer::Create(Args&&... args) {
+//   // Cuboid* cuboid_ptr =  new Cuboid{std::forward<Args>(args)...};
+//   auto cuboid_ptr =
+//       std::unique_ptr<Cuboid>(new Cuboid{std::forward<Args>(args)...});
+//   auto cuboid_ptr_val = cuboid_ptr.get();
+//   cuboids_.emplace(cuboid_ptr_val, std::pair{std::move(cuboid_ptr), -1});
+//   updated_cuboids.push_back(cuboid_ptr_val);
+//
+//   return cuboid_ptr_val;
+// }
 
 }  // namespace Simple3D
 
