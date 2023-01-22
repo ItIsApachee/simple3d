@@ -42,7 +42,7 @@ Error View::Draw(const Scene& scene) {
 
       shader_ptr->Use();
       for (auto& [renderer_type, renderer] : cell.renderers) {
-        renderer->Draw(*shader_ptr);
+        renderer->Draw(shader_ptr.get());
       }
     } else {
       std::ostringstream ostrm{};

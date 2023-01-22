@@ -55,7 +55,7 @@ class PrimitiveRenderer : public IRenderer {
   PrimitiveRenderer& operator=(PrimitiveRenderer&&) = default;
   ~PrimitiveRenderer() override = default;
 
-  void Draw(IShader&) override;
+  void Draw(IShader*) override;
 
   void NotifyUpdated(void*) override;
   void Destroy(void*) override;
@@ -141,7 +141,7 @@ PrimitiveRenderer<P>::PrimitiveRenderer()
 }
 
 template <typename P>
-void PrimitiveRenderer<P>::Draw(IShader& shader_) {
+void PrimitiveRenderer<P>::Draw(IShader* shader_) {
   if (primitives_.empty()) {
     return;
   }

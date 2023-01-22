@@ -62,7 +62,7 @@ class ModelRenderer : public IRenderer {
   ModelInstance* Create(const std::shared_ptr<Model>& model,
       const glm::vec3& pos = glm::vec3(0.0f));
 
-  void Draw(IShader&) override;
+  void Draw(IShader*) override;
 
   // TODO(apachee): add optimization for instancing
   void NotifyUpdated(void*) override;

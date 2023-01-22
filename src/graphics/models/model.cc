@@ -307,8 +307,8 @@ ModelInstance* ModelRenderer::Create(const std::shared_ptr<Model>& model,
   return model_instance_ptr;
 }
 
-void ModelRenderer::Draw(IShader& shader_interface) {
-  auto& shader = dynamic_cast<TexturedModelShader&>(shader_interface);
+void ModelRenderer::Draw(IShader* shader_interface) {
+  auto& shader = dynamic_cast<TexturedModelShader&>(*shader_interface);
   for (auto& [model_ptr_, model_group] : models_) {
     auto& [model, instances] = model_group;
     for (auto& [instance_ptr_, instance] : instances) {
