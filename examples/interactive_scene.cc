@@ -38,73 +38,81 @@ class FocusFpsCam : public Simple3D::IInputHandler {
   std::shared_ptr<Simple3D::Camera> cam{};
 };
 
-class InteractiveCubes {
+template <typename P>
+class InteractivePrimitives {
  public:
-  InteractiveCubes(Simple3D::Scene* scene,
+  InteractivePrimitives(Simple3D::Scene* scene,
                    const std::shared_ptr<Simple3D::Camera>& camera)
       : scene_{scene}, camera_{camera} {}
-  InteractiveCubes(const InteractiveCubes&) = delete;
-  InteractiveCubes(InteractiveCubes&& other) : scene_{other.scene_} {
+  InteractivePrimitives(const InteractivePrimitives&) = delete;
+  InteractivePrimitives(InteractivePrimitives&& other) : scene_{other.scene_} {
     other.scene_ = nullptr;
   }
-  InteractiveCubes& operator=(const InteractiveCubes&) = delete;
-  InteractiveCubes& operator=(InteractiveCubes&& other) {
+  InteractivePrimitives& operator=(const InteractivePrimitives&) = delete;
+  InteractivePrimitives& operator=(InteractivePrimitives&& other) {
     if (&other == this) return *this;
     scene_ = other.scene_;
     other.scene_ = nullptr;
   }
-  ~InteractiveCubes() = default;
+  ~InteractivePrimitives() = default;
 
-  void DrawGui() {
-    ImGui::Begin("Cubes");
+  void DrawGui(const std::string& window_name) {
+    ImGui::Begin(window_name.c_str());
 
-    for (auto& [id, cube] : cubes) {
-      if (ImGui::TreeNode(reinterpret_cast<void*>(id), "Cube [id=%lld]", id)) {
+    std::optional<std::int64_t> deleted_primitive = {};
+    for (auto& [id, primitive] : primitives) {
+      if (ImGui::TreeNode(reinterpret_cast<void*>(id), "[id=%lld]", id)) {
         ImGui::PushItemWidth(150.0f);
 
         if (ImGui::TreeNode("position")) {
-          ImGui::InputFloat3("##pos", glm::value_ptr(cube->pos));
+          ImGui::InputFloat3("##pos", glm::value_ptr(primitive->pos));
           ImGui::TreePop();
         }
         if (ImGui::TreeNode("color")) {
           ImGui::ColorPicker3("diffuse_color",
-                              glm::value_ptr(cube->diffuse_color));
+                              glm::value_ptr(primitive->diffuse_color));
           ImGui::ColorPicker3("specular_color",
-                              glm::value_ptr(cube->specular_color));
+                              glm::value_ptr(primitive->specular_color));
           ImGui::TreePop();
+        }
+        if (ImGui::Button("destroy")) {
+          deleted_primitive = id;
         }
         ImGui::PopItemWidth();
 
         ImGui::TreePop();
       }
     }
+    if (deleted_primitive) {
+      primitives.erase(deleted_primitive.value());
+    }
 
-    if (ImGui::Button("CreateCube")) {
+    if (ImGui::Button("Create")) {
       std::int64_t id = ++last_created_id;
-      if (!temp_cube_.has_value()) {
+      if (!temp_primitive_.has_value()) {
         glm::vec3 front(0.0f, 0.0f, -1.0f);
         front = glm::mat3(glm::inverse(camera_->GetView())) * front;
         glm::vec3 pos = camera_->GetViewPos() + front * 5.0f;
         if (snap_to_the_grid_)
           for (int i = 0; i < 3; i++) pos[i] -= std::fmod(pos[i], 1.0f);
-        temp_cube_ = scene_->Create<Simple3D::Cuboid>(pos, glm::vec3(0.5f),
+        temp_primitive_ = scene_->Create<P>(pos, glm::vec3(0.5f),
                                                       glm::vec3(0.5f));
       }
-      cubes.emplace(id, std::move(temp_cube_.value()));
-      temp_cube_ = {};
+      primitives.emplace(id, std::move(temp_primitive_.value()));
+      temp_primitive_ = {};
     }
     if (ImGui::IsItemHovered()) {
-      if (!temp_cube_.has_value()) {
+      if (!temp_primitive_.has_value()) {
         glm::vec3 front(0.0f, 0.0f, -1.0f);
         front = glm::mat3(glm::inverse(camera_->GetView())) * front;
         glm::vec3 pos = camera_->GetViewPos() + front * 5.0f;
         if (snap_to_the_grid_)
           for (int i = 0; i < 3; i++) pos[i] -= std::fmod(pos[i], 1.0f);
-        temp_cube_ = scene_->Create<Simple3D::Cuboid>(pos, glm::vec3(0.5f),
+        temp_primitive_ = scene_->Create<P>(pos, glm::vec3(0.5f),
                                                       glm::vec3(0.5f));
       }
     } else {
-      temp_cube_ = {};
+      temp_primitive_ = {};
     }
 
     if (ImGui::RadioButton("Snap to the grid", snap_to_the_grid_)) {
@@ -120,9 +128,9 @@ class InteractiveCubes {
 
   std::int64_t last_created_id{0};
 
-  std::optional<Simple3D::ModelHandle<Simple3D::Cuboid>> temp_cube_{};
-  std::unordered_map<std::int64_t, Simple3D::ModelHandle<Simple3D::Cuboid>>
-      cubes;
+  std::optional<Simple3D::ModelHandle<P>> temp_primitive_{};
+  std::unordered_map<std::int64_t, Simple3D::ModelHandle<P>>
+      primitives;
 
   bool snap_to_the_grid_{false};
 };
@@ -157,10 +165,10 @@ int main() {
   std::unordered_set<std::shared_ptr<light_t>> lights;
   {
     std::vector<std::pair<glm::vec3, glm::vec3>> light_cfg = {
-        //{glm::vec3(0.0f, -1.0f, 0.0f), white * 0.9f},
-        //{glm::vec3(1.0f, 0.0f, 0.0f), white * 0.8f},
-        //{glm::vec3(0.0f, 0.0f, 1.0f), white * 0.7f},
-        //{glm::vec3(-1.0f, 0.0f, 0.0f), white * 0.55f},
+        {glm::vec3(0.0f, -1.0f, 0.0f), white * 0.9f},
+        {glm::vec3(1.0f, 0.0f, 0.0f), white * 0.8f},
+        {glm::vec3(0.0f, 0.0f, 1.0f), white * 0.7f},
+        {glm::vec3(-1.0f, 0.0f, 0.0f), white * 0.55f},
         {glm::vec3(0.0f, 0.0f, -1.0f), white * 0.4f}};
     for (const auto& [dir, base_color] : light_cfg) {
       lights.emplace(new light_t{dir, base_color * 0.5f, base_color * 0.3f});
@@ -185,8 +193,8 @@ int main() {
   imgui_handler->EnableInputHandler(
       std::make_shared<FocusFpsCam>(cam_handler, camera));
 
-  InteractiveCubes interactive_cubes(&scene, camera);
-  auto sphere = scene.Create<Simple3D::Sphere>(glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(1.0f));
+  InteractivePrimitives<Simple3D::Cuboid> interactive_cubes(&scene, camera);
+  InteractivePrimitives<Simple3D::Sphere> interactive_spheres(&scene, camera);
 
   auto prev = std::chrono::high_resolution_clock::now();
   while (!Simple3D::App::ShouldClose()) {
@@ -234,7 +242,8 @@ int main() {
     if (ImGui::Button("Reset to default")) cfg = default_cfg;
     ImGui::End();
 
-    interactive_cubes.DrawGui();
+    interactive_cubes.DrawGui("Cubes");
+    interactive_spheres.DrawGui("Spheres");
 
     Simple3D::ImGui::Render();
 
