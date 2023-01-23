@@ -6,7 +6,7 @@ C++ namespace - Simpl3D.
 Currently there is no aim to support multiple windows, and contexts, but it might be provided in the future.
 
 ## Development.
-Coding standard - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
+Code style - Google C++ Style Guide. (https://github.com/cpplint/cpplint)
 
 ## Components.
 1. (graphics) Objects related to 3D rendering.
