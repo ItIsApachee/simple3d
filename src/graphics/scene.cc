@@ -35,7 +35,8 @@ void Scene::RemoveDirectionalLight(
   directional_lights_.erase(dir_light);
 }
 
-// void Scene::SetAmbientLight(const glm::vec3& light) { ambient_light = light; }
+// void Scene::SetAmbientLight(const glm::vec3& light) { ambient_light = light;
+// }
 //
 // void Scene::SetBackgroundColor(const glm::vec3& bg_color) {
 //   background_color = bg_color;
