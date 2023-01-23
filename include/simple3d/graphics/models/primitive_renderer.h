@@ -128,17 +128,6 @@ PrimitiveRenderer<P>::PrimitiveRenderer()
              .Build(vao_);
   vao_.BindEbo(ebo_);
   vao_.Unbind();
-
-  std::cerr << "vertices: " << std::endl;
-  for (auto vertex : primitive_vertices) {
-    std::cerr << vertex.position.x << ' ' << vertex.position.y << ' '
-              << vertex.position.z << std::endl;
-  }
-
-  std::cerr << "indices: " << std::endl;
-  for (auto index : primitive_indices) {
-    std::cerr << index << std::endl;
-  }
 }
 
 template <typename P>
