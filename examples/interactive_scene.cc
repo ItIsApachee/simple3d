@@ -4,7 +4,7 @@
 #include <simple3d/graphics/camera.h>
 #include <simple3d/graphics/light.h>
 #include <simple3d/graphics/model_handle.h>
-#include <simple3d/graphics/models/cuboid.h>
+#include <simple3d/graphics/models/primitives.h>
 #include <simple3d/imgui/imgui.h>
 #include <simple3d/simple3d.h>
 #include <simple3d/utils/fps_camera.h>
@@ -155,10 +155,10 @@ int main() {
   std::unordered_set<std::shared_ptr<light_t>> lights;
   {
     std::vector<std::pair<glm::vec3, glm::vec3>> light_cfg = {
-        {glm::vec3(0.0f, -1.0f, 0.0f), white * 0.9f},
-        {glm::vec3(1.0f, 0.0f, 0.0f), white * 0.8f},
-        {glm::vec3(0.0f, 0.0f, 1.0f), white * 0.7f},
-        {glm::vec3(-1.0f, 0.0f, 0.0f), white * 0.55f},
+        //{glm::vec3(0.0f, -1.0f, 0.0f), white * 0.9f},
+        //{glm::vec3(1.0f, 0.0f, 0.0f), white * 0.8f},
+        //{glm::vec3(0.0f, 0.0f, 1.0f), white * 0.7f},
+        //{glm::vec3(-1.0f, 0.0f, 0.0f), white * 0.55f},
         {glm::vec3(0.0f, 0.0f, -1.0f), white * 0.4f}};
     for (const auto& [dir, base_color] : light_cfg) {
       lights.emplace(new light_t{dir, base_color * 0.5f, base_color * 0.3f});
@@ -184,6 +184,7 @@ int main() {
       std::make_shared<FocusFpsCam>(cam_handler, camera));
 
   InteractiveCubes interactive_cubes(&scene, camera);
+  auto sphere = scene.Create<Simple3D::Sphere>(glm::vec3(0.0f), glm::vec3(1.0f), glm::vec3(1.0f));
 
   auto prev = std::chrono::high_resolution_clock::now();
   while (!Simple3D::App::ShouldClose()) {
