@@ -1,4 +1,5 @@
 /** \~Russian
+ * \file
  * \brief Примитив куб.
 */
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_

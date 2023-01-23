@@ -11,4 +11,9 @@
 // #include <simple3d/graphics/internal/shader.h>
 #include <simple3d/misc/error.h>
 
+/** \~Russian
+ * \namespace Simple3D
+ * \brief Пространство имен библиотеки Simple3D, а так же ее утилит.
+*/
+
 #endif  // INCLUDE_SIMPLE3D_SIMPLE3D_H_
