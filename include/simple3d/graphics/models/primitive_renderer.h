@@ -10,11 +10,10 @@
 #include <simple3d/graphics/renderer.h>
 
 #include <memory>
+#include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <vector>
-
-#include <type_traits>
 
 namespace Simple3D {
 
@@ -74,6 +73,7 @@ class PrimitiveRenderer : public IRenderer {
 
   Internal::ElementBufferObject ebo_{};
   Internal::VertexBufferObject verices_vbo_{};
+  GLsizei indices_count_{};
 
   Internal::VertexBufferObject instances_vbo_{};
   std::size_t instances_vbo_capacity_{0};
@@ -110,6 +110,7 @@ PrimitiveRenderer<P>::PrimitiveRenderer()
   // to get vertices & indices
   const std::vector<Internal::Vertex>& primitive_vertices = P::GetVertices();
   const std::vector<GLuint>& primitive_indices = P::GetIndices();
+  indices_count_ = primitive_indices.size();
 
   verices_vbo_ = Internal::VertexBufferObject(
       sizeof(Internal::Vertex) * primitive_vertices.size(),
@@ -213,7 +214,7 @@ void PrimitiveRenderer<P>::Draw(IShader* shader_) {
                          (const std::byte*)instances_.data());
 
   vao_.Bind();
-  glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT,
+  glDrawElementsInstanced(GL_TRIANGLES, indices_count_, GL_UNSIGNED_INT,
                           reinterpret_cast<void*>(0),
                           static_cast<GLsizei>(instances_cnt));
   vao_.Unbind();
