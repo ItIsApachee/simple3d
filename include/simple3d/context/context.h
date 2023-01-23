@@ -28,7 +28,6 @@ struct AppConfig {
   bool window_maximized{false};
 };
 
-// TODO(apachee): implement mechanism to close the window
 /** \class Context simple3d/context/context.h
  * \brief Class representing application
  */
