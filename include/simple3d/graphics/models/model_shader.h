@@ -1,3 +1,7 @@
+/** \~Russian
+ * \file
+ * \brief Класс Simple3D::ModelShader.
+*/
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_SHADER_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_SHADER_H_
 
@@ -11,9 +15,17 @@
 
 namespace Simple3D {
 
-// singletone of shader program used by primitives
+/** \~Russian
+ * \class ModelShader
+ * \brief Шейдер для моделей, использующих Simple3D::Internal::Vertex.
+*/
 class ModelShader : public IShader {
  public:
+  /** \~Russian
+   * \brief Создает шейдер.
+   * 
+   * Создание ModelShader при неинициализированном контексте - UB.
+  */
   ModelShader();
   ModelShader(const ModelShader&) = delete;
   ModelShader(ModelShader&&) = delete;

@@ -1,12 +1,12 @@
-/** \dir
- * \brief Graphics component.
-*/
-/** \file
- * \brief Includes all headers of graphics component.
+/** \~Russian
+ * \dir
+ * \brief Графическая компонента.
 */
 
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_GRAPHICS_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_GRAPHICS_H_
+
+// TODO(apachee): add all header files
 
 #include <simple3d/types.h>
 // #include <simple3d/graphics/renderer.h>

@@ -15,25 +15,25 @@
 
 namespace Simple3D::Internal {
 
-GlesShaderBuilder& GlesShaderBuilder::VertexShaderSource(
-    const std::string& src) {
-  vertex_shader_src_ = src;
-  return *this;
-}
+// GlesShaderBuilder& GlesShaderBuilder::VertexShaderSource(
+//     const std::string& src) {
+//   vertex_shader_src_ = src;
+//   return *this;
+// }
 
 GlesShaderBuilder& GlesShaderBuilder::VertexShaderSource(std::string&& src) {
-  vertex_shader_src_ = src;
+  vertex_shader_src_ = std::forward<std::string>(src);
   return *this;
 }
 
-GlesShaderBuilder& GlesShaderBuilder::FragmentShaderSource(
-    const std::string& src) {
-  fragment_shader_src_ = src;
-  return *this;
-}
+// GlesShaderBuilder& GlesShaderBuilder::FragmentShaderSource(
+//     const std::string& src) {
+//   fragment_shader_src_ = src;
+//   return *this;
+// }
 
 GlesShaderBuilder& GlesShaderBuilder::FragmentShaderSource(std::string&& src) {
-  fragment_shader_src_ = src;
+  fragment_shader_src_ = std::forward<std::string>(src);
   return *this;
 }
 
@@ -158,7 +158,7 @@ unsigned int GlesShader::GetID() const { return shader_id_; }
 bool GlesShader::IsValid() const { return shader_id_ != 0; }
 
 void GlesShader::Delete() {
-  if (IsValid()) {
+  if (shader_id_ != kGlesInvalidShader && ctx_id_ == App::GetCtxId()) {
     glDeleteProgram(shader_id_);
     shader_id_ = 0;
   }

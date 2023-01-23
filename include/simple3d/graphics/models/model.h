@@ -1,3 +1,7 @@
+/** \~Russian
+ * \file
+ * \brief Класс Simple3D::Model.
+*/
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_MODEL_H_
 
@@ -23,10 +27,32 @@ namespace Simple3D {
 class Mesh;
 class ModelRenderer;
 
+/** \~Russian
+ * \class Model
+ * \brief Произвольная 3D модель.
+ * 
+ * Данный класс представляет собой произвольную
+ * загруженную 3D модель.
+*/
 class Model {
  public:
   friend ModelRenderer;
 
+  /** \~Russian
+   * \brief Builder-метод для загрузки модели из файловой системы.
+   * \param[in] model_path Путь, где лежит модель.
+   * \param[in] textures_path Опциональный путь, где лежат текстуры модели.
+   * По умолчанию используется тот же путь, что и model_path.
+   * \return Возвращает загруженную модель.
+   * 
+   * \warning Неудачная загрузка модели вызывает терминирование программы.
+   * \warning На данный момент не поддерживаются текстуры встроенные в файл модели.
+   * \warning Загрузка модели при неинициализированном контексте - UB.
+   * 
+   * Для загрузки моделей используется библиотека assimp.
+   * Подробнее о форматах поддерживаемых assimp:
+   * https://github.com/assimp/assimp/blob/master/doc/Fileformats.md
+  */
   static std::shared_ptr<Model> Load(const std::filesystem::path& model_path,
       std::optional<std::filesystem::path> textures_path = {});
 
@@ -42,12 +68,31 @@ class Model {
   std::vector<Mesh> meshes;
 };
 
+/** \~Russian
+ * \class ModelInstance
+ * \brief Экземпляр некоторой модели Model.
+ * 
+ * Чтобы добавить на сцену загруженную Model,
+ * используется ModelRenderer, который создает
+ * экземпляр заданной модели и дает возможность
+ * изменять ее положение на сцене.
+*/
 struct ModelInstance {
  public:
   using Renderer = ModelRenderer;
+
+  /** \~Russian
+   * \brief Позиция экземпляра модели.
+  */
   glm::vec3 pos = glm::vec3(0.0f);
+
+  // TODO(apachee): add rotation
 };
 
+/** \~Russian
+ * \class ModelRenderer
+ * \brief Рендерер экземпляров Model.
+*/
 class ModelRenderer : public IRenderer {
  public:
   using Shader = TexturedModelShader;
@@ -59,6 +104,15 @@ class ModelRenderer : public IRenderer {
   ModelRenderer& operator=(ModelRenderer&&) = default;;
   ~ModelRenderer() override = default;
 
+  /** \~Russian
+   * \brief Метод для создания экземпляра модели.
+   * \param[in] model Модель, экземпляр которой создается.
+   * \param[in] pos Положение модели. По умолчанию (0, 0, 0).
+   * \return Указатель на созданный экземпляр модели.
+   * 
+   * Данная функция используется при вызове
+   * Scene::Create<ModelInstance>(model, pos).
+  */
   ModelInstance* Create(const std::shared_ptr<Model>& model,
       const glm::vec3& pos = glm::vec3(0.0f));
 

@@ -1,3 +1,7 @@
+/** \~Russian
+ * \file
+ * \brief Класс Simple3D::View.
+*/
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_VIEW_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_VIEW_H_
 
@@ -9,9 +13,12 @@ namespace Simple3D {
 
 
 
-/**
- * \class View simple3d/graphics/view.h
- * \brief Class representing object you can draw to.
+/** \~Russian
+ * \class View
+ * \brief Объект, который может отрисовать сцену.
+ * 
+ * \note Не является синглтоном, для того, чтобы
+ * в будущем добавить возможность рисовать не только в окно.
 */
 class View {
  public:
@@ -22,10 +29,16 @@ class View {
   View& operator=(View&&) = default;
   ~View();  // delete framebuffer if not 0
 
+  /** \~Russian
+   * \brief Метод для отрисовки сцены.
+   * \param[in] scene Отрисовываемая сцена.
+   * \return Ошибка в случае, если шейдер, требуемый для отрисовки не
+   * инициализирован. Иначе Error::Ok{};
+  */
   Error Draw(const Scene& scene);
 
  private:
-  unsigned int framebuffer_{0};
+  // unsigned int framebuffer_{0};
 };
 
 

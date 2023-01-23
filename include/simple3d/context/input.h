@@ -1,3 +1,7 @@
+/** \~Russian
+ * \file
+ * \brief Обработка ввода.
+*/
 #ifndef INCLUDE_SIMPLE3D_CONTEXT_INPUT_H_
 #define INCLUDE_SIMPLE3D_CONTEXT_INPUT_H_
 
@@ -5,6 +9,18 @@
 
 namespace Simple3D {
 
+/** \~Russian
+ * \class IInputHandler
+ * \brief Интерфейс для обработки ввода.
+ * 
+ * По умолчанию методы ничего не делают. Для реализации своей обработки ввода
+ * нужно создать класс, наследующийся от IInputHandler со своей реализацией
+ * обработки нужных событий.
+ * Методы представляют собой обертку над callback функциями GLFW. Названия
+ * callback функций такое же как и в GLFW. Подробнее
+ * об аргументах, с которыми они вызываются можно узнать по ссылке
+ * https://www.glfw.org/docs/3.3/group__input.html
+*/
 class IInputHandler {
  public:
   IInputHandler() = default;
@@ -20,6 +36,18 @@ class IInputHandler {
   virtual void DropCallback(int path_count, const char* paths[]);
 };
 
+/** \~Russian
+ * \class IWindowInputHandler
+ * \brief Интерфейс для обработки событий окна.
+ * 
+ * По умолчанию методы ничего не делают. Для реализации своей обработки
+ * событий окна нужно создать класс, наследующийся от IWindowInputHandler
+ * со своей реализацией обработки нужных событий.
+ * Методы представляют собой обертку над callback функциями GLFW. Названия
+ * callback функций такое же как и в GLFW. Подробнее
+ * об аргументах, с которыми они вызываются можно узнать по ссылке
+ * https://www.glfw.org/docs/latest/group__window.html
+*/
 class IWindowInputHandler {
  public:
   IWindowInputHandler() = default;
@@ -38,10 +66,32 @@ class IWindowInputHandler {
 
 namespace Internal {
 
+/** \~Russian
+ * \brief Функция для установки обработчика ввода для окна GLFW.
+ * \warning Это часть внутренней структуры библиотеки. Пользователь не должен
+ * сам вызывать эту функцию. Она будет вызвана при инициализации приложения.
+*/
 void SetInputHandler(GLFWwindow* window, IInputHandler*);
+
+/** \~Russian
+ * \brief Функция для отключения обработки ввода для окна GLFW.
+ * \warning Это часть внутренней структуры библиотеки. Пользователь не должен
+ * сам вызывать эту функцию. Она будет вызвана при инициализации приложения.
+*/
 void UnsetInputHandler();
 
+/** \~Russian
+ * \brief Функция для установки обработчика событий окна GLFW.
+ * \warning Это часть внутренней структуры библиотеки. Пользователь не должен
+ * сам вызывать эту функцию. Она будет вызвана при завершении работы приложения.
+*/
 void SetWindowInputHandler(GLFWwindow* window, IWindowInputHandler*);
+
+/** \~Russian
+ * \brief Функция для отключения обработки событий окна GLFW.
+ * \warning Это часть внутренней структуры библиотеки. Пользователь не должен
+ * сам вызывать эту функцию. Она будет вызвана при завершении работы приложения.
+*/
 void UnsetWindowInputHandler();
 
 }  // namespace Internal

@@ -1,3 +1,7 @@
+/** \~Russian
+ * \file
+ * \brief Класс Simple3D::TexturedModelShader.
+*/
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_TEXTURED_MODEL_SHADER_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_TEXTURED_MODEL_SHADER_H_
 
@@ -14,9 +18,17 @@ namespace Simple3D {
 
 
 
-// singletone of shader program used by primitives
+/** \~Russian
+ * \class TexturedModelShader
+ * \brief Шейдер для моделей, использующих Simple3D::Internal::TexturedVertex.
+*/
 class TexturedModelShader : public IShader {
  public:
+  /** \~Russian
+   * \brief Создает шейдер.
+   * 
+   * Создание TexturedModelShader при неинициализированном контексте - UB.
+  */
   TexturedModelShader();
   TexturedModelShader(const TexturedModelShader&) = delete;
   TexturedModelShader(TexturedModelShader&&) = delete;

@@ -1,5 +1,6 @@
-/** \file
- * \brief Includes all headers provided by this library.
+/** \~Russian
+ * \dir
+ * \brief Библиотека Simple3D.
 */
 
 #ifndef INCLUDE_SIMPLE3D_SIMPLE3D_H_

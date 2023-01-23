@@ -1,5 +1,6 @@
-/** \file
- * \brief Definition of Simple3D::Scene
+/** \~Russian
+ * \file
+ * \brief Объект Simple3D::Scene
  */
 
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_SCENE_H_
@@ -25,15 +26,24 @@
 
 namespace Simple3D {
 
+/** \~Russian
+ * \brief Фоновое освещение сцены по умолчанию.
+*/
 const float kDefaultAmbientLight = 0.1f;
 
 // definition
-/** \class Scene simple3d/graphics/scene.h
- * \brief Container for light sources, and cameras.
+/** \~Russian
+ * \class Scene
+ * \brief Контейнер объектов на сцене.
+ * 
+ * Сцена предоставляет собой объект, хранящий отрисовываемые
+ * объекты, их относительное положение.
+ * Сцена также хранит наблюдателя и параметры освещения.
  */
 class Scene {
  public:
   friend class View;
+
   Scene();
   Scene(const Scene&) = delete;
   Scene(Scene&&);
@@ -41,11 +51,39 @@ class Scene {
   Scene& operator=(Scene&&);
   ~Scene() = default;
 
+  // FIXME: add const ref
+  /** \~Russian
+   * \brief Метод для установки наблюдателя.
+   * \param[in] camera Наблюдатель.
+  */
   void SetCamera(std::shared_ptr<ICamera> camera);
 
   // TODO(apachee): add ability to initialize renderer like
   // Scene::AddRenerer<R>(R&& renderer)
 
+  /** \~Russian
+   * \brief Создание объекта типа M с помощью args.
+   * \tparam M Тип создаваемой модели. Данная перегрузка использует
+   * M\::Renderer как тип рендерера, используемый для создания M.
+   * \tparam Args Типы аргументов для создания модели.
+   * \param args Аргументы для создания модели.
+   * 
+   * Создает объект типа M, передавая args рендереру M\::Renderer.
+   * Требования к типу M\::Renderer:
+   * - Реализация интерфейса Simple3D::IRenderer.
+   * - Имеет тип или псевдоним типа M\::Renderer\::Shader.
+   * - Имеет метод M* M\::Renderer::Create.
+   * Аргументы args передаются прямой передачей в
+   * M* M\::Renderer::Create для создания объекта.
+   * 
+   * Требования к типу M\::Renderer\::Shader:
+   * - Реализация интерфейса Simple3D::IShader.
+   * 
+   * У данного метода есть перегрузка с явным указанием
+   * типа рендерера R. С помощью нее можно, например,
+   * создавать существующие в этой библиотеки примитивы
+   * (например, Simple3D::Cuboid), используя другие рендереры.
+  */
   template <typename M, typename... Args>
   auto Create(Args&&... args) -> std::enable_if_t<
       std::is_same_v<decltype(std::declval<typename M::Renderer>().Create(
@@ -53,13 +91,43 @@ class Scene {
                      M*>,
       ModelHandle<M>>;
 
+  /** \~Russian
+   * \brief Создание объекта типа M с помощью args и рендерера R.
+   * \tparam M Тип создаваемой модели.
+   * \tparam R Тип рендерера, используемого для создания модели.
+   * \tparam Args Типы аргументов для создания модели.
+   * \param args Аргументы для создания модели.
+   * 
+   * Создает объект типа M, передавая args рендереру R.
+   * Требования к типу R\:
+   * - Реализация интерфейса Simple3D::IRenderer.
+   * - Имеет тип или псевдоним типа R\::Shader.
+   * - Имеет метод M* R\::Create.
+   * Аргументы args передаются прямой передачей в
+   * M* M\::Renderer::Create для создания объекта.
+   * 
+   * Требования к типу R\::Shader:
+   * - Реализация интерфейса Simple3D::IShader.
+   * 
+   * Используя данную перегрузку можно, например, использовать свою реализацию
+   * рендерера для некоторого примитива.
+  */
   template <typename M, typename R, typename... Args>
   auto Create(Args&&... args) -> std::enable_if_t<
       std::is_same_v<
           decltype(std::declval<R>().Create(std::forward<Args>(args)...)), M*>,
       ModelHandle<M>>;
 
+  /** \~Russian
+   * \brief Функция для добавления источника направленного света.
+   * \param[in] dir_light Источник направленного света.
+  */
   void AddDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_light);
+
+  /** \~Russian
+   * \brief Функция для удаления источника направленного света.
+   * \param[in] dir_light Источник направленного света.
+  */
   void RemoveDirectionalLight(
       const std::shared_ptr<DirectionalLight>& dir_light);
 
@@ -67,7 +135,14 @@ class Scene {
   // void SetAmbientLight(const glm::vec3& light);
   // void SetBackgroundColor(const glm::vec3& bg_color);
 
+  /** \~Russian
+   * \brief Цвет фонового освещения объектов.
+  */
   glm::vec3 ambient_light = glm::vec3(kDefaultAmbientLight);
+
+  /** \~Russian
+   * \brief Цвет фона сцены.
+  */
   glm::vec3 background_color = glm::vec3(0.0f);
 
  private:

@@ -1,3 +1,6 @@
+/** \~Russian
+ * \brief Примитив куб.
+*/
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_CUBOID_H_
 
@@ -15,12 +18,30 @@
 
 namespace Simple3D {
 
+/** \~Russian
+ * \struct Cuboid
+ * \brief Примитив куб.
+ * 
+ * Название Cuboid, чтобы в будущем преобразовать куб
+ * к прямоугольному параллелепипеду.
+*/
 struct Cuboid {
  public:
   // TODO(apachee): add ability to change face's color
+
+  /** \~Russian
+   * \brief Рендерер, используемый при вызове Scene::Create<Cuboid>(...);
+  */
   using Renderer = PrimitiveRenderer<Cuboid>;
 
+  /** \~Russian
+   * \brief Реализация требований на шаблонный параметр P типа PrimitiveRenderer.
+  */
   static const std::vector<Internal::Vertex>& GetVertices();
+
+  /** \~Russian
+   * \brief Реализация требований на шаблонный параметр P типа PrimitiveRenderer.
+  */
   static const std::vector<GLuint>& GetIndices();
 
   Cuboid(const glm::vec3& pos = glm::vec3(0.0f),
@@ -31,14 +52,32 @@ struct Cuboid {
   Cuboid& operator=(const Cuboid&) = default;
   ~Cuboid() = default;
 
+  /** \~Russian
+   * \brief Реализация требований на шаблонный параметр P типа PrimitiveRenderer.
+  */
   explicit operator Internal::PrimitiveInstance() const;
 
-  // coordinates
+  /** \~Russian
+   * \brief Позиция куба.
+  */
   glm::vec3 pos = glm::vec3(0.0f);
 
-  // material
+
+  /** \~Russian
+   * \brief Цвет используемый для расчета фонового и рассеянного освещения.
+  */
   glm::vec3 diffuse_color = glm::vec3(1.0f);
+
+
+  /** \~Russian
+   * \brief Цвет используемый для расчета освещения глянцевых бликов.
+  */
   glm::vec3 specular_color = glm::vec3(1.0f);
+
+
+  /** \~Russian
+   * \brief Блеск используемый для расчета освещения глянцевых бликов.
+  */
   GLfloat shininess{16.0f};
 
   // TODO(apachee): add rotation

@@ -1,3 +1,7 @@
+/** \~Russian
+ * \file
+ * \brief Класс Simple3D::PrimitiveRenderer<P>.
+*/
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_PRIMITIVE_RENDERER_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_PRIMITIVE_RENDERER_H_
 
@@ -18,13 +22,47 @@
 namespace Simple3D {
 
 namespace Internal {
+
+/** \~Russian
+ * \struct PrimitiveInstance
+ * \brief Структура экземпляра примитива, используемая для рендера.
+ * 
+ * Данная структура предназначена для унификации параметров примитива.
+*/
 struct PrimitiveInstance {
+  /** \~Russian
+   * \brief Привязка активного Internal::VertexBufferObject к Internal::VertexArrayObject.
+   * 
+   * Используется для связаываня данных буфера вершин к массиву вершин.
+   * Буфер вершин должен быть массивом Internal::PrimitiveInstance.
+   * Работает только при использовании Simple3D::ModelShader.
+  */
   static void BindAttributes();
+
+  /** \~Russian
+   * \brief Матрица model модели MVP.
+   * 
+   * \warning На данный момент Simple3D::PrimitiveRenderer<P> не поддерживает
+   * model матрицы, использующие неоднородные преобразования масштабирования.
+  */
   glm::mat4 model;
+
+  /** \~Russian
+   * \brief Цвет для расчета рассеянного освещения затенения по Фонгу.
+  */
   glm::vec3 diffuse_color;
+
+  /** \~Russian
+   * \brief Цвет для расчета освещения глянцевых бликов затенения по Фонгу.
+  */
   glm::vec3 specular_color;
+
+  /** \~Russian
+   * \brief Блеск для расчета освещения глянцевых бликов затенения по Фонгу.
+  */
   float shininess;
 };
+
 }  // namespace Internal
 
 /*
@@ -43,10 +81,43 @@ also
 explicit operator Internal::PrimitiveInstance() const;
 */
 
+/*
+*/
+/** \~Russian
+ * \class PrimitiveRenderer
+ * \brief Рендерер примитивов типа P.
+ * \tparam P Тип отрисовываемого примитива. Требования:
+ * - Должны быть определены статические методы
+ * T1 P\::GetVertices() и T2 P\::GetIndices(),
+ * где T1 и T2 могут быть использованы для иницализации
+ * const std\::vector<Internal\::Vertex>& и
+ * const std\::vector<GLuint>&
+ * соответственно, причем
+ *   -  P\::GetVertices возвращает вектор вершин,
+ *   -  P\::GetIndices возвращает вектор индексов размера \f$ 3 \cdot N \f$, такой, что
+ * \f$ \forall i=0,1,...,N-1: \f$ элементы с индексами
+ * \f$ (3\cdot i, 3\cdot i + 1, 3\cdot i + 2) \f$
+ * определяют индексы вершин очередного треугольника в векторе вершин.
+ * - Должен быть определен оператор:
+ * explicit P\::operator Internal::PrimitiveInstance() const;
+ * 
+ * Если для типа P выполняются требования, то на сцене можно создать
+ * объект типа P с помощью
+ * Scene::Create<P, PrimitiveRenderer<P>>(arg1, arg2,..), а
+ * так же можно добавить в тип P публичный псевдоним типа P\::Renderer =
+ * PrimitiveRenderer<P>. Во втором случае для создания на сцене
+ * объекта типа P можно вызвать
+ * Scene::Create<P>(arg1, arg2,...).
+*/
 template <typename P>
 class PrimitiveRenderer : public IRenderer {
  public:
   using Shader = ModelShader;
+  /** \~Russian
+   * \brief Создает рендерер примитива P.
+   * 
+   * Создание PrimitiveRenderer при неинициализированном контексте - UB.
+  */
   PrimitiveRenderer();
   PrimitiveRenderer(const PrimitiveRenderer&) = delete;
   PrimitiveRenderer(PrimitiveRenderer&&) = default;
@@ -59,6 +130,18 @@ class PrimitiveRenderer : public IRenderer {
   void NotifyUpdated(void*) override;
   void Destroy(void*) override;
 
+  /** \~Russian
+   * \brief Метод для создания примитива.
+   * \tparam Args Типы аргументов, передаваемых конструктору примитива.
+   * \param[in] args Аргументы, передаваемые конструктору примитива.
+   * \return Указатель на созданный примитив.
+   * 
+   * Данная функция использует прямую передачу, для
+   * конструирования объекта типа P, используя
+   * конструктор данного типа.
+   * Данная функция используется при вызове
+   * Scene::Create<P, PrimitiveRenderer<P>>(arg1, arg2, ...).
+  */
   template <typename... Args>
   P* Create(Args&&... args);
 

@@ -1,5 +1,6 @@
-/** \file
- * \brief List of all classes declarations.
+/** \~Russian
+ * \file
+ * \brief Объявления типов для разрешения циклических зависимостей.
 */
 
 #ifndef INCLUDE_SIMPLE3D_TYPES_H_

@@ -1,3 +1,7 @@
+/** \~Russian
+ * \file
+ * \brief Шаблон Simple3D::ModelHandle<M>
+*/
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODEL_HANDLE_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODEL_HANDLE_H_
 
@@ -14,6 +18,14 @@
 namespace Simple3D {
 
 // definition
+/** \~Russian
+ * \class ModelHandle
+ * \brief Обертка над некоторой моделью M.
+ * \tparam M Модель.
+ * 
+ * Обертка над создаваемым на сцене объектом. Предоставляет доступ к
+ * экземпляру M.
+*/
 template <typename M>
 class ModelHandle {
  public:
@@ -26,9 +38,28 @@ class ModelHandle {
 
   ~ModelHandle();
 
+  /** \~Russian
+   * \brief Перегрузка оператора разыменовывания.
+   * \return Ссылка на хранимую модель.
+  */
   M& operator*();
+
+  /** \~Russian
+   * \brief Перегрузка оператора разыменовывания.
+   * \return Ссылка на хранимую модель.
+  */
   const M& operator*() const;
+
+  /** \~Russian
+   * \brief Перегрузка оператора доступа к полям и методам по указателю.
+   * \return Ссылка на хранимую модель.
+  */
   M* operator->();
+
+  /** \~Russian
+   * \brief Перегрузка оператора доступа к полям и методам по указателю.
+   * \return Ссылка на хранимую модель.
+  */
   const M* operator->() const;
 
   // should all primitives of the same type be associated with some unique id?

@@ -1,3 +1,7 @@
+/** \~Russian
+ * \file
+ * \brief Класс Simple3D::Internal::VertexArrayObject.
+*/
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_VERTEX_ARRAY_OBJECT_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_VERTEX_ARRAY_OBJECT_H_
 
@@ -10,11 +14,20 @@
 
 namespace Simple3D::Internal {
 
+/** \~Russian
+ * \class VertexArrayObject.
+ * \brief Обертка над масивом вершин OpenGL ES 3.1.
+*/
 class VertexArrayObject {
  public:
   friend class ElementBufferObjectBuilder;
   friend void ResetActiveBindings();
 
+  /** \~Russian
+   * \brief Создает масив вершин.
+   * 
+   * Создание масива вершин при неинициализированном контексте вызывает UB.
+  */
   VertexArrayObject();
   VertexArrayObject(VertexArrayObject&&);
   VertexArrayObject& operator=(VertexArrayObject&&);
@@ -25,9 +38,20 @@ class VertexArrayObject {
   // TODO(apachee):
   // [ ] a way to define an array of generic vertex attribute data
 
-  void BindEbo(const ElementBufferObject&) const;
+  /** \~Russian
+   * \brief Метод для привязки к массиву вершин буфера индексов.
+   * \param[in] ebo Привязываемый буфер индексов.
+  */
+  void BindEbo(const ElementBufferObject& ebo) const;
 
+  /** \~Russian
+   * \brief Метод для активации буфера индексов.
+  */
   void Bind() const;
+  
+  /** \~Russian
+   * \brief Метод для деактивации буфера индексов.
+  */
   static void Unbind();
 
  private:

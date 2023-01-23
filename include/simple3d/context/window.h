@@ -1,6 +1,6 @@
-/**
+/** \~Russian
  * \file
- * \brief Window handling
+ * \brief Управление окном приложения.
  */
 
 #ifndef INCLUDE_SIMPLE3D_CONTEXT_WINDOW_H_
@@ -15,9 +15,15 @@
 
 namespace Simple3D {
 
+/** \~Russian
+ * \class Window
+ * \brief Окно приложения.
+ * \warning Часть внутренней структуры Simple3D::App непредназначенная для
+ * использования.
+*/
 class Window : public IInputHandler, public IWindowInputHandler {
  public:
-  friend App;
+  friend class App;
 
   Window(const Window&) = delete;
   Window& operator=(const Window&) = delete;
