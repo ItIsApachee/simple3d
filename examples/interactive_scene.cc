@@ -147,7 +147,9 @@ int main() {
   Simple3D::View view{};
   Simple3D::Scene scene{};
 
-  scene.SetAmbientLight(glm::vec3(0.5f));
+  scene.background_color = glm::vec3(1.0f);
+  scene.ambient_light = glm::vec3(0.5f);
+
   using light_t = Simple3D::DirectionalLight;
   glm::vec3 white(1.0f);
   std::cout << "white: " << white.x << white.y << white.z << std::endl;
@@ -205,6 +207,15 @@ int main() {
     Simple3D::ImGui::NewFrame();
 
     ImGui::ShowDemoWindow();
+
+    ImGui::Begin("Scene controls");
+    ImGui::PushItemWidth(150.0f);
+    ImGui::ColorPicker3("background color",
+                        glm::value_ptr(scene.background_color));
+    ImGui::ColorPicker3("ambient light",
+                        glm::value_ptr(scene.ambient_light));
+    ImGui::PopItemWidth();
+    ImGui::End();
 
     ImGui::Begin("Position");
     static_assert(std::is_same_v<decltype(camera->pos.x), float>);

@@ -57,7 +57,7 @@ int main() {
   Simple3D::View view{};
   Simple3D::Scene scene{};
 
-  scene.SetAmbientLight(glm::vec3(0.5f, 0.5f, 0.5f));
+  scene.ambient_light = glm::vec3(0.5f);
   using light_t = Simple3D::DirectionalLight;
   std::unordered_set<std::shared_ptr<light_t>> lights = {
     std::shared_ptr<light_t>(new light_t{

@@ -22,6 +22,12 @@
 
 namespace Simple3D {
 
+struct AppConfig {
+ public:
+  std::string window_title{"Application"};
+  bool window_maximized{false};
+};
+
 // TODO(apachee): implement mechanism to close the window
 /** \class Context simple3d/context/context.h
  * \brief Class representing application
@@ -31,7 +37,7 @@ class App {
   static App& GetInstance();
 
   // load everything, create window
-  static Error Init();
+  static Error Init(const AppConfig& cfg = {});
   // destroy window, unload everything
   static void Destroy();
 

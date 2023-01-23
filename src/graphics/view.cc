@@ -22,7 +22,7 @@ Error View::Draw(const Scene& scene) {
   // FIXME(apachee): bind framebuffer
   glEnable(GL_DEPTH_TEST);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  const glm::vec3& bg_color = scene.background_color_;
+  const glm::vec3& bg_color = scene.background_color;
   glClearColor(bg_color.r, bg_color.g, bg_color.b, 1.0f);
 
   auto& cam = scene.active_camera_;
@@ -30,7 +30,7 @@ Error View::Draw(const Scene& scene) {
   auto view = cam->GetView();
   auto view_pos = cam->GetViewPos();
   auto& directional_lights = scene.directional_lights_;
-  auto& ambient_light = scene.ambient_light_;
+  auto& ambient_light = scene.ambient_light;
 
   for (auto& [cell_type, cell] : scene.renderers_) {
     if (auto shader_ptr = cell.shader.lock(); shader_ptr) {

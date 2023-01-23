@@ -63,9 +63,13 @@ class Scene {
   void AddDirectionalLight(const std::shared_ptr<DirectionalLight>& dir_light);
   void RemoveDirectionalLight(
       const std::shared_ptr<DirectionalLight>& dir_light);
-  void SetAmbientLight(const glm::vec3& light);
 
-  void SetBackgroundColor(const glm::vec3& bg_color);
+  // deprecated
+  // void SetAmbientLight(const glm::vec3& light);
+  // void SetBackgroundColor(const glm::vec3& bg_color);
+
+  glm::vec3 ambient_light = glm::vec3(kDefaultAmbientLight);
+  glm::vec3 background_color = glm::vec3(0.0f);
 
  private:
   struct ShaderCell {
@@ -85,9 +89,6 @@ class Scene {
   std::shared_ptr<ICamera> active_camera_{};
 
   std::unordered_set<std::shared_ptr<DirectionalLight>> directional_lights_{};
-  glm::vec3 ambient_light_ = glm::vec3(kDefaultAmbientLight);
-
-  glm::vec3 background_color_ = glm::vec3(0.0f);
 };
 
 // implementation

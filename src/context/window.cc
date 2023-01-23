@@ -2,6 +2,7 @@
 #include <glad/gles2.h>
 #include <simple3d/context/input.h>
 #include <simple3d/context/window.h>
+#include <simple3d/context/context.h>
 #include <simple3d/misc/error.h>
 
 #include <memory>
@@ -24,19 +25,20 @@ class FramebufferSizeHandler : public IWindowInputHandler {
 //   glViewport(0, 0, width, height);
 // }
 
-Window Window::Create(Error* error) {
+Window Window::Create(const AppConfig& cfg, Error* error) {
   glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 
   glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-  glfwWindowHint(GLFW_MAXIMIZED, GLFW_TRUE);
+
+  glfwWindowHint(GLFW_MAXIMIZED, cfg.window_maximized ? GLFW_TRUE : GLFW_FALSE);
 
   // doesn't work with ANGLE for some reason
   // glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_FALSE); // disable vsync
 
   GLFWwindow* glfw_window =
-      glfwCreateWindow(800, 800, "test (FIXME)", nullptr, nullptr);
+      glfwCreateWindow(800, 800, cfg.window_title.c_str(), nullptr, nullptr);
 
   if (glfw_window == nullptr) {
     *error =

@@ -25,7 +25,7 @@ App& App::GetInstance() {
 
 // App::App() {}
 
-Error App::Init() {
+Error App::Init(const AppConfig& cfg) {
   App& ctx = GetInstance();
   if (ctx.ctx_id_ != 0) {
     return Error(ErrorType::kInitFailed, "already initialized");
@@ -39,7 +39,7 @@ Error App::Init() {
   // std::cout << "initliazed glfw successfully" << std::endl;
 
   Error err{};
-  ctx.window_ = Window::Create(&err);
+  ctx.window_ = Window::Create(cfg, &err);
   if (!err.IsOk()) {
     return err;
   }

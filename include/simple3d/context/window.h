@@ -44,7 +44,7 @@ class Window : public IInputHandler, public IWindowInputHandler {
   void WindowContentScaleCallback(float xscale, float yscale) override;
 
  private:
-  static Window Create(Error* error);
+  static Window Create(const AppConfig& cfg, Error* error);
 
   Window() = default;
   explicit Window(GLFWwindow* window);

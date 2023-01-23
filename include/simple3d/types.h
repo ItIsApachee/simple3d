@@ -10,6 +10,7 @@ namespace Simple3D {
 
 
 // context
+struct AppConfig;
 class App;
 class Window;
 class IInputHandler;
