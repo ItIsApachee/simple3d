@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.21)
 option(SIMPLE3D_BUILD_EXAMPLES "Build the Simple3D example programs" ON)
 option(SIMPLE3D_USE_VCPKG "Use vcpkg for resolving ANGLE & zlib dependency" ON)
 
+# FIXME
+message(STATUS "CMAKE_TOOLCHAIN_FILE: ${CMAKE_TOOLCHAIN_FILE}")
+
 message(STATUS "SIMPLE3D_BUILD_EXAMPLES value: ${SIMPLE3D_BUILD_EXAMPLES}")
 message(STATUS "SIMPLE3D_USE_VCPKG value: ${SIMPLE3D_USE_VCPKG}")
 
