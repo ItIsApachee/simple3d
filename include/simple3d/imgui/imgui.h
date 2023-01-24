@@ -14,6 +14,10 @@
 #include <memory>
 #include <unordered_set>
 
+/** \~Russian
+ * \namespace Simple3D::ImGui
+ * \brief Компонента для взаимодействия с Dear ImGui
+*/
 namespace Simple3D::ImGui {
 
 /** \~Russian

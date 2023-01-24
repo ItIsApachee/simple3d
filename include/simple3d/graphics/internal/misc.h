@@ -16,6 +16,10 @@
 #include <cstdint>
 #include <glad/gles2.h>
 
+/** \~Russian
+ * \namespace Simple3D::Internal
+ * \brief Внутренние части библиотеки и вспомогательные инструменты.
+*/
 namespace Simple3D::Internal {
 
 
