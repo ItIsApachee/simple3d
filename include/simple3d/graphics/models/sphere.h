@@ -102,7 +102,7 @@ struct BaseSphere {
  private:
   using geometry_t =
       std::pair<std::vector<Internal::Vertex>, std::vector<GLuint>>;
-  static const typename geometry_t& GetGeometry();
+  static const geometry_t& GetGeometry();
 };
 
 /** \~Russian
