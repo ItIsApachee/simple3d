@@ -3,7 +3,11 @@ cmake_minimum_required(VERSION 3.21)
 option(SIMPLE3D_BUILD_EXAMPLES "Build the Simple3D example programs" ON)
 option(SIMPLE3D_USE_VCPKG "Use vcpkg for resolving ANGLE & zlib dependency" ON)
 
+message(STATUS "SIMPLE3D_BUILD_EXAMPLES value: ${SIMPLE3D_BUILD_EXAMPLES}")
+message(STATUS "SIMPLE3D_USE_VCPKG value: ${SIMPLE3D_USE_VCPKG}")
+
 if (SIMPLE3D_BUILD_EXAMPLES AND SIMPLE3D_USE_VCPKG)
+  message(STATUS "simple3d is enabling vcpkg manifest mode with auto-install")
   set(VCPKG_MANIFEST_MODE ON)
   set(VCPKG_MANIFEST_INSTALL ON)
 endif()
@@ -51,8 +55,11 @@ if (SIMPLE3D_BUILD_EXAMPLES)
               CONFIGURATIONS Release RelWithDebInfo MinSizeRel)
 
   if(SIMPLE3D_USE_VCPKG)
+    message(STATUS "locating binaries of ANGLE and its dependencies...")
     file(GLOB_RECURSE VCPKG_INSTALLED_BINARIES_DEBUG ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/debug/bin/*)
     file(GLOB_RECURSE VCPKG_INSTALLED_BINARIES_RELEASE ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/bin/*)
+    message(STATUS "ANGLE debug: ${VCPKG_INSTALLED_BINARIES_DEBUG}")
+    message(STATUS "ANGLE release: ${VCPKG_INSTALLED_BINARIES_RELEASE}")
 
     install(FILES
             ${VCPKG_INSTALLED_BINARIES_DEBUG}
