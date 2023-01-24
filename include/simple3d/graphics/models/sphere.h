@@ -49,7 +49,7 @@ constexpr std::uint64_t kMaxSphereDetalization = 8;
 */
 template <std::uint64_t Detalization, bool NormalLerp>
 struct BaseSphere {
-  static_assert(Detalization <= kMaxDetalization, "Detalization exceeds kMaxSphereDetalization");
+  static_assert(Detalization <= kMaxSphereDetalization, "Detalization exceeds kMaxSphereDetalization");
  public:
   /** \~Russian
    * \brief Рендерер, используемый при вызове Scene::Create<BaseSphere>(...);
