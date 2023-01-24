@@ -6,6 +6,9 @@
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_PRIMITIVE_RENDERER_H_
 
 #include <glad/gles2.h>
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <simple3d/graphics/internal/element_buffer_object.h>
 #include <simple3d/graphics/internal/vertex.h>
 #include <simple3d/graphics/internal/vertex_array_object.h>
