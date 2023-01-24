@@ -181,7 +181,7 @@ std::shared_ptr<IRenderer>& Scene::GetIRendererShared() {
 
   auto renderers_it = renderers_.find(shader_type);
   if (renderers_it == renderers_.end()) {
-    auto& cell =
+    auto cell =
         ShaderCell{ShaderStorage::GetInstance().GetShader<Shader>(), {}};
     renderers_it = renderers_.emplace(shader_type, std::move(cell)).first;
   }
