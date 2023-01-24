@@ -18,7 +18,9 @@
 #include <unordered_map>
 #include <unordered_set>
 
-class FocusFpsCam : public Simple3D::IInputHandler {
+class FocusFpsCam
+    : public Simple3D::IInputHandler,
+      public Simple3D::IWindowInputHandler {
  public:
   explicit FocusFpsCam(
       const std::shared_ptr<Simple3D::FpsCameraInputHandler>& v_,
@@ -29,6 +31,14 @@ class FocusFpsCam : public Simple3D::IInputHandler {
     if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
       if (fps_cam_handler && !fps_cam_handler->IsEnabled()) {
         fps_cam_handler->Enable(cam);
+      }
+    }
+  }
+
+  void WindowFocusCallback(int focused) override {
+    if (focused == GLFW_FALSE) {
+      if (fps_cam_handler && fps_cam_handler->IsEnabled()) {
+        fps_cam_handler->Disable();
       }
     }
   }
@@ -190,8 +200,11 @@ int main() {
   imgui_handler->EnableWindowInputHandler(cam_handler);
   cam_handler->Enable(camera);
 
-  imgui_handler->EnableInputHandler(
-      std::make_shared<FocusFpsCam>(cam_handler, camera));
+  {
+    auto focus_fps_cam = std::make_shared<FocusFpsCam>(cam_handler, camera);
+    imgui_handler->EnableInputHandler(focus_fps_cam);
+    imgui_handler->EnableWindowInputHandler(focus_fps_cam);
+  }
 
   InteractivePrimitives<Simple3D::Cuboid> interactive_cubes(&scene, camera);
   InteractivePrimitives<Simple3D::Sphere> interactive_spheres(&scene, camera);
