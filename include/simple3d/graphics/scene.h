@@ -168,7 +168,7 @@ class Scene {
 // implementation
 template <typename R>
 std::shared_ptr<IRenderer>& Scene::GetIRendererShared() {
-  using Shader = R::Shader;
+  using Shader = typename R::Shader;
 
   std::type_index shader_type = typeid(Shader);
   std::type_index renderer_type = typeid(R);

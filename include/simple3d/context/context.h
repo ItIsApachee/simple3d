@@ -123,7 +123,7 @@ class App {
    * \brief Метод для получения окна GLFW.
    * \return Окно GLFW.
   */
-  static GLFWwindow* App::GetGLFWwindow();
+  static GLFWwindow* GetGLFWwindow();
 
   /** \~Russian
    * \brief Метод для получения уникального идентификатора контекста.
@@ -145,8 +145,6 @@ class App {
 
  private:
   App() = default;
-
-  bool test() {}
 
   // bool is_init{false};
   std::int64_t ctx_id_{0};
