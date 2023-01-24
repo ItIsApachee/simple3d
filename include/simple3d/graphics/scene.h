@@ -85,11 +85,14 @@ class Scene {
    * (например, Simple3D::Cuboid), используя другие рендереры.
   */
   template <typename M, typename... Args>
-  auto Create(Args&&... args) -> std::enable_if_t<
-      std::is_same_v<decltype(std::declval<typename M::Renderer>().Create(
-                         std::forward<Args>(args)...)),
-                     M*>,
-      ModelHandle<M>>;
+  ModelHandle<M> Create(Args&&... args);
+
+  // deprecated
+  // auto Create(Args&&... args) -> std::enable_if_t<
+  //     std::is_same_v<decltype(std::declval<typename M::Renderer>().Create(
+  //                        std::forward<Args>(args)...)),
+  //                    M*>,
+  //     ModelHandle<M>>;
 
   /** \~Russian
    * \brief Создание объекта типа M с помощью args и рендерера R.
@@ -113,10 +116,13 @@ class Scene {
    * рендерера для некоторого примитива.
   */
   template <typename M, typename R, typename... Args>
-  auto Create(Args&&... args) -> std::enable_if_t<
-      std::is_same_v<
-          decltype(std::declval<R>().Create(std::forward<Args>(args)...)), M*>,
-      ModelHandle<M>>;
+  ModelHandle<M> Create(Args&&... args);
+
+  // deprecated
+  // auto Create(Args&&... args) -> std::enable_if_t<
+  //     std::is_same_v<
+  //         decltype(std::declval<R>().Create(std::forward<Args>(args)...)), M*>,
+  //     ModelHandle<M>>;
 
   /** \~Russian
    * \brief Функция для добавления источника направленного света.
@@ -196,19 +202,27 @@ R& Scene::GetRendererRef() {
 }
 
 template <typename M, typename... Args>
-auto Scene::Create(Args&&... args) -> std::enable_if_t<
-    std::is_same_v<decltype(std::declval<typename M::Renderer>().Create(
-                       std::forward<Args>(args)...)),
-                   M*>,
-    ModelHandle<M>> {
+ModelHandle<M> Scene::Create(Args&&... args) {
+
+// deprecated
+// auto Scene::Create(Args&&... args) -> std::enable_if_t<
+//     std::is_same_v<decltype(std::declval<typename M::Renderer>().Create(
+//                        std::forward<Args>(args)...)),
+//                    M*>,
+//     ModelHandle<M>> {
+
   return Scene::Create<M, typename M::Renderer>(args...);
 }
 
 template <typename M, typename R, typename... Args>
-auto Scene::Create(Args&&... args) -> std::enable_if_t<
-    std::is_same_v<
-        decltype(std::declval<R>().Create(std::forward<Args>(args)...)), M*>,
-    ModelHandle<M>> {
+ModelHandle<M> Scene::Create(Args&&... args) {
+
+//deprecated
+// auto Scene::Create(Args&&... args) -> std::enable_if_t<
+//     std::is_same_v<
+//         decltype(std::declval<R>().Create(std::forward<Args>(args)...)), M*>,
+//     ModelHandle<M>> {
+
   using Renderer = R;
   // auto& renderer = GetRendererRef<R>();
   auto renderer = GetIRendererShared<R>();
