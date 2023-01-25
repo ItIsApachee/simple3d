@@ -25,7 +25,7 @@ void Scene::SetCamera(std::shared_ptr<ICamera> camera) {
   }
 }
 
-Scene::Scene(Scene&&other)
+Scene::Scene(Scene&& other)
     : ambient_light{other.ambient_light},
       background_color{other.background_color},
       renderers_{std::move(other.renderers_)},
@@ -33,9 +33,8 @@ Scene::Scene(Scene&&other)
       directional_lights_{std::move(other.directional_lights_)} {}
 
 Scene& Scene::operator=(Scene&& other) {
-  if (&other == this)
-    return *this;
-  
+  if (&other == this) return *this;
+
   ambient_light = other.ambient_light;
   background_color = other.background_color;
   renderers_ = std::move(other.renderers_);

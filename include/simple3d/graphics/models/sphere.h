@@ -1,7 +1,7 @@
 /** \~Russian
  * \file
  * \brief Примитив сфера.
-*/
+ */
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODELS_SPHERE_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODELS_SPHERE_H_
 
@@ -18,7 +18,7 @@ namespace Internal {
 
 /** \~Russian
  * \brief Функция для генерации геометрии сферы.
-*/
+ */
 std::pair<std::vector<Internal::Vertex>, std::vector<GLuint>> GenSphereGeometry(
     std::uint64_t detalization, bool normal_lerp);
 
@@ -28,10 +28,10 @@ std::pair<std::vector<Internal::Vertex>, std::vector<GLuint>> GenSphereGeometry(
  * \brief Максимальное значение параметра Detalization шаблонного класса
  * template <std::uint64_t Detalization, bool NormalLerp>
  * struct BaseSphere;
- * 
+ *
  * Данное ограничение вызвано тем, что количество вершин
  * сферы растет экспоненциально от Detalization.
-*/
+ */
 constexpr std::uint64_t kMaxSphereDetalization = 8;
 
 /** \~Russian
@@ -41,29 +41,33 @@ constexpr std::uint64_t kMaxSphereDetalization = 8;
  * \tparam NormalLerp Параметр, условно включающий линейную интерполяцию
  * нормалей с последующей нормализацией для создания эффекта "гладкости"
  * сферы.
- * 
+ *
  * Для приближения сферы используется икосаэдр, над которым
  * Detalization раз выполняют преобразование каждой грани (треугольника) в 4
  * новых так, чтобы вершины оставались на поверхности сферы.
  * Подробнее: https://en.wikipedia.org/wiki/Geodesic_polyhedron
-*/
+ */
 template <std::uint64_t Detalization, bool NormalLerp>
 struct BaseSphere {
-  static_assert(Detalization <= kMaxSphereDetalization, "Detalization exceeds kMaxSphereDetalization");
+  static_assert(Detalization <= kMaxSphereDetalization,
+                "Detalization exceeds kMaxSphereDetalization");
+
  public:
   /** \~Russian
    * \brief Рендерер, используемый при вызове Scene::Create<BaseSphere>(...);
-  */
+   */
   using Renderer = PrimitiveRenderer<BaseSphere>;
 
   /** \~Russian
-   * \brief Реализация требований на шаблонный параметр P типа PrimitiveRenderer.
-  */
+   * \brief Реализация требований на шаблонный параметр P типа
+   * PrimitiveRenderer.
+   */
   static const std::vector<Internal::Vertex>& GetVertices();
 
   /** \~Russian
-   * \brief Реализация требований на шаблонный параметр P типа PrimitiveRenderer.
-  */
+   * \brief Реализация требований на шаблонный параметр P типа
+   * PrimitiveRenderer.
+   */
   static const std::vector<GLuint>& GetIndices();
 
   BaseSphere(const glm::vec3& pos = glm::vec3(0.0f),
@@ -75,28 +79,29 @@ struct BaseSphere {
   ~BaseSphere() = default;
 
   /** \~Russian
-   * \brief Реализация требований на шаблонный параметр P типа PrimitiveRenderer.
-  */
+   * \brief Реализация требований на шаблонный параметр P типа
+   * PrimitiveRenderer.
+   */
   explicit operator Internal::PrimitiveInstance() const;
 
   /** \~Russian
    * \brief Позиция сферы.
-  */
+   */
   glm::vec3 pos = glm::vec3(0.0f);
 
   /** \~Russian
    * \brief Цвет используемый для расчета фонового и рассеянного освещения.
-  */
+   */
   glm::vec3 diffuse_color = glm::vec3(1.0f);
 
   /** \~Russian
    * \brief Цвет используемый для расчета освещения глянцевых бликов.
-  */
+   */
   glm::vec3 specular_color = glm::vec3(1.0f);
 
   /** \~Russian
    * \brief Блеск используемый для расчета освещения глянцевых бликов.
-  */
+   */
   GLfloat shininess{16.0f};
 
  private:
@@ -107,9 +112,9 @@ struct BaseSphere {
 
 /** \~Russian
  * \brief Псевдоним типа BaseSphere с параметрами,
- * совмещающими высокую производительность и 
+ * совмещающими высокую производительность и
  * хорошее качество изображения.
-*/
+ */
 using Sphere = BaseSphere<2, true>;
 
 // implementation

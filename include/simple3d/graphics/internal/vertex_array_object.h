@@ -1,14 +1,14 @@
 /** \~Russian
  * \file
  * \brief Класс Simple3D::Internal::VertexArrayObject.
-*/
+ */
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_VERTEX_ARRAY_OBJECT_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_VERTEX_ARRAY_OBJECT_H_
 
 #include <glad/gles2.h>
+#include <simple3d/context/context.h>
 #include <simple3d/graphics/internal/misc.h>
 #include <simple3d/types.h>
-#include <simple3d/context/context.h>
 
 #include <cstdint>
 
@@ -17,7 +17,7 @@ namespace Simple3D::Internal {
 /** \~Russian
  * \class VertexArrayObject.
  * \brief Обертка над масивом вершин OpenGL ES 3.1.
-*/
+ */
 class VertexArrayObject {
  public:
   friend class ElementBufferObjectBuilder;
@@ -25,9 +25,9 @@ class VertexArrayObject {
 
   /** \~Russian
    * \brief Создает масив вершин.
-   * 
+   *
    * Создание масива вершин при неинициализированном контексте вызывает UB.
-  */
+   */
   VertexArrayObject();
   VertexArrayObject(VertexArrayObject&&);
   VertexArrayObject& operator=(VertexArrayObject&&);
@@ -41,17 +41,17 @@ class VertexArrayObject {
   /** \~Russian
    * \brief Метод для привязки к массиву вершин буфера индексов.
    * \param[in] ebo Привязываемый буфер индексов.
-  */
+   */
   void BindEbo(const ElementBufferObject& ebo) const;
 
   /** \~Russian
    * \brief Метод для активации буфера индексов.
-  */
+   */
   void Bind() const;
-  
+
   /** \~Russian
    * \brief Метод для деактивации буфера индексов.
-  */
+   */
   static void Unbind();
 
  private:

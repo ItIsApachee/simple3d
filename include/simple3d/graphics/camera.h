@@ -17,12 +17,12 @@ namespace Simple3D {
 /** \~Russian
  * \class ICamera
  * \brief Интерфейс камеры.
- * 
+ *
  * Интерфейс используются для описания сущности, которая используется для
  * наблюдения сцены. Данный интерфейс отвечает за предоставление view и
  * projection матриц модели MVP (model-view-projection), а также позиции
  * наблюдателя.
-*/
+ */
 class ICamera {
  public:
   ICamera() = default;
@@ -31,19 +31,19 @@ class ICamera {
   /** \~Russian
    * \brief Метод для получения view матрицы MVP модели.
    * \return Матрица view.
-  */
+   */
   virtual glm::mat4 GetView();
 
   /** \~Russian
    * \brief Метод для получения projection матрицы MVP модели.
    * \return Матрица projectioon
-  */
+   */
   virtual glm::mat4 GetProj();
 
   /** \~Russian
    * \brief Метод для получения позиции наблюдателя.
    * \return Радиус-вектор позиции наблюдателя.
-  */
+   */
   virtual glm::vec3 GetViewPos();
 };
 
@@ -58,38 +58,38 @@ class Camera : public ICamera {
 
   /** \~Russian
    * \brief Радиус-вектор позиции наблюдателя.
-  */
+   */
   glm::vec3 pos{0.0f};
 
   /** \~Russian
    * \brief Крен камеры.
-   * 
+   *
    * Подробнее: https://clck.ru/32fMLv
-  */
+   */
   GLfloat roll{0.0f};
-  
+
   /** \~Russian
    * \brief Тангаж камеры.
-   * 
+   *
    * Подробнее: https://clck.ru/32fMLv
-  */
+   */
   GLfloat pitch{0.0f};
 
   /** \~Russian
    * \brief Рыскание камеры.
-   * 
+   *
    * Подробнее: https://clck.ru/32fMLv
-  */
+   */
   GLfloat yaw{0.0f};
 
   /** \~Russian
    * \brief Угол обзора наблюдателя (field of view).
-  */
+   */
   GLfloat fov{45.0f};
 
   /** \~Russian
    * \brief Соотношение ширины к высоте.
-  */
+   */
   GLfloat aspect_ratio{16.0f / 9.0f};
 
   glm::mat4 GetView() override;

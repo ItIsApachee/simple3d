@@ -1,7 +1,7 @@
 /** \~Russian
  * \file
  * \brief Класс Simple3D::Internal::ElementBufferObject.
-*/
+ */
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_ELEMENT_BUFFER_OBJECT_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_ELEMENT_BUFFER_OBJECT_H_
 
@@ -17,7 +17,7 @@ namespace Simple3D::Internal {
 /** \~Russian
  * \class ElementBufferObjectBuilder
  * \brief Класс-builder для ElementBufferObject.
- * 
+ *
  * Пример использования:
  * \code{.cpp}
  * // indices_size_in_bytes - размер массива индексов в байт
@@ -28,8 +28,8 @@ namespace Simple3D::Internal {
  *                      indices_data)
  *                .Build(vao);
  * \endcode
- *  
-*/
+ *
+ */
 class ElementBufferObjectBuilder {
  public:
   ElementBufferObjectBuilder() = default;
@@ -45,23 +45,23 @@ class ElementBufferObjectBuilder {
    * \param[in] size Размер массива индексов в байт.
    * \param[in] data Указатель на данные массива индексов.
    * \return Возвращает *this для поддержки цепочки вызовов.
-  */
+   */
   ElementBufferObjectBuilder& Data(std::size_t size,
                                    const std::byte* data = nullptr);
-                              
+
   /** \~Russian
    * \brief Метод для установки типа использования буфера.
    * \param[in] usage Тип использования буфера согласно спецификации OpenGL ES
    * 3.1.
    * \return Возвращает *this для поддержки цепочки вызовов.
-  */
+   */
   ElementBufferObjectBuilder& Usage(GLenum usage);
 
   /** \~Russian
    * \brief Метод для создания буфера с использованием vao.
    * \param[in] vao Vertex array object используемый для создания.
    * \return Возращает ElementBufferObject по параметрам заданным ранее.
-  */
+   */
   ElementBufferObject Build(const VertexArrayObject& vao);
 
  private:
@@ -73,7 +73,7 @@ class ElementBufferObjectBuilder {
 /** \~Russian
  * \class ElementBufferObject
  * \brief Обертка над буфером индексов.
-*/
+ */
 class ElementBufferObject {
  public:
   friend ElementBufferObjectBuilder;
@@ -81,10 +81,10 @@ class ElementBufferObject {
   /** \~Russian
    * \brief Создает пустой буфер индексов, использование которого может
    * привести к UB.
-   * 
+   *
    * Для создания валидного буфера индексов следует использовать
    * ElementBufferObjectBuilder.
-  */
+   */
   ElementBufferObject() = default;
   ElementBufferObject(ElementBufferObject&&);
   ElementBufferObject& operator=(ElementBufferObject&&);
@@ -94,13 +94,13 @@ class ElementBufferObject {
 
   /** \~Russian
    * \brief Метод для получения идентификатора буфера индексов.
-  */
+   */
   GLuint ebo() const;
 
   /** \~Russian
    * \brief Метод для получения идентификатора типа использования буфера
    * согласно спецификации OpenGL ES 3.1.
-  */
+   */
   GLenum usage() const;
 
  private:
