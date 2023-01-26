@@ -5,9 +5,10 @@
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_MODEL_HANDLE_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_MODEL_HANDLE_H_
 
+#include <simple3d/types.h>
 #include <simple3d/graphics/renderer.h>
 #include <simple3d/graphics/scene.h>
-#include <simple3d/types.h>
+#include <simple3d/graphics/renderer.h>
 
 #include <cstdint>
 #include <memory>
