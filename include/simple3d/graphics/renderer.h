@@ -5,7 +5,6 @@
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_RENDERER_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_RENDERER_H_
 
-#include <simple3d/graphics/scene.h>
 #include <simple3d/graphics/shader.h>
 #include <simple3d/types.h>
 
