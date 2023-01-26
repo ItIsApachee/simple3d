@@ -17,9 +17,9 @@ TexturedModelShader::TexturedModelShader() {
                 .VertexShaderSource(Internal::kTexturedVertexShader)
                 .Build(&err);
 
-  // FIXME
-  std::cerr << "is_ok: " << err.IsOk() << ", desc: " << err.description
-            << std::endl;
+  //// FIXME
+  //std::cerr << "is_ok: " << err.IsOk() << ", desc: " << err.description
+  //          << std::endl;
   assert(err.IsOk());
 }
 

@@ -43,7 +43,7 @@ struct AppConfig {
    * \brief Логический флаг, отвечающий за то, будет ли созданное окно
    * максимизированным.
   */
-  bool window_maximized{false};
+  bool window_maximized{true};
 };
 
 /** \~Russian

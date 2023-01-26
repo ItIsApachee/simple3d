@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.16)
 
 option(SIMPLE3D_BUILD_EXAMPLES "Build the Simple3D example programs" ON)
 option(SIMPLE3D_USE_VCPKG "Use vcpkg for resolving ANGLE & zlib dependency" ON)
@@ -56,6 +56,10 @@ if (SIMPLE3D_BUILD_EXAMPLES)
           RUNTIME
               DESTINATION bin/
               CONFIGURATIONS Release RelWithDebInfo MinSizeRel)
+  install(FILES
+          ${simple3d_SOURCE_DIR}/examples/imgui.ini
+          TYPE BIN
+          CONFIGURATIONS Debug Release RelWithDebInfo MinSizeRel)
 
   if(SIMPLE3D_USE_VCPKG)
     message(STATUS "locating binaries of ANGLE and its dependencies...")

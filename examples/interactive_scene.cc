@@ -12,6 +12,7 @@
 #include <chrono>
 #include <cmath>
 #include <cstdint>
+#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <memory>
@@ -189,6 +190,9 @@ int main() {
   }
 
   auto camera = std::make_shared<Simple3D::Camera>();
+  camera->pos = {-20.0f, 80.0f, -20.0f};
+  camera->pitch = glm::radians(60.0f);
+  camera->yaw = glm::radians(135.0f);
   scene.SetCamera(camera);
 
   Simple3D::FpsCameraConfig default_cfg{};
@@ -208,6 +212,24 @@ int main() {
 
   InteractivePrimitives<Simple3D::Cuboid> interactive_cubes(&scene, camera);
   InteractivePrimitives<Simple3D::Sphere> interactive_spheres(&scene, camera);
+  std::vector<Simple3D::ModelHandle<Simple3D::Cuboid>> demo_cubes;
+  {
+    auto cnt = 10;
+    for (int i = 0; i <= cnt; i++) {
+      float red = static_cast<float>(i) / cnt;
+      for (int j = 0; j <= cnt; j++) {
+        float green = static_cast<float>(j) / cnt;
+        for (int k = 0; k <= cnt; k++) {
+          float blue = static_cast<float>(k) / cnt;
+
+          glm::vec3 pos(i * 2, j * 2, k * 2);
+          glm::vec3 color(red, green, blue);
+          auto cube = scene.Create<Simple3D::Cuboid>(pos, 0.8f * color, 0.5f * color);
+          demo_cubes.emplace_back(std::move(cube));
+        }
+      }
+    }
+  }
 
   auto prev = std::chrono::high_resolution_clock::now();
   while (!Simple3D::App::ShouldClose()) {
