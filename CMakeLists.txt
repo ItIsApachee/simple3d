@@ -47,7 +47,7 @@ add_subdirectory(examples)
 if (SIMPLE3D_BUILD_EXAMPLES)
   # TODO: add targets for ANGLE, and try using install(EXPORT)
   install(TARGETS
-              simple3d-interactive-scene simple3d-interactive-model
+              simple3d-interactive-scene #simple3d-interactive-model
           RUNTIME
               DESTINATION bin/
               CONFIGURATIONS Debug)
