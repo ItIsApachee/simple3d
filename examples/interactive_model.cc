@@ -143,21 +143,21 @@ int main() {
 
     Simple3D::ImGui::NewFrame();
 
-    ImGui::Begin("Scene controls");
-    ImGui::PushItemWidth(150.0f);
-    ImGui::ColorPicker3("background color",
-                        glm::value_ptr(scene.background_color));
-    ImGui::ColorPicker3("ambient light",
-                        glm::value_ptr(scene.ambient_light));
-    ImGui::PopItemWidth();
-    ImGui::End();
+    //ImGui::Begin("Scene controls");
+    //ImGui::PushItemWidth(150.0f);
+    //ImGui::ColorPicker3("background color",
+    //                    glm::value_ptr(scene.background_color));
+    //ImGui::ColorPicker3("ambient light",
+    //                    glm::value_ptr(scene.ambient_light));
+    //ImGui::PopItemWidth();
+    //ImGui::End();
 
-    ImGui::Begin("Position");
-    static_assert(std::is_same_v<decltype(camera->pos.x), float>);
-    ImGui::InputFloat("x", &camera->pos.x);
-    ImGui::InputFloat("y", &camera->pos.y);
-    ImGui::InputFloat("z", &camera->pos.z);
-    ImGui::End();
+    //ImGui::Begin("Position");
+    //static_assert(std::is_same_v<decltype(camera->pos.x), float>);
+    //ImGui::InputFloat("x", &camera->pos.x);
+    //ImGui::InputFloat("y", &camera->pos.y);
+    //ImGui::InputFloat("z", &camera->pos.z);
+    //ImGui::End();
 
     ImGui::Begin("Camera controls");
     auto& cfg = cam_handler->cfg;

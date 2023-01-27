@@ -99,7 +99,7 @@ if(SIMPLE3D_BUILD_DOCS)
 
   # Doxygen configuration
   set(SIMPLE3D_DOCS_OUTPUT_LANGUAGE "Russian" CACHE STRING "Documentation language")
-  set(SIMPLE3D_DOXYGEN_INPUT "${CMAKE_SOURCE_DIR}/include/simple3d/")
+  set(SIMPLE3D_DOXYGEN_INPUT "${simple3d_SOURCE_DIR}/include/simple3d/")
 
   # set(SIMPLE3D_BUILD_INTERNAL_DOCS ON CACHE BOOL "specify whether you need documentation of private API")
   # if (${SIMPLE3D_BUILD_INTERNAL_DOCS})
@@ -111,13 +111,13 @@ if(SIMPLE3D_BUILD_DOCS)
 
   configure_file(
       Doxyfile.in
-      ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+      ${simple3d_BINARY_DIR}/Doxyfile
   )
   add_custom_target(
       simple3d-docs
       ${DOXYGEN_EXECUTABLE}
-      ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+      ${simple3d_BINARY_DIR}/Doxyfile
+      # WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
       COMMENT "Target to generate docs" VERBATIM)
   set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS Doxyfile.in)
 endif()
