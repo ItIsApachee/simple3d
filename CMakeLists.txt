@@ -36,6 +36,16 @@ set(ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
 set(ASSIMP_BUILD_ASSIMP_VIEW OFF CACHE BOOL "" FORCE)
 CPMAddPackage("gh:assimp/assimp@5.2.5")
 
+# resource setup
+if (SIMPLE3D_BUILD_EXAMPLES)
+  CPMAddPackage(
+    NAME simple3d_resources
+    VERSION 0.1
+    URL https://github.com/ItIsApachee/simple3d/releases/download/v0.1/resources.zip
+    DOWNLOAD_ONLY
+  )
+endif()
+
 # find_package(ZLIB REQUIRED)
 # find_package(unofficial-angle CONFIG REQUIRED)
 
@@ -47,7 +57,7 @@ add_subdirectory(examples)
 if (SIMPLE3D_BUILD_EXAMPLES)
   # TODO: add targets for ANGLE, and try using install(EXPORT)
   install(TARGETS
-              simple3d-interactive-scene #simple3d-interactive-model
+              simple3d-interactive-scene simple3d-interactive-model
           RUNTIME
               DESTINATION bin/
               CONFIGURATIONS Debug)
@@ -60,6 +70,10 @@ if (SIMPLE3D_BUILD_EXAMPLES)
           ${simple3d_SOURCE_DIR}/examples/imgui.ini
           TYPE BIN
           CONFIGURATIONS Debug Release RelWithDebInfo MinSizeRel)
+
+  # add resources
+  install(DIRECTORY ${simple3d_resources_SOURCE_DIR}/Minecraft_Grass_Block_OBJ
+          TYPE BIN)
 
   if(SIMPLE3D_USE_VCPKG)
     message(STATUS "locating binaries of ANGLE and its dependencies...")

@@ -1,22 +1,23 @@
-#include <iostream>
-#include <memory>
-#include <cmath>
-#include <unordered_set>
-#include <chrono>
-
 #include <glad/gles2.h>
-
 #include <imgui.h>
-
-#include <simple3d/simple3d.h>
 #include <simple3d/context/input.h>
-#include <simple3d/graphics/model_handle.h>
-#include <simple3d/graphics/models/model.h>
 #include <simple3d/graphics/camera.h>
 #include <simple3d/graphics/light.h>
-#include <simple3d/graphics/models/cuboid.h>
-#include <simple3d/utils/fps_camera.h>
+#include <simple3d/graphics/model_handle.h>
+#include <simple3d/graphics/models/model.h>
 #include <simple3d/imgui/imgui.h>
+#include <simple3d/simple3d.h>
+#include <simple3d/utils/fps_camera.h>
+
+#include <chrono>
+#include <cmath>
+#include <cstdint>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <iostream>
+#include <memory>
+#include <unordered_map>
+#include <unordered_set>
 
 class FocusFpsCam
     : public Simple3D::IInputHandler,
@@ -49,9 +50,10 @@ class FocusFpsCam
 };
 
 int main() {
-	auto app_init_error = Simple3D::App::Init();
+  auto app_init_error = Simple3D::App::Init();
   if (!app_init_error.IsOk()) {
-    std::cerr << "initialization failed: " << app_init_error.description << std::endl;
+    std::cerr << "initialization failed: " << app_init_error.description
+              << std::endl;
     return -1;
   }
 
@@ -62,44 +64,45 @@ int main() {
   Simple3D::App::EnableWindowInputHandler(imgui_handler);
   imgui_handler->ToggleInputs(false);
 
-
   std::cout << "init succ" << std::endl;
-  
+
   Simple3D::View view{};
   Simple3D::Scene scene{};
 
+  scene.background_color = glm::vec3(1.0f);
   scene.ambient_light = glm::vec3(0.5f);
+
   using light_t = Simple3D::DirectionalLight;
-  std::unordered_set<std::shared_ptr<light_t>> lights = {
-    std::shared_ptr<light_t>(new light_t{
-      glm::normalize(glm::vec3(1.0f, -1.0f, 0.0f)),
-      glm::vec3(1.0f, 0.0f, 0.0f) * 0.3f,
-      glm::vec3(1.0f, 0.0f, 0.0f) * 0.2f}),
-    std::shared_ptr<light_t>(new light_t{
-      glm::normalize(glm::vec3(0.0f, -1.0f, 1.0f)),
-      glm::vec3(0.0f, 1.0f, 0.0f) * 0.3f,
-      glm::vec3(0.0f, 1.0f, 0.0f) * 0.2f}),
-    std::shared_ptr<light_t>(new light_t{
-      glm::normalize(glm::vec3(-1.0f, -1.0f, 0.0f)),
-      glm::vec3(0.0f, 0.0f, 1.0f) * 0.3f,
-      glm::vec3(0.0f, 0.0f, 1.0f) * 0.2f}),
-    std::shared_ptr<light_t>(new light_t{
-      glm::normalize(glm::vec3(0.0f, -1.0f, -1.0f)),
-      glm::vec3(1.0f, 0.3f, 0.4f) * 0.3f,
-      glm::vec3(1.0f, 0.3f, 0.4f) * 0.2f}),
-  };
-  for (auto &light : lights)
+  glm::vec3 white(1.0f);
+  std::cout << "white: " << white.x << white.y << white.z << std::endl;
+
+  std::unordered_set<std::shared_ptr<light_t>> lights;
+  {
+    std::vector<std::pair<glm::vec3, glm::vec3>> light_cfg = {
+        {glm::vec3(0.0f, -1.0f, 0.0f), white * 0.9f},
+        {glm::vec3(1.0f, 0.0f, 0.0f), white * 0.8f},
+        {glm::vec3(0.0f, 0.0f, 1.0f), white * 0.7f},
+        {glm::vec3(-1.0f, 0.0f, 0.0f), white * 0.55f},
+        {glm::vec3(0.0f, 0.0f, -1.0f), white * 0.4f}};
+    for (const auto& [dir, base_color] : light_cfg) {
+      lights.emplace(new light_t{dir, base_color * 0.5f, base_color * 0.3f});
+    }
+  }
+  for (const auto& light : lights) {
     scene.AddDirectionalLight(light);
+  }
 
   auto camera = std::make_shared<Simple3D::Camera>();
+  camera->pos = {-5.0f, 10.0f, -5.0f};
+  camera->pitch = glm::radians(45.0f);
+  camera->yaw = glm::radians(135.0f);
   scene.SetCamera(camera);
 
   Simple3D::FpsCameraConfig default_cfg{};
   default_cfg.raw_motion_enabled = true;
   default_cfg.escape_key = GLFW_KEY_ESCAPE;
-  auto cam_handler = std::make_shared<Simple3D::FpsCameraInputHandler>(default_cfg);
-  // Simple3D::App::EnableInputHandler(cam_handler);
-  // Simple3D::App::EnableWindowInputHandler(cam_handler);
+  auto cam_handler =
+      std::make_shared<Simple3D::FpsCameraInputHandler>(default_cfg);
   imgui_handler->EnableInputHandler(cam_handler);
   imgui_handler->EnableWindowInputHandler(cam_handler);
   cam_handler->Enable(camera);
@@ -110,11 +113,11 @@ int main() {
     imgui_handler->EnableWindowInputHandler(focus_fps_cam);
   }
 
-  auto model = Simple3D::Model::Load(".\\Minecraft_Grass_Block_OBJ"
-      "\\Grass_Block.obj");
-  
-  // Simple3D::ModelRenderer();
-  auto minecraft_cube = scene.Create<Simple3D::ModelInstance, Simple3D::ModelRenderer>(model, glm::vec3(1.0f));
+  auto minecraft_cube_model =
+      Simple3D::Model::Load("Minecraft_Grass_Block_OBJ/Grass_Block.obj");
+
+  auto minecraft_cube =
+      scene.Create<Simple3D::ModelInstance>(minecraft_cube_model);
 
   auto prev = std::chrono::high_resolution_clock::now();
   while (!Simple3D::App::ShouldClose()) {
@@ -122,11 +125,12 @@ int main() {
 
     auto now = std::chrono::high_resolution_clock::now();
 
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - prev);
+    auto elapsed =
+        std::chrono::duration_cast<std::chrono::milliseconds>(now - prev);
     prev = now;
 
     if (cam_handler->Update(elapsed)) {
-        imgui_handler->ToggleInputs(true);
+      imgui_handler->ToggleInputs(true);
     }
 
     view.Draw(scene);
@@ -134,6 +138,15 @@ int main() {
     Simple3D::ImGui::NewFrame();
 
     ImGui::ShowDemoWindow();
+
+    ImGui::Begin("Scene controls");
+    ImGui::PushItemWidth(150.0f);
+    ImGui::ColorPicker3("background color",
+                        glm::value_ptr(scene.background_color));
+    ImGui::ColorPicker3("ambient light",
+                        glm::value_ptr(scene.ambient_light));
+    ImGui::PopItemWidth();
+    ImGui::End();
 
     ImGui::Begin("Position");
     static_assert(std::is_same_v<decltype(camera->pos.x), float>);
@@ -149,8 +162,7 @@ int main() {
     if (ImGui::RadioButton("Raw inputs", cfg.raw_motion_enabled)) {
       cfg.raw_motion_enabled = !cfg.raw_motion_enabled;
     }
-    if (ImGui::Button("Reset to default"))
-      cfg = default_cfg;
+    if (ImGui::Button("Reset to default")) cfg = default_cfg;
     ImGui::End();
 
     Simple3D::ImGui::Render();
