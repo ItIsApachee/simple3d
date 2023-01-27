@@ -249,8 +249,6 @@ int main() {
 
     Simple3D::ImGui::NewFrame();
 
-    ImGui::ShowDemoWindow();
-
     ImGui::Begin("Scene controls");
     ImGui::PushItemWidth(150.0f);
     ImGui::ColorPicker3("background color",

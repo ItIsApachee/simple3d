@@ -119,7 +119,8 @@ int main() {
   auto minecraft_cube =
       scene.Create<Simple3D::ModelInstance>(minecraft_cube_model);
 
-  auto prev = std::chrono::high_resolution_clock::now();
+  auto start = std::chrono::high_resolution_clock::now();
+  auto prev = start;
   while (!Simple3D::App::ShouldClose()) {
     Simple3D::App::PollEvents();
 
@@ -133,11 +134,14 @@ int main() {
       imgui_handler->ToggleInputs(true);
     }
 
+    float amplitude = 2.0f;
+    auto elapsed_from_start =
+        std::chrono::duration_cast<std::chrono::milliseconds>(now - start).count();
+    minecraft_cube->pos.y = 2.0f * glm::sin(static_cast<float>(elapsed_from_start) / 1000.0f);
+
     view.Draw(scene);
 
     Simple3D::ImGui::NewFrame();
-
-    ImGui::ShowDemoWindow();
 
     ImGui::Begin("Scene controls");
     ImGui::PushItemWidth(150.0f);
