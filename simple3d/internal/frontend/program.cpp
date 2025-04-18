@@ -1,6 +1,9 @@
-#include <simple3d/internal/frontend/graphics/webgl2/webgl.h>
+#include <simple3d/internal/frontend/graphics/renderer.h>
+#include <simple3d/internal/frontend/library/webgl2/webgl.h>
 
 #include <simple3d/core/assert.h>
+#include <simple3d/core/static_initializer.h>
+
 
 #include <emscripten.h>
 #include <emscripten/html5.h>
@@ -9,41 +12,32 @@
 
 #include <GLES3/gl3.h>
 
+#include <exception>
 #include <iostream>
 #include <format>
 #include <cassert>
 
+#ifndef __EMSCRIPTEN_PTHREADS__
+#error Support for pthread must be enabled
+#endif
 
-void main_loop()
+using namespace NApachee::NSimple3D;
+
+void TerminateHandler()
 {
-    static int i = 0;
-    i++;
-
-    glEnable(GL_DEPTH_TEST);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    GLfloat v = (sin(i / 15.0f) + 1) / 2.0f;
-    std::cerr << "v: " << v << std::endl;
-    glClearColor(v, v, v, 1.0f);
-
-    glFlush();
+    NWebGL2::Terminate();
+    std::abort();
 }
+
+S3D_STATIC_INITIALIZER([] () {
+    std::set_terminate(TerminateHandler);
+} ());
 
 int main()
 {
-    NApachee::NSimple3D::NWebGL2::Initialize();
+    // XXX(apachee): Maybe use NApachee::NSimple3D::NFrontnend? 
 
-    glViewport(0, 0, 800, 600);
+    NWebGL2::InitializeOrCrash();
 
-// #ifndef NDEBUG
-// #endif
-
-    // emscripten_set_main_loop();
-    emscripten_set_main_loop(&main_loop, 0, true);
-
-
-    // assert(eglInitialize(display, nullptr, nullptr));
-
-    // EGLConfig* configs{};
-
+    NGraphics::SetMainLoop();
 }

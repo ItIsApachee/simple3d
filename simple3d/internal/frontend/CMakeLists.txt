@@ -8,6 +8,8 @@ include(utils)
 
 apachee_simple3d_init_dev_cmake_options()
 
+add_compile_definitions(ALLOW_BLOCKING_ON_MAIN_THREAD=0)
+
 execute_process(
 	COMMAND em++ --cflags
 	OUTPUT_VARIABLE EM_CFLAGS)
@@ -15,7 +17,9 @@ execute_process(
 string(STRIP "${EM_CFLAGS}" EM_CFLAGS)
 
 # file(GLOB_RECURSE APACHEE_SIMPLE3D_FRONTEND_SOURCES *.cpp)
-set(APACHEE_SIMPLE3D_FRONTEND_SOURCES program.cpp graphics/webgl2/webgl.cpp)
+set(
+	APACHEE_SIMPLE3D_FRONTEND_SOURCES
+	program.cpp)
 
 set(APACHEE_SIMPLE3D_FRONTEND_EMSCRIPTEN_LINK_OPTIONS "SHELL:--shell-file ${CMAKE_CURRENT_SOURCE_DIR}/templates/index.html" "SHELL:-sMIN_WEBGL_VERSION=2" "SHELL:-sMAX_WEBGL_VERSION=2")
 
@@ -33,6 +37,20 @@ if (CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL RelWithDebInfo)
 	endif()
 endif()
 
+# Enable threads
+add_compile_options(-pthread)
+add_link_options(
+	-pthread
+	"SHELL:-sPTHREAD_POOL_SIZE=\"Math.max(2, navigator.hardwareConcurrency)\""
+	"SHELL:-sPROXY_TO_PTHREAD")
+
+# Enable offscreen canvas
+
+add_link_options(
+	"SHELL:-sOFFSCREENCANVAS_SUPPORT"
+	"SHELL:-sOFFSCREEN_FRAMEBUFFER"
+	"SHELL:-sOFFSCREENCANVASES_TO_PTHREAD=#canvas")
+
 apachee_simple3d_report_variables(
     "simple3d/simple3d/internal/frontend"
 	CMAKE_BUILD_TYPE
@@ -43,10 +61,12 @@ apachee_simple3d_report_variables(
 	APACHEE_SIMPLE3D_FRONTEND_DEBUG_INFO_TYPE)
 
 add_subdirectory(${APACHEE_SIMPLE3D_SOURCE_DIR}/simple3d/core ${CMAKE_CURRENT_BINARY_DIR}/core)
+add_subdirectory(library)
+add_subdirectory(graphics)
 
 add_executable(apachee_simple3d_frontend ${APACHEE_SIMPLE3D_FRONTEND_SOURCES})
 
-target_link_libraries(apachee_simple3d_frontend PUBLIC apachee_simple3d_core)
+target_link_libraries(apachee_simple3d_frontend PUBLIC apachee_simple3d_core apachee_simple3d_frontend_lib apachee_simple3d_frontend_graphics)
 
 target_include_directories(apachee_simple3d_frontend SYSTEM PUBLIC ${APACHEE_SIMPLE3D_SOURCE_DIR})
 

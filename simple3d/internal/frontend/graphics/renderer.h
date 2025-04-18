@@ -1,10 +1,15 @@
 #pragma once
 
-namespace NApachee::NSimple3D::NWebGL2 {
+#include <emscripten.h>
+
+#include <memory>
+
+namespace NApachee::NSimple3D::NGraphics {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void Initialize();
+//! Initializes renderer and provides with callback for Emscripten.
+void SetMainLoop();
 
 ////////////////////////////////////////////////////////////////////////////////
 

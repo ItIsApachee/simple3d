@@ -19,11 +19,16 @@ void AssertTrapImpl(
 
 }  // namespace NDetail
 
-#ifdef __GNUC__
+#if defined(__GNUC__)
     #define S3D_BUILTIN_TRAP_IMPL() __builtin_trap()
 #else
     #define S3D_BUILTIN_TRAP_IMPL() std::terminate()
 #endif
+
+#define S3D_ALERT(message) \
+    do { \
+        ::NApachee::NSimple3D::NDetail::AssertTrapImpl("S3D_ALERT", "", message); \
+    } while (false)
 
 #define S3D_VERIFY(expr) \
     do { \
