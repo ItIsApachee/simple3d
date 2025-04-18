@@ -25,3 +25,9 @@ target_link_libraries(foo PRIVATE simple3d)
 
 TODO(apachee): Complete instructions and README as a whole
 
+## Credits
+
+Many project design choices were inspired by [YTsaurus](https://ytsaurus.tech/). Here is short list of some of those choices:
+- Monorepo-like file structure.
+- simple3d/core library.
+- [Code style](https://github.com/ytsaurus/ytsaurus/blob/main/yt/styleguide/cpp.md).
