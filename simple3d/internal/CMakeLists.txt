@@ -5,7 +5,7 @@ set(APACHEE_SIMPLE3D_EMSCRIPTEN_CMAKE_TOOLCHAIN_FILE "" CACHE FILEPATH "")
 # TODO(apachee): Add external project for frontend
 
 # Report first.
-report_variables(
+apachee_simple3d_report_variables(
     "simple3d/simple3d/internal"
         APACHEE_SIMPLE3D_EMSCRIPTEN_CMAKE_TOOLCHAIN_FILE 
         APACHEE_SIMPLE3D_FRONTEND_SOURCE_DIR 
@@ -40,7 +40,7 @@ if (IS_MAIN_PROJECT)
                 "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
             INSTALL_COMMAND ""
     )
-    register_target(apachee_simple3d_frontend)
+    apachee_simple3d_register_preconfigure_dependency(apachee_simple3d_frontend)
 
 endif()
 

@@ -6,7 +6,9 @@ set(CMAKE_MODULE_PATH ${APACHEE_SIMPLE3D_SOURCE_DIR}/simple3d/cmake ${CMAKE_MODU
 
 include(utils)
 
-report_variables(
+apachee_simple3d_init_dev_cmake_options()
+
+apachee_simple3d_report_variables(
     "simple3d/simple3d/internal/frontend"
 		APACHEE_SIMPLE3D_SOURCE_DIR
 		APACHEE_SIMPLE3D_BINARY_DIR)
@@ -21,14 +23,12 @@ add_executable(apachee_simple3d_frontend test.cpp)
 
 target_include_directories(apachee_simple3d_frontend PUBLIC ${APACHEE_SIMPLE3D_SOURCE_DIR})
 
+set(APACHEE_SIMPLE3D_FRONTEND_EMSCRIPTEN_LINK_OPTIONS "SHELL:--shell-file ${CMAKE_CURRENT_SOURCE_DIR}/templates/index.html")
+
 set_property(TARGET apachee_simple3d_frontend PROPERTY CXX_STANDARD 20)
 set_property(TARGET apachee_simple3d_frontend PROPERTY RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/out")
 set_property(TARGET apachee_simple3d_frontend PROPERTY COMPILE_FLAGS "${EM_CFLAGS}")
 set_property(TARGET apachee_simple3d_frontend PROPERTY OUTPUT_NAME index)
-set_property(TARGET apachee_simple3d_frontend PROPERTY SUFFIX .js)
+set_property(TARGET apachee_simple3d_frontend PROPERTY SUFFIX .html)
 
-add_custom_command(
-	TARGET apachee_simple3d_frontend
-	POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different "${CMAKE_CURRENT_SOURCE_DIR}/templates/index.html" "${CMAKE_CURRENT_BINARY_DIR}/out"
-	BYPRODUCTS "${CMAKE_CURRENT_BINARY_DIR}/out/index.html")
+target_link_options(apachee_simple3d_frontend PUBLIC ${APACHEE_SIMPLE3D_FRONTEND_EMSCRIPTEN_LINK_OPTIONS})
