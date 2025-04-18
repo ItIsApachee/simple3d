@@ -1,5 +1,5 @@
 # NB(apachee): Core library must be compatible for all native platforms and emscripten,
-# because it is used both in client library and frontend implementation.
+# because it is used both in client library and web client implementation.
 
 file(GLOB_RECURSE APACHEE_SIMPLE3D_CORE_SOURCES *.cpp)
 

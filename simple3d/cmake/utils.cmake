@@ -16,7 +16,7 @@ add_custom_target(apachee_simple3d_configure ALL)
 add_dependencies(apachee_simple3d_configure apachee_simple3d_preconfigure)
 
 # NB(apachee): Only for targets required for proper configuration for IDE,
-# e.g. frontend target is required as its compile commands appear only at build step.
+# e.g. web client target is required as its compile commands appear only at build step.
 function(apachee_simple3d_register_preconfigure_dependency TARGET)
 	add_dependencies(apachee_simple3d_preconfigure ${TARGET})
 endfunction()

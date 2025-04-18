@@ -1,6 +1,6 @@
 #include <GLES3/gl3.h>
 #include <simple3d/context/context.h>
-#include <simple3d/graphics/internal/vertex_buffer_object.h>
+#include <simple3d/graphics/web/vertex_buffer_object.h>
 
 #include <cassert>
 #include <cstddef>

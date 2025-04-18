@@ -1,8 +1,8 @@
 #include <GLES3/gl3.h>
 #include <simple3d/context/context.h>
-#include <simple3d/graphics/internal/element_buffer_object.h>
-#include <simple3d/graphics/internal/misc.h>
-#include <simple3d/graphics/internal/vertex_array_object.h>
+#include <simple3d/graphics/web/element_buffer_object.h>
+#include <simple3d/graphics/web/misc.h>
+#include <simple3d/graphics/web/vertex_array_object.h>
 
 #include <cstddef>
 #include <cstdint>

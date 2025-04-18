@@ -1,6 +1,6 @@
-#include <simple3d/graphics/internal/misc.h>
-#include <simple3d/graphics/internal/gles_shader.h>
-#include <simple3d/graphics/internal/vertex_array_object.h>
+#include <simple3d/graphics/web/misc.h>
+#include <simple3d/graphics/web/gles_shader.h>
+#include <simple3d/graphics/web/vertex_array_object.h>
 
 #include <GLES3/gl3.h>
 

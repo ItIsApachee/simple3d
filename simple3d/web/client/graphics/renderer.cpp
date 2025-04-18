@@ -1,8 +1,10 @@
 #include "renderer.h"
 
-#include <simple3d/internal/frontend/library/webgl2/webgl.h>
+#include <simple3d/core/assert.h>
 
-#include <simple3d/internal/frontend/library/helpers.h>
+#include <simple3d/web/client/library/webgl2/webgl.h>
+
+#include <simple3d/web/client/library/helpers.h>
 
 #include <GLES3/gl3.h>
 
@@ -22,6 +24,8 @@ public:
 
     void Render()
     {
+        S3D_VERIFY(false);
+
         // TODO(apachee): Update viewport according to canvas size
         glViewport(0, 0, 800, 600);
 

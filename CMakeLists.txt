@@ -10,7 +10,7 @@ include(user-config.cmake OPTIONAL)
 include(ExternalProject)
 
 # Flag for determining how the library is built.
-# If IS_MAIN_PROJECT is false, frontend part should be downloaded instead of being built.
+# If IS_MAIN_PROJECT is false, web client part should be downloaded instead of being built.
 # TODO(apachee): Download release using link pattern from
 # FIXME(apachee): Get info about release using github API in cmake
 # https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases.
@@ -24,8 +24,8 @@ endif()
 set(APACHEE_SIMPLE3D_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 set(APACHEE_SIMPLE3D_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 
-set(APACHEE_SIMPLE3D_FRONTEND_SOURCE_DIR "${APACHEE_SIMPLE3D_SOURCE_DIR}/simple3d/internal/frontend")
-set(APACHEE_SIMPLE3D_FRONTEND_BINARY_DIR "${APACHEE_SIMPLE3D_BINARY_DIR}/simple3d/internal/frontend")
+set(APACHEE_SIMPLE3D_WEB_CLIENT_SOURCE_DIR "${APACHEE_SIMPLE3D_SOURCE_DIR}/simple3d/web/client")
+set(APACHEE_SIMPLE3D_WEB_CLIENT_BINARY_DIR "${APACHEE_SIMPLE3D_BINARY_DIR}/simple3d/web/client")
 
 apachee_simple3d_report_variables(
 	"simple3d"

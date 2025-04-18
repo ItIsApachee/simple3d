@@ -1,5 +1,5 @@
-#include <simple3d/internal/frontend/graphics/renderer.h>
-#include <simple3d/internal/frontend/library/webgl2/webgl.h>
+#include <simple3d/web/client/graphics/renderer.h>
+#include <simple3d/web/client/library/webgl2/webgl.h>
 
 #include <simple3d/core/assert.h>
 

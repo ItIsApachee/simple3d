@@ -1,5 +1,5 @@
 add_subdirectory(core)
-add_subdirectory(internal)
+add_subdirectory(web)
 
 add_library(apachee_simple3d STATIC test.cpp)
 
@@ -27,7 +27,7 @@ if (IS_MAIN_PROJECT AND CMAKE_EXPORT_COMPILE_COMMANDS)
 		add_custom_target(
 			apachee_simple3d_merge_compile_commands_target
 				${Python_EXECUTABLE} "${APACHEE_SIMPLE3D_SOURCE_DIR}/simple3d/scripts/merge_compile_commands.py"
-				"${APACHEE_SIMPLE3D_BINARY_DIR}/compile_commands.json" "${APACHEE_SIMPLE3D_FRONTEND_BINARY_DIR}/compile_commands.json" -O ${APACHEE_SIMPLE3D_COMPILE_COMMANDS_PATH}
+				"${APACHEE_SIMPLE3D_BINARY_DIR}/compile_commands.json" "${APACHEE_SIMPLE3D_WEB_CLIENT_BINARY_DIR}/compile_commands.json" -O ${APACHEE_SIMPLE3D_COMPILE_COMMANDS_PATH}
 				SOURCES "${APACHEE_SIMPLE3D_SOURCE_DIR}/simple3d/scripts/merge_compile_commands.py"
 				COMMAND_EXPAND_LISTS
 			)
