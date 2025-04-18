@@ -1,4 +1,5 @@
-add_subdirectory("internal" "${APACHEE_SIMPLE3D_BINARY_DIR}/simple3d/internal")
+add_subdirectory(core)
+add_subdirectory(internal)
 
 add_library(apachee_simple3d STATIC test.cpp)
 
@@ -16,7 +17,6 @@ if (IS_MAIN_PROJECT AND CMAKE_EXPORT_COMPILE_COMMANDS)
 
 		apachee_simple3d_report_variables(
 			"simple3d (compile_commands)"
-			APACHEE_SIMPLE3D_COMPILE_COMMANDS_LIST 
 			APACHEE_SIMPLE3D_COMPILE_COMMANDS_PATH
 			APACHEE_SIMPLE3D_COMPILE_COMMANDS_MARKER_PATH)
 

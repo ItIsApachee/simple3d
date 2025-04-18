@@ -1,7 +1,5 @@
 set(APACHEE_SIMPLE3D_EMSCRIPTEN_CMAKE_TOOLCHAIN_FILE "" CACHE FILEPATH "")
 
-# add_subdirectory(library ${APACHEE_SIMPLE3D_SOURCE_DIR})
-
 # TODO(apachee): Add external project for frontend
 
 # Report first.
@@ -19,6 +17,7 @@ endif()
 
 if (IS_MAIN_PROJECT)
     # TODO(apachee): Prevent creation of 
+
     ExternalProject_Add(
         apachee_simple3d_frontend
             PREFIX "${APACHEE_SIMPLE3D_FRONTEND_BINARY_DIR}"
@@ -38,10 +37,13 @@ if (IS_MAIN_PROJECT)
                 "-DAPACHEE_SIMPLE3D_SOURCE_DIR=${APACHEE_SIMPLE3D_SOURCE_DIR}"
                 "-DAPACHEE_SIMPLE3D_BINARY_DIR=${APACHEE_SIMPLE3D_BINARY_DIR}"
                 "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+                "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
             INSTALL_COMMAND ""
     )
     apachee_simple3d_register_preconfigure_dependency(apachee_simple3d_frontend)
 
+else()
+    message(FATAL_ERROR "Loading frontend part of this library is WIP")
 endif()
 
 set(APACHEE_SIMPLE3D_COMPILE_COMMANDS_FILE_LIST ${APACHEE_SIMPLE3D_COMPILE_COMMANDS_FILE_LIST} PARENT_SCOPE)

@@ -30,10 +30,11 @@ set(APACHEE_SIMPLE3D_FRONTEND_BINARY_DIR "${APACHEE_SIMPLE3D_BINARY_DIR}/simple3
 apachee_simple3d_report_variables(
 	"simple3d"
 	IS_MAIN_PROJECT
+	CMAKE_BUILD_TYPE
 	APACHEE_SIMPLE3D_SOURCE_DIR
 	APACHEE_SIMPLE3D_BINARY_DIR)
 
-add_subdirectory(simple3d "${APACHEE_SIMPLE3D_BINARY_DIR}/simple3d")
+add_subdirectory(simple3d)
 
 # TODO(apachee): Make install steps that puts html files where they belong
 # TODO(apachee): Maybe use distinct build directories for different build types and create compile_commands.json symlink in project root.
