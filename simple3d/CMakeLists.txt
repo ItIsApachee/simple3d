@@ -3,7 +3,7 @@ add_subdirectory(internal)
 
 add_library(apachee_simple3d STATIC test.cpp)
 
-target_include_directories(apachee_simple3d PUBLIC ${APACHEE_SIMPLE3D_SOURCE_DIR})
+target_include_directories(apachee_simple3d SYSTEM PUBLIC ${APACHEE_SIMPLE3D_SOURCE_DIR})
 set_property(TARGET apachee_simple3d PROPERTY CXX_STANDARD 20)
 
 if (IS_MAIN_PROJECT AND CMAKE_EXPORT_COMPILE_COMMANDS)

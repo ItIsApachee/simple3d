@@ -14,7 +14,7 @@
 #define INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_MISC_H_
 
 #include <cstdint>
-#include <glad/gles2.h>
+#include <GLES3/gl3.h>
 
 /** \~Russian
  * \namespace Simple3D::Internal

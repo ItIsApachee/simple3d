@@ -6,7 +6,7 @@
 #ifndef INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_GLES_SHADER_H_
 #define INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_GLES_SHADER_H_
 
-#include <glad/gles2.h>
+#include <GLES3/gl3.h>
 #include <simple3d/graphics/internal/misc.h>
 #include <simple3d/misc/error.h>
 #include <simple3d/types.h>

@@ -1,4 +1,4 @@
-#include <glad/gles2.h>
+#include <GLES3/gl3.h>
 #include <simple3d/context/context.h>
 #include <simple3d/graphics/internal/gles_shader.h>
 #include <simple3d/graphics/internal/misc.h>

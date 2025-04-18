@@ -1,6 +1,6 @@
 #include <simple3d/graphics/internal/vertex.h>
 
-#include <glad/gles2.h>
+#include <GLES3/gl3.h>
 
 namespace Simple3D::Internal {
 
