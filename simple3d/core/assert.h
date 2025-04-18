@@ -4,7 +4,7 @@
 #include <string_view>
 #include <source_location>
 
-namespace NApachee::NSimple3D {
+namespace NSimple3D {
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -27,13 +27,13 @@ void AssertTrapImpl(
 
 #define S3D_ALERT(message) \
     do { \
-        ::NApachee::NSimple3D::NDetail::AssertTrapImpl("S3D_ALERT", "", message); \
+        ::NSimple3D::NDetail::AssertTrapImpl("S3D_ALERT", "", message); \
     } while (false)
 
 #define S3D_VERIFY(expr) \
     do { \
         if (!(expr)) [[unlikely]] { \
-            ::NApachee::NSimple3D::NDetail::AssertTrapImpl("S3D_VERIFY", #expr); \
+            ::NSimple3D::NDetail::AssertTrapImpl("S3D_VERIFY", #expr); \
         } \
     } while (false)
 
@@ -48,11 +48,11 @@ void AssertTrapImpl(
     #define S3D_ASSERT(expr) \
         do { \
             if (!(expr)) [[unlikely]] { \
-                ::NApachee::NSimple3D::NDetail::AssertTrapImpl("S3D_ASSERT", #expr);\
+                ::NSimple3D::NDetail::AssertTrapImpl("S3D_ASSERT", #expr);\
             } \
         } while (false)
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////
 
-}  // namespace NApachee::NSimple3D
+}  // namespace NSimple3D

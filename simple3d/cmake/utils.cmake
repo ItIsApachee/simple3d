@@ -1,4 +1,4 @@
-function(apachee_simple3d_report_variables path)
+function(simple3d_report_variables path)
     message(STATUS "${path} config variables")
 
     list(APPEND CMAKE_MESSAGE_INDENT "    ")
@@ -10,19 +10,19 @@ function(apachee_simple3d_report_variables path)
     list(POP_BACK CMAKE_MESSAGE_INDENT)
 endfunction()
 
-add_custom_target(apachee_simple3d_preconfigure)
-add_custom_target(apachee_simple3d_configure ALL)
+add_custom_target(simple3d_preconfigure)
+add_custom_target(simple3d_configure ALL)
 
-add_dependencies(apachee_simple3d_configure apachee_simple3d_preconfigure)
+add_dependencies(simple3d_configure simple3d_preconfigure)
 
 # NB(apachee): Only for targets required for proper configuration for IDE,
 # e.g. web client target is required as its compile commands appear only at build step.
-function(apachee_simple3d_register_preconfigure_dependency TARGET)
-	add_dependencies(apachee_simple3d_preconfigure ${TARGET})
+function(simple3d_register_preconfigure_dependency TARGET)
+	add_dependencies(simple3d_preconfigure ${TARGET})
 endfunction()
 
 # NB(apachee): Initialize options to ease the development of this project.
-function(apachee_simple3d_init_dev_cmake_options)
+function(simple3d_init_dev_cmake_options)
     set(CMAKE_COMPILE_WARNING_AS_ERROR ON PARENT_SCOPE)
 
 	set(CMAKE_VERBOSE_MAKEFILE ON CACHE BOOL "" FORCE)

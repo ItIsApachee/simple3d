@@ -8,7 +8,7 @@
 
 #include <GLES3/gl3.h>
 
-namespace NApachee::NSimple3D::NGLib {
+namespace NSimple3D::NGLib {
 
 namespace {
 
@@ -70,11 +70,11 @@ void SetMainLoop()
         Renderer = new TRenderer();
     }
 
-    ::NApachee::NSimple3D::SetMainLoop([] (TRenderer* renderer) {
+    ::NSimple3D::SetMainLoop([] (TRenderer* renderer) {
         renderer->Render();
     }, Renderer);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
 
-}  // namespace NApachee::NSimple3D::NGLib
+}  // namespace NSimple3D::NGLib

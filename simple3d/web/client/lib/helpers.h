@@ -3,7 +3,7 @@
 #include <concepts>
 #include <type_traits>
 
-namespace NApachee::NSimple3D {
+namespace NSimple3D {
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -16,7 +16,7 @@ void SetMainLoop(F mainLoopFunc, TArgs... funcArgs);
 
 ////////////////////////////////////////////////////////////////////////////////
 
-}  // namespace NApachee::NSimple3D
+}  // namespace NSimple3D
 
 #define S3D_LIB_HELPERS_INL_H_
 #include "helpers-inl.h"

@@ -19,7 +19,7 @@
 #error Support for pthread must be enabled
 #endif
 
-using namespace NApachee::NSimple3D;
+using namespace NSimple3D;
 
 class TProgram
 {

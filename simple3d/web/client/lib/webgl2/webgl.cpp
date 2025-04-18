@@ -9,7 +9,7 @@
 #include <mutex>
 #include <optional>
 
-namespace NApachee::NSimple3D::NWebGL2 {
+namespace NSimple3D::NWebGL2 {
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -103,4 +103,4 @@ void CommitFrame()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-}  // namespace NApachee::NSimple3D::NGLib
+}  // namespace NSimple3D::NGLib

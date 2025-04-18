@@ -8,13 +8,13 @@ Project uses C++20.
 include(FetchContent)
 
 FetchContent_Declare(
-    apachee_simple3d
+    simple3d
     GIT_REPOSITORY https://github.com/ItIsApachee/simple3d.git # or git@github.com:ItIsApachee/simple3d.git
     GIT_TAG master # FIXME(apachee): Replace with tag or commit hash.
     )
-FetchContent_MakeAvailable(apachee_simple3d)
+FetchContent_MakeAvailable(simple3d)
 
-target_link_libraries(foo PRIVATE apachee_simple3d)
+target_link_libraries(foo PRIVATE simple3d)
 ```
 
 ## Build instructions (for development purposes)

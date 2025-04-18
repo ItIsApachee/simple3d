@@ -4,7 +4,7 @@
 #include <format>
 #include <utility>
 
-namespace NApachee::NSimple3D::NDetail {
+namespace NSimple3D::NDetail {
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -52,4 +52,4 @@ void AssertTrapImpl(
 
 ////////////////////////////////////////////////////////////////////////////////
 
-}  // namespace NApachee::NSimple3D::NDetail
+}  // namespace NSimple3D::NDetail
