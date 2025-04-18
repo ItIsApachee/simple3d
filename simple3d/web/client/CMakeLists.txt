@@ -61,7 +61,7 @@ apachee_simple3d_report_variables(
 	APACHEE_SIMPLE3D_WEB_CLIENT_DEBUG_INFO_TYPE)
 
 add_subdirectory(${APACHEE_SIMPLE3D_SOURCE_DIR}/simple3d/core ${CMAKE_CURRENT_BINARY_DIR}/core)
-add_subdirectory(library)
+add_subdirectory(lib)
 add_subdirectory(graphics)
 
 add_executable(apachee_simple3d_web_client ${APACHEE_SIMPLE3D_WEB_CLIENT_SOURCES})
