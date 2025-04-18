@@ -2,6 +2,7 @@
 
 #include <exception>
 #include <string_view>
+#include <source_location>
 
 namespace NApachee::NSimple3D {
 
@@ -12,9 +13,9 @@ namespace NDetail {
 [[noreturn]]
 void AssertTrapImpl(
     std::string_view trapName,
-    std::string_view fileLoc,
-    int line,
-    std::string_view expr);
+    std::string_view expr,
+    std::string_view message = {},
+    std::source_location sourceLocation = std::source_location::current());
 
 }  // namespace NDetail
 
@@ -27,7 +28,7 @@ void AssertTrapImpl(
 #define S3D_VERIFY(expr) \
     do { \
         if (!(expr)) [[unlikely]] { \
-            ::NApachee::NSimple3D::NDetail::AssertTrapImpl("S3D_VERIFY", __FILE__, __LINE__, #expr);\
+            ::NApachee::NSimple3D::NDetail::AssertTrapImpl("S3D_VERIFY", #expr); \
         } \
     } while (false)
 
@@ -42,7 +43,7 @@ void AssertTrapImpl(
     #define S3D_ASSERT(expr) \
         do { \
             if (!(expr)) [[unlikely]] { \
-                ::NApachee::NSimple3D::NDetail::AssertTrapImpl("S3D_ASSERT", __FILE__, __LINE__, #expr);\
+                ::NApachee::NSimple3D::NDetail::AssertTrapImpl("S3D_ASSERT", #expr);\
             } \
         } while (false)
 #endif
