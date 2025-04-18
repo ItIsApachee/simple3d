@@ -2,8 +2,6 @@
 #include <simple3d/internal/frontend/library/webgl2/webgl.h>
 
 #include <simple3d/core/assert.h>
-#include <simple3d/core/static_initializer.h>
-
 
 #include <emscripten.h>
 #include <emscripten/html5.h>
@@ -23,21 +21,29 @@
 
 using namespace NApachee::NSimple3D;
 
-void TerminateHandler()
+class TProgram
 {
-    NWebGL2::Terminate();
-    std::abort();
-}
+public:
+    TProgram() = default;
 
-S3D_STATIC_INITIALIZER([] () {
-    std::set_terminate(TerminateHandler);
-} ());
+    void Start() {
+        std::set_terminate(TerminateHandler);
+        NGraphics::Start();
+    }
+
+    static void TerminateHandler()
+    {
+        // TODO(apachee): Setup all threads and exit.
+        NWebGL2::Terminate();
+        std::abort();
+    }
+};
 
 int main()
 {
-    // XXX(apachee): Maybe use NApachee::NSimple3D::NFrontnend? 
+    auto program = new TProgram();
+    program->Start();
 
-    NWebGL2::InitializeOrCrash();
-
-    NGraphics::SetMainLoop();
+    // XXX(apachee): Do I really need this?
+    [[maybe_unused]] volatile auto vProgram = program;
 }

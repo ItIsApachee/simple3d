@@ -8,6 +8,9 @@ namespace NApachee::NSimple3D::NGraphics {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+//! Initializes WebGL context and sets main loop.
+void Start();
+
 //! Initializes renderer and provides with callback for Emscripten.
 void SetMainLoop();
 
