@@ -7,7 +7,7 @@
 
 #include <GLES3/gl3.h>
 #include <simple3d/context/context.h>
-#include <simple3d/graphics/web/misc.h>
+#include <simple3d/gl/web/misc.h>
 #include <simple3d/types.h>
 
 #include <cstdint>

@@ -8,7 +8,7 @@
 
 #include <GLES3/gl3.h>
 
-namespace NApachee::NSimple3D::NGraphics {
+namespace NApachee::NSimple3D::NGLib {
 
 namespace {
 
@@ -59,7 +59,7 @@ void Start()
 {
     NWebGL2::InitializeOrCrash();
 
-    NGraphics::SetMainLoop();
+    NGLib::SetMainLoop();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -77,4 +77,4 @@ void SetMainLoop()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-}  // namespace NApachee::NSimple3D::NGraphics
+}  // namespace NApachee::NSimple3D::NGLib

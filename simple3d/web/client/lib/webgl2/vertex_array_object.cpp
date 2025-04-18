@@ -1,8 +1,8 @@
 #include <GLES3/gl3.h>
 #include <simple3d/context/context.h>
-#include <simple3d/graphics/web/element_buffer_object.h>
-#include <simple3d/graphics/web/misc.h>
-#include <simple3d/graphics/web/vertex_array_object.h>
+#include <simple3d/gl/web/element_buffer_object.h>
+#include <simple3d/gl/web/misc.h>
+#include <simple3d/gl/web/vertex_array_object.h>
 #include <simple3d/types.h>
 
 #include <utility>

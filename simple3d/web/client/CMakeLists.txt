@@ -62,11 +62,11 @@ apachee_simple3d_report_variables(
 
 add_subdirectory(${APACHEE_SIMPLE3D_SOURCE_DIR}/simple3d/core ${CMAKE_CURRENT_BINARY_DIR}/core)
 add_subdirectory(lib)
-add_subdirectory(graphics)
+add_subdirectory(gl)
 
 add_executable(apachee_simple3d_web_client ${APACHEE_SIMPLE3D_WEB_CLIENT_SOURCES})
 
-target_link_libraries(apachee_simple3d_web_client PUBLIC apachee_simple3d_core apachee_simple3d_web_client_lib apachee_simple3d_web_client_graphics)
+target_link_libraries(apachee_simple3d_web_client PUBLIC apachee_simple3d_core apachee_simple3d_web_client_lib apachee_simple3d_web_client_gl)
 
 target_include_directories(apachee_simple3d_web_client SYSTEM PUBLIC ${APACHEE_SIMPLE3D_SOURCE_DIR})
 

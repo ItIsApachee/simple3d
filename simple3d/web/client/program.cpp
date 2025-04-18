@@ -1,4 +1,4 @@
-#include <simple3d/web/client/graphics/renderer.h>
+#include <simple3d/web/client/gl/renderer.h>
 #include <simple3d/web/client/lib/webgl2/webgl.h>
 
 #include <simple3d/core/assert.h>
@@ -28,7 +28,7 @@ public:
 
     void Start() {
         std::set_terminate(TerminateHandler);
-        NGraphics::Start();
+        NGLib::Start();
     }
 
     static void TerminateHandler()

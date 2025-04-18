@@ -6,7 +6,7 @@
 #define INCLUDE_SIMPLE3D_GRAPHICS_INTERNAL_ELEMENT_BUFFER_OBJECT_H_
 
 #include <GLES3/gl3.h>
-#include <simple3d/graphics/web/misc.h>
+#include <simple3d/gl/web/misc.h>
 #include <simple3d/types.h>
 
 #include <cstddef>

@@ -1,4 +1,4 @@
-#include <simple3d/graphics/web/vertex.h>
+#include <simple3d/gl/web/vertex.h>
 
 #include <GLES3/gl3.h>
 

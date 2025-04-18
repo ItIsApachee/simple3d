@@ -103,4 +103,4 @@ void CommitFrame()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-}  // namespace NApachee::NSimple3D::NGraphics
+}  // namespace NApachee::NSimple3D::NGLib
