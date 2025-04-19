@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          path: simple3d
 
       - name: Checkout emsdk
         uses: actions/checkout@v4
@@ -35,15 +37,29 @@ jobs:
           em++ -v
 
           echo "S3D_EMSCRIPTEN_CMAKE_TOOLCHAIN=$(dirname -- $(which emcc))/cmake/Modules/Platform/Emscripten.cmake" >> $GITHUB_ENV
-          
-          echo 'source "$GITHUB_WORKSPACE/emsdk/emsdk_env.sh"' >> $HOME/.bash_profile
 
       - name: Build
+        working-directory: ./simple3d
         run: |
+          # Actual build step
+
+          set -x
+
+          # Make build artifacts dir
+
+          mkdir -p $GITHUB_WORKSPACE/out
+          
           cmake -S . -B build -DSIMPLE3D_EMSCRIPTEN_CMAKE_TOOLCHAIN_FILE=$S3D_EMSCRIPTEN_CMAKE_TOOLCHAIN -DCMAKE_BUILD_TYPE:STRING=Release
           cmake --build build
 
-          # Verify web client was built
-          file build/simple3d/web/client/out/index.html
-          file build/simple3d/web/client/out/index.js
-          file build/simple3d/web/client/out/index.wasm
+          # Package client
+          tar -czvf $GITHUB_WORKSPACE/out/web-client.tar.gz ./build/simple3d/web/client/out
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: ${{ github.ref == 'refs/heads/main' }}
+        with:
+          files: $GITHUB_WORKSPACE/out/**
+          prerelease: true
+          name: "[CI] Automatic pre-release (Commit: {{ github.sha }})"
+          tag_name: prerelease
