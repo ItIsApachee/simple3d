@@ -10,6 +10,8 @@ jobs:
   build:
     name: Build project
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -59,7 +61,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: ${{ github.ref == 'refs/heads/main' }}
         with:
-          files: $GITHUB_WORKSPACE/out/**
+          files: ./out/**
           prerelease: true
           name: "[CI] Automatic pre-release (Commit: {{ github.sha }})"
           tag_name: prerelease
