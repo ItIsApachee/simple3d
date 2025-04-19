@@ -21,14 +21,14 @@ jobs:
           path: emsdk
 
       - name: Install Emscripten
+        working-directory: ./emsdk
         run: |
-          cd emsdk
-
+          # Install Emscripten via emsdk
+          
           ./emsdk install latest
           ./emsdk activate latest
           source ./emsdk_env.sh
-
-          cd $GITHUB_WORKSPACE
+          echo 'source "$GITHUB_WORKSPACE/emsdk/emsdk_env.sh"' >> $HOME/.bash_profile
 
       - name: Verify Emscripten installation
         run: em++ -v
