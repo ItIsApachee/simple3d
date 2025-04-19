@@ -31,10 +31,12 @@ jobs:
           ./emsdk activate latest
           source ./emsdk_env.sh
 
+          # Verify installation
           em++ -v
+
+          echo "S3D_EMSCRIPTEN_CMAKE_TOOLCHAIN=$(dirname -- $(which emcc))/cmake/Modules/Platform/Emscripten.cmake" >> $GITHUB_ENV
           
           echo 'source "$GITHUB_WORKSPACE/emsdk/emsdk_env.sh"' >> $HOME/.bash_profile
 
-      - name: Verify Emscripten installation
-        shell: "bash -l -e {0}"
-        run: em++ -v
+      - name: Verify env
+        run: echo $S3D_EMSCRIPTEN_CMAKE_TOOLCHAIN
