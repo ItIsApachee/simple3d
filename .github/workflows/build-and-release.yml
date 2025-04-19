@@ -18,7 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: emscripten-core/emsdk
-          path: ${GITHUB_WORKSPACE}/emsdk
+          path: emsdk
 
       - name: Install Emscripten
         run: |
@@ -28,7 +28,7 @@ jobs:
           ./emsdk activate latest
           source ./emsdk_env.sh
 
-          cd ${GITHUB_WORKSPACE}
+          cd $GITHUB_WORKSPACE
 
       - name: Verify Emscripten installation
         run: em++ -v
