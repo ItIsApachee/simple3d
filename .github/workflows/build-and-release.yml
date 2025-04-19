@@ -1,0 +1,32 @@
+name: Build project and create release with resulting artifacts
+
+on:
+  schedule:
+    - cron:  '0 0,12 * * *'
+
+jobs:
+  build:
+    name: Build project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout emsdk
+        uses: actions/checkout@v4
+        with:
+          repository: emscripten-core/emsdk
+          path: ${GITHUB_WORKSPACE}/emsdk
+
+      - name: Install Emscripten
+        run: |
+          cd emsdk
+
+          ./emsdk install latest
+          ./emsdk activate latest
+          source ./emsdk_env.sh
+
+          cd ${GITHUB_WORKSPACE}
+
+      - name: Verify Emscripten installation
+        run: em++ -v
