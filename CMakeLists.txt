@@ -5,6 +5,7 @@ project(simple3d VERSION 0.0.0 LANGUAGES CXX)
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/simple3d/cmake ${CMAKE_MODULE_PATH})
 
 include(utils)
+include(ci)
 include(user-config.cmake OPTIONAL)
 
 include(ExternalProject)
@@ -26,6 +27,8 @@ set(SIMPLE3D_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 
 set(SIMPLE3D_WEB_CLIENT_SOURCE_DIR "${SIMPLE3D_SOURCE_DIR}/simple3d/web/client")
 set(SIMPLE3D_WEB_CLIENT_BINARY_DIR "${SIMPLE3D_BINARY_DIR}/simple3d/web/client")
+
+set(SIMPLE3D_FORCE_DOWNLOAD_WEB_CLIENT OFF CACHE BOOL "")
 
 simple3d_report_variables(
 	"simple3d"
