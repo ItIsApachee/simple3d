@@ -63,5 +63,6 @@ jobs:
         with:
           files: ./out/**
           prerelease: true
-          name: "[CI] Automatic pre-release (Commit: {{ github.sha }})"
+          name: "[CI] Automatic pre-release (Commit: ${{ github.sha }})"
           tag_name: prerelease
+          body: ""  # Generate release notes?
