@@ -38,5 +38,12 @@ jobs:
           
           echo 'source "$GITHUB_WORKSPACE/emsdk/emsdk_env.sh"' >> $HOME/.bash_profile
 
-      - name: Verify env
-        run: echo $S3D_EMSCRIPTEN_CMAKE_TOOLCHAIN
+      - name: Build
+        run: |
+          cmake -S . -B build -DSIMPLE3D_EMSCRIPTEN_CMAKE_TOOLCHAIN_FILE=$S3D_EMSCRIPTEN_CMAKE_TOOLCHAIN -DCMAKE_BUILD_TYPE:STRING=Release
+          cmake --build build
+
+          # Verify web client was built
+          file build/simple3d/web/client/out/index.html
+          file build/simple3d/web/client/out/index.js
+          file build/simple3d/web/client/out/index.wasm
