@@ -55,7 +55,7 @@ jobs:
           cmake --build build
 
           # Package client
-          tar -czvf $GITHUB_WORKSPACE/out/web-client.tar.gz ./build/simple3d/web/client/out
+          tar -czvf $GITHUB_WORKSPACE/out/web-client.tar.gz -C ./build/simple3d/web/client/out .
 
       - name: Release
         uses: softprops/action-gh-release@v2
