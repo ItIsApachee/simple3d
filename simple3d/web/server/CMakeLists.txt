@@ -1,0 +1,4 @@
+add_executable(simple3d_web_server test.cpp)
+target_link_libraries(simple3d_web_server simple3d_core uWebSockets)
+set_property(TARGET simple3d_web_server PROPERTY CXX_STANDARD 20)
+target_include_directories(simple3d_web_server SYSTEM PUBLIC ${SIMPLE3D_SOURCE_DIR})

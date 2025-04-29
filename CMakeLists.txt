@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
-project(simple3d VERSION 0.0.0 LANGUAGES CXX)
+project(simple3d VERSION 0.0.0 LANGUAGES C CXX)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/simple3d/cmake ${CMAKE_MODULE_PATH})
 
@@ -8,6 +8,7 @@ include(utils)
 include(ci)
 include(user-config.cmake OPTIONAL)
 
+include(FetchContent)
 include(ExternalProject)
 
 # Flag for determining how the library is built.
