@@ -11,6 +11,14 @@ include(user-config.cmake OPTIONAL)
 include(FetchContent)
 include(ExternalProject)
 
+FetchContent_Declare(
+	glm
+	GIT_REPOSITORY	https://github.com/g-truc/glm.git
+	GIT_TAG 	bf71a834948186f4097caa076cd2663c69a10e1e #refs/tags/1.0.1
+)
+
+FetchContent_MakeAvailable(glm)
+
 # Flag for determining how the library is built.
 # If IS_MAIN_PROJECT is false, web client part should be downloaded instead of being built.
 # TODO(apachee): Download release using link pattern from
@@ -28,6 +36,9 @@ set(SIMPLE3D_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 
 set(SIMPLE3D_WEB_CLIENT_SOURCE_DIR "${SIMPLE3D_SOURCE_DIR}/simple3d/web/client")
 set(SIMPLE3D_WEB_CLIENT_BINARY_DIR "${SIMPLE3D_BINARY_DIR}/simple3d/web/client")
+
+set(SIMPLE3D_WEB_CLIENT_GLM_SOURCE_DIR "${glm_SOURCE_DIR}")
+set(SIMPLE3D_WEB_CLIENT_GLM_BINARY_DIR "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/_deps/glm/glm-build")
 
 set(SIMPLE3D_FORCE_DOWNLOAD_WEB_CLIENT OFF CACHE BOOL "")
 

@@ -63,6 +63,11 @@ simple3d_report_variables(
 	SIMPLE3D_WEB_CLIENT_EMSCRIPTEN_LINK_OPTIONS
 	SIMPLE3D_WEB_CLIENT_DEBUG_INFO_TYPE)
 
+# NB(apachee): Dirty hack to re-use GLM downloaded by main CMakeLists.txt.
+# Either way it would need to be built for native and emscripten platform, but at least
+# without having duplicate glm sources.
+add_subdirectory(${SIMPLE3D_WEB_CLIENT_GLM_SOURCE_DIR} ${SIMPLE3D_WEB_CLIENT_GLM_BINARY_DIR})
+
 add_subdirectory(${SIMPLE3D_SOURCE_DIR}/simple3d/core ${CMAKE_CURRENT_BINARY_DIR}/core)
 add_subdirectory(lib)
 add_subdirectory(gl)
