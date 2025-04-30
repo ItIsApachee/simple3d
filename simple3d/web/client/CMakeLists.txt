@@ -8,6 +8,9 @@ include(utils)
 
 simple3d_init_dev_cmake_options()
 
+set(SIMPLE3D_WEB_CLIENT_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
+set(SIMPLE3D_WEB_CLIENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+
 add_compile_definitions(ALLOW_BLOCKING_ON_MAIN_THREAD=0)
 
 execute_process(
@@ -68,7 +71,7 @@ add_executable(simple3d_web_client ${SIMPLE3D_WEB_CLIENT_SOURCES})
 
 target_link_libraries(simple3d_web_client PUBLIC simple3d_core simple3d_web_client_lib simple3d_web_client_gl)
 
-target_include_directories(simple3d_web_client SYSTEM PUBLIC ${SIMPLE3D_SOURCE_DIR})
+target_include_directories(simple3d_web_client SYSTEM PUBLIC "${SIMPLE3D_SOURCE_DIR}" "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/include")
 
 set_property(TARGET simple3d_web_client PROPERTY CXX_STANDARD 20)
 set_property(TARGET simple3d_web_client PROPERTY RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/out")
