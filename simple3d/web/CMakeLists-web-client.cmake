@@ -35,7 +35,7 @@ if (IS_MAIN_PROJECT AND NOT SIMPLE3D_FORCE_DOWNLOAD_WEB_CLIENT)
                 "-DSIMPLE3D_WEB_CLIENT_GLM_SOURCE_DIR=${SIMPLE3D_WEB_CLIENT_GLM_SOURCE_DIR}"
                 "-DSIMPLE3D_WEB_CLIENT_GLM_BINARY_DIR=${SIMPLE3D_WEB_CLIENT_GLM_BINARY_DIR}"
                 "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
-                "-DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE}"
+                "-DCMAKE_BUILD_TYPE=$<CONFIG>"
             INSTALL_COMMAND ""
     )
     simple3d_register_preconfigure_dependency(simple3d_web_client)
