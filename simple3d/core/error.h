@@ -2,8 +2,14 @@
 
 #include "public.h"
 
+#include "compiler.h"
+#include "format.h"
+
+#include <exception>
 #include <format>
 #include <memory>
+#include <optional>
+#include <type_traits>
 
 namespace NSimple3D {
 
@@ -37,21 +43,71 @@ public:
 
     bool IsOk() const;
 
+    void ThrowOnError() const &;
+    void ThrowOnError() &&;
+
 private:
     class TImpl;
 
     std::unique_ptr<TImpl> Impl_;
 };
 
+////////////////////////////////////////////////////////////////////////////////
 
-// TODO(apachee): Add TErrorOr<T>
+class TErrorException
+    : public std::exception
+{
+public:
+    TErrorException(TError error);
 
-// template <typename T>
-// class [[nodiscard]] TErrorOr
-//     : public TError
-// {
+    TErrorException(const TErrorException&) = default;
+    TErrorException(TErrorException&&) = default;
 
-// };
+    const char* what() const noexcept override;
+
+    const TError& GetUnderlyingError() const;
+
+private:
+    TError UnderlyingError_;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+template <typename T>
+class [[nodiscard]] TErrorOr
+    : public TError
+{
+public:
+    TErrorOr();
+
+    TErrorOr(TError error);
+
+    TErrorOr(const T& value);
+    TErrorOr(T&& value);
+
+    template <typename U>
+    TErrorOr(const TErrorOr<U>& other);
+    template <typename U>
+    TErrorOr(TErrorOr<U>&& other);
+
+    ~TErrorOr();
+
+    TErrorOr& operator=(const TErrorOr<T>&)
+        requires std::is_copy_assignable_v<T>;
+    TErrorOr& operator=(TErrorOr<T>&&)
+        requires std::is_move_assignable_v<T>;
+
+    const T& Value() const & S3D_LIFETIME_BOUND;
+    T& Value() & S3D_LIFETIME_BOUND;
+    T&& Value() && S3D_LIFETIME_BOUND;
+
+    const T& ValueOrThrow() const & S3D_LIFETIME_BOUND;
+    T& ValueOrThrow() & S3D_LIFETIME_BOUND;
+    T&& ValueOrThrow() && S3D_LIFETIME_BOUND;
+
+private:
+    std::optional<T> Value_;
+};
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -67,6 +123,21 @@ struct std::formatter<NSimple3D::TError, char>
 
     template <class TFmtCtx>
     TFmtCtx::iterator format(const NSimple3D::TError& error, TFmtCtx& ctx) const;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+template<typename T>
+    requires NSimple3D::NConcepts::CFormattable<T>
+struct std::formatter<NSimple3D::TErrorOr<T>, char>
+{
+    std::formatter<T, char> ValueFormatter{};
+
+    template <class TParseCtx>
+    constexpr TParseCtx::iterator parse(TParseCtx& ctx);
+
+    template <class TFmtCtx>
+    TFmtCtx::iterator format(const NSimple3D::TErrorOr<T>& errorOrValue, TFmtCtx& ctx) const;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

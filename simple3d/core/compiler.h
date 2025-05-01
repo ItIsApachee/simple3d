@@ -4,12 +4,11 @@ namespace NSimple3D {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template <typename T>
-class TErrorOr;
-
-using TError = TErrorOr<void>;
-
-class TErrorException;
+#if defined(__clang__) && defined(__cplusplus) && defined(__has_cpp_attribute) && __has_cpp_attribute(clang::lifetimebound)
+    #define S3D_LIFETIME_BOUND [[clang::lifetimebound]]
+#else
+    #define S3D_LIFETIME_BOUND
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 

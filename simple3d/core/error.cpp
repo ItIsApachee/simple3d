@@ -1,5 +1,4 @@
 #include "error.h"
-#include <simple3d/core/public.h>
 
 namespace NSimple3D {
 
@@ -130,6 +129,36 @@ TError& TError::SetMesasge(std::string message)
 bool TError::IsOk() const
 {
     return !Impl_ || Impl_->IsOk();
+}
+
+void TError::ThrowOnError() const &
+{
+    if (!IsOk()) {
+        throw TErrorException(*this);
+    }
+}
+
+void TError::ThrowOnError() &&
+{
+    if (!IsOk()) {
+        throw TErrorException(std::move(*this));
+    }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+TErrorException::TErrorException(TError error)
+    : UnderlyingError_(std::move(error))
+{ }
+
+const char* TErrorException::what() const noexcept
+{
+    return UnderlyingError_.GetMessage().c_str();
+}
+
+const TError& TErrorException::GetUnderlyingError() const
+{
+    return UnderlyingError_;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
