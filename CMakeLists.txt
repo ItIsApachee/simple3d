@@ -11,14 +11,6 @@ include(user-config.cmake OPTIONAL)
 include(FetchContent)
 include(ExternalProject)
 
-FetchContent_Declare(
-	glm
-	GIT_REPOSITORY	https://github.com/g-truc/glm.git
-	GIT_TAG 	bf71a834948186f4097caa076cd2663c69a10e1e #refs/tags/1.0.1
-)
-
-FetchContent_MakeAvailable(glm)
-
 # Flag for determining how the library is built.
 # If IS_MAIN_PROJECT is false, web client part should be downloaded instead of being built.
 # TODO(apachee): Download release using link pattern from
@@ -29,6 +21,29 @@ set(IS_MAIN_PROJECT OFF)
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
 	set(IS_MAIN_PROJECT ON)
 	simple3d_init_dev_cmake_options()
+endif()
+
+FetchContent_Declare(
+	glm
+	GIT_REPOSITORY	https://github.com/g-truc/glm.git
+	GIT_TAG 	bf71a834948186f4097caa076cd2663c69a10e1e #refs/tags/1.0.1
+)
+
+FetchContent_MakeAvailable(glm)
+
+if (IS_MAIN_PROJECT)
+	enable_testing()
+
+	FetchContent_Declare(
+	googletest
+	URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+	)
+
+	set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+
+	FetchContent_MakeAvailable(googletest)
+
+	include(GoogleTest)
 endif()
 
 set(SIMPLE3D_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")

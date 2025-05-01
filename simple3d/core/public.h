@@ -1,14 +1,13 @@
 #pragma once
 
-#include <memory>
-
 namespace NSimple3D {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#define S3D_DECLARE_REFCOUNTED_TYPE(type) \
-    using type ## Ptr = std::shared_ptr<type>; \
-    static_assert(true)
+template <typename T>
+class TErrorOr;
+
+using TError = TErrorOr<void>;
 
 ////////////////////////////////////////////////////////////////////////////////
 
