@@ -6,8 +6,6 @@
 #include <emscripten.h>
 #include <emscripten/html5.h>
 
-#include <EGL/egl.h>
-
 #include <GLES3/gl3.h>
 
 #include <exception>
