@@ -1,23 +1,7 @@
 #include "error.h"
+#include <simple3d/core/error_code.h>
 
 namespace NSimple3D {
-
-////////////////////////////////////////////////////////////////////////////////
-
-namespace {
-
-////////////////////////////////////////////////////////////////////////////////
-
-// XXX(apachee): Simplest approximation for the time being.
-enum struct EErrorCode : int
-{
-    OK = 0,
-    Generic = 1,
-};
-
-////////////////////////////////////////////////////////////////////////////////
-
-}  // namespace
 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -28,6 +12,11 @@ public:
 
     explicit TImpl(std::string message)
         : Code_(EErrorCode::Generic)
+        , Message_(std::move(message))
+    { }
+
+    TImpl(EErrorCode code, std::string message)
+        : Code_(code)
         , Message_(std::move(message))
     { }
 
@@ -62,6 +51,16 @@ public:
         return &Message_;
     }
 
+    const EErrorCode& GetCode() const
+    {
+        return Code_;
+    }
+
+    EErrorCode* MutableCode()
+    {
+        return &Code_;
+    }
+
     bool IsOk() const
     {
         return Code_ == EErrorCode::OK;
@@ -89,6 +88,10 @@ TError::TErrorOr(TError&& other)
 
 TError::TErrorOr(std::string message, TDisableFormat)
     : Impl_(std::make_unique<TImpl>(message))
+{ }
+
+TError::TErrorOr(EErrorCode code, std::string message, TDisableFormat)
+    : Impl_(std::make_unique<TImpl>(code, message))
 { }
 
 TError::~TErrorOr() = default;
@@ -120,9 +123,24 @@ const std::string& TError::GetMessage() const
     return EmptyMessage;
 }
 
-TError& TError::SetMesasge(std::string message)
+TError& TError::SetMessage(std::string message)
 {
     *Impl_->MutableMessage() = std::move(message);
+    return *this;
+}
+
+const EErrorCode& TError::GetCode() const
+{
+    if (Impl_) {
+        return Impl_->GetCode();
+    }
+    static const EErrorCode OKErrorCode = EErrorCode::OK;
+    return OKErrorCode;
+}
+
+TError& TError::SetCode(EErrorCode message)
+{
+    *Impl_->MutableCode() = std::move(message);
     return *this;
 }
 

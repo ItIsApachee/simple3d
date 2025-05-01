@@ -17,6 +17,11 @@ TError::TErrorOr(std::format_string<Args...> fmt, Args&&... args)
     : TErrorOr(std::format(std::move(fmt), std::forward<Args>(args)...), DisableFormat)
 { }
 
+template <typename... Args>
+TError::TErrorOr(EErrorCode code, std::format_string<Args...> fmt, Args&&... args)
+    : TErrorOr(code, std::format(std::move(fmt), std::forward<Args>(args)...), DisableFormat)
+{ }
+
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>

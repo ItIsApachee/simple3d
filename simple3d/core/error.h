@@ -3,6 +3,7 @@
 #include "public.h"
 
 #include "compiler.h"
+#include "error_code.h"
 #include "format.h"
 
 #include <exception>
@@ -28,10 +29,13 @@ public:
     static constexpr TDisableFormat DisableFormat = {};
 
     TErrorOr(std::string message, TDisableFormat);
+    TErrorOr(EErrorCode code, std::string message, TDisableFormat);
 
     //! Construct error message by passing all formatArgs to std::format.
     template <typename... Args>
     TErrorOr(std::format_string<Args...> fmt, Args&&... args);
+    template <typename... Args>
+    TErrorOr(EErrorCode code, std::format_string<Args...> fmt, Args&&... args);
 
     ~TErrorOr();
 
@@ -39,7 +43,10 @@ public:
     TErrorOr& operator=(TErrorOr&&);
 
     const std::string& GetMessage() const;
-    TError& SetMesasge(std::string message);
+    TError& SetMessage(std::string message);
+
+    const EErrorCode& GetCode() const;
+    TError& SetCode(EErrorCode code);
 
     bool IsOk() const;
 
