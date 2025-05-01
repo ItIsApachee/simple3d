@@ -1,12 +1,13 @@
-#include <type_traits>
 #ifndef S3D_LIB_HELPERS_INL_H_
 #error This file should not be included directly, use .h version
 #include "helpers.h"
 #endif
 
-#include <tuple>
 #include <emscripten/emscripten.h>
 #include <emscripten/html5.h>
+
+#include <tuple>
+#include <type_traits>
 
 namespace NSimple3D {
 
