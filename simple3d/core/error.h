@@ -16,6 +16,21 @@ namespace NSimple3D {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+#define S3D_THROW(head, ...) \
+    throw ::NSimple3D::TErrorException(::NSimple3D::TError(head __VA_OPT__(,) __VA_ARGS__))
+
+#define S3D_THROW_UNLESS(cond, ...) \
+    if (!(cond)) { \
+        S3D_THROW(__VA_ARGS__); \
+    }
+
+#define S3D_THROW_IF(cond, ...) \
+    if (cond) { \
+        S3D_THROW(__VA_ARGS__); \
+    }
+
+////////////////////////////////////////////////////////////////////////////////
+
 template <>
 class [[nodiscard]] TErrorOr<void>
 {
