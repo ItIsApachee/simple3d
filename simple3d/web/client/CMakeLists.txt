@@ -22,7 +22,9 @@ string(STRIP "${EM_CFLAGS}" EM_CFLAGS)
 # file(GLOB_RECURSE SIMPLE3D_WEB_CLIENT_SOURCES *.cpp)
 set(
 	SIMPLE3D_WEB_CLIENT_SOURCES
-	program.cpp)
+	bootstrap.cpp
+	program.cpp
+	renderer_agent.cpp)
 
 set(SIMPLE3D_WEB_CLIENT_EMSCRIPTEN_LINK_OPTIONS "SHELL:--shell-file ${CMAKE_CURRENT_SOURCE_DIR}/templates/index.html" "SHELL:-sMIN_WEBGL_VERSION=2" "SHELL:-sMAX_WEBGL_VERSION=2")
 
@@ -70,11 +72,10 @@ add_subdirectory(${SIMPLE3D_WEB_CLIENT_GLM_SOURCE_DIR} ${SIMPLE3D_WEB_CLIENT_GLM
 
 add_subdirectory(${SIMPLE3D_SOURCE_DIR}/simple3d/core ${CMAKE_CURRENT_BINARY_DIR}/core)
 add_subdirectory(lib)
-add_subdirectory(gl)
 
 add_executable(simple3d_web_client ${SIMPLE3D_WEB_CLIENT_SOURCES})
 
-target_link_libraries(simple3d_web_client PUBLIC simple3d_core simple3d_web_client_lib simple3d_web_client_gl)
+target_link_libraries(simple3d_web_client PUBLIC simple3d_core simple3d_web_client_lib)
 
 target_include_directories(simple3d_web_client SYSTEM PUBLIC "${SIMPLE3D_SOURCE_DIR}" "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/include")
 

@@ -1,46 +1,65 @@
-#include <simple3d/web/client/gl/renderer.h>
-#include <simple3d/web/client/lib/webgl2/webgl.h>
+#include "public.h"
 
-#include <simple3d/core/assert.h>
+#include "bootstrap.h"
+#include "config.h"
 
-#include <emscripten.h>
-#include <emscripten/html5.h>
+#include <memory>
 
-#include <GLES3/gl3.h>
+// #include <simple3d/web/client/lib/webgl2/webgl.h>
 
-#include <exception>
-#include <iostream>
-#include <format>
-#include <cassert>
+// #include <simple3d/core/assert.h>
+
+// #include <emscripten.h>
+// #include <emscripten/html5.h>
+
+// #include <GLES3/gl3.h>
+
+// #include <exception>
+// #include <iostream>
+// #include <format>
+// #include <cassert>
 
 #ifndef __EMSCRIPTEN_PTHREADS__
 #error Support for pthread must be enabled
 #endif
 
-using namespace NSimple3D;
+namespace NSimple3D::NWebClient {
+
+////////////////////////////////////////////////////////////////////////////////
 
 class TProgram
 {
 public:
     TProgram() = default;
 
-    void Start() {
-        std::set_terminate(TerminateHandler);
-        NGLib::Start();
+    void Run() {
+        Bootstrap_ = CreateBootstrap(GetConfig());
+
+        Bootstrap_->Start();
     }
 
-    static void TerminateHandler()
+    TBootstrapConfigPtr GetConfig()
     {
-        // TODO(apachee): Setup all threads and exit.
-        NWebGL2::Terminate();
-        std::abort();
+        return std::make_shared<TBootstrapConfig>(TBootstrapConfig{
+            .RendererAgent = std::make_shared<TRendererAgentConfig>(TRendererAgentConfig{
+
+            }),
+        });
     }
+
+private:
+    IBootstrapPtr Bootstrap_;
 };
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+}  // namespace NSimple3D::NWebClient
 
 int main()
 {
-    auto program = new TProgram();
-    program->Start();
+    auto program = new NSimple3D::NWebClient::TProgram();
+    program->Run();
 
     // XXX(apachee): Do I really need this?
     [[maybe_unused]] volatile auto vProgram = program;

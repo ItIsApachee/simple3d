@@ -1,0 +1,23 @@
+#include "public.h"
+
+#include <memory>
+
+namespace NSimple3D::NWebClient {
+
+////////////////////////////////////////////////////////////////////////////////
+
+struct IBootstrap
+    : public std::enable_shared_from_this<IBootstrap>
+{
+    virtual void Start() = 0;
+
+    virtual ~IBootstrap() = default;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+IBootstrapPtr CreateBootstrap(TBootstrapConfigPtr config);
+
+////////////////////////////////////////////////////////////////////////////////
+
+}  // namespace NSimple3D::NWebClient
