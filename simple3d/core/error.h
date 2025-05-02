@@ -164,6 +164,6 @@ struct std::formatter<NSimple3D::TErrorOr<T>, char>
 
 ////////////////////////////////////////////////////////////////////////////////
 
-#define S3D_CORE_ERROR_H_
+#define S3D_CORE_ERROR_INL_H_
 #include "error-inl.h"
-#undef S3D_CORE_ERROR_H_
+#undef S3D_CORE_ERROR_INL_H_

@@ -1,10 +1,11 @@
-#include <simple3d/core/assert.h>
-#include <simple3d/core/compiler.h>
-#include <simple3d/core/public.h>
-#ifndef S3D_CORE_ERROR_H_
+#ifndef S3D_CORE_ERROR_INL_H_
 #error "This file should not be included directly, use .h version"
 #include "error.h"
 #endif
+
+#include <simple3d/core/assert.h>
+#include <simple3d/core/compiler.h>
+#include <simple3d/core/public.h>
 
 #include <ranges>
 
