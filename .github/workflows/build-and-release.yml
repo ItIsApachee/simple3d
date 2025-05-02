@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-release:
     name: Build project
     runs-on: ubuntu-latest
     permissions:
@@ -30,7 +30,7 @@ jobs:
           # Install Emscripten via emsdk
 
           set -x
-          
+
           ./emsdk install latest
           ./emsdk activate latest
           source ./emsdk_env.sh
@@ -50,7 +50,7 @@ jobs:
           # Make build artifacts dir
 
           mkdir -p $GITHUB_WORKSPACE/out
-          
+
           cmake -S . -B build -DSIMPLE3D_EMSCRIPTEN_CMAKE_TOOLCHAIN_FILE=$S3D_EMSCRIPTEN_CMAKE_TOOLCHAIN -DCMAKE_BUILD_TYPE:STRING=Release
           cmake --build build
 
