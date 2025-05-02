@@ -57,6 +57,8 @@ jobs:
           # Package client
           tar -czvf $GITHUB_WORKSPACE/out/web-client.tar.gz -C ./build/simple3d/web/client/out .
 
+      # TODO(apachee): Run tests
+
       - name: Release
         uses: softprops/action-gh-release@v2
         if: ${{ github.ref == 'refs/heads/main' }}
