@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-release:
-    name: Build project
+    name: Build project and create release with resulting artifacts
     runs-on: ubuntu-latest
     permissions:
       contents: write
