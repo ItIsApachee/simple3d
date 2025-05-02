@@ -20,6 +20,8 @@ void UnbindBuffer(EBufferType type)
     // so skip unbinding in release.
 #ifndef NDEBUG
     glBindBuffer(static_cast<GLenum>(type), InvalidBufferHandle);
+#else
+    S3D_UNUSED(type);
 #endif
 }
 

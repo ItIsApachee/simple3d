@@ -10,6 +10,8 @@ namespace NSimple3D {
     #define S3D_LIFETIME_BOUND
 #endif
 
+#define S3D_UNUSED(var) (void)(var)
+
 ////////////////////////////////////////////////////////////////////////////////
 
 }  // namespace NSimple3D
