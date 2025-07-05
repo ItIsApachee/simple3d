@@ -23,7 +23,11 @@ target_link_libraries(foo PRIVATE simple3d)
 - C++20-compatible compiler.
 - Emscripten SDK.
 
-TODO(apachee): Complete instructions and README as a whole
+2. Build:
+```bash
+$ cmake -S <simple3d-dir> -B <simple3d-dir>/build -DSIMPLE3D_EMSCRIPTEN_CMAKE_TOOLCHAIN_FILE=<emsdk-dir>/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_BUILD_TYPE:STRING=<cfg> ...
+$ cmake --build build
+```
 
 ## Credits
 
