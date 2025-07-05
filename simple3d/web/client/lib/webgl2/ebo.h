@@ -28,7 +28,7 @@ public:
 private:
     const std::byte *Data_{nullptr};
     i64 Size_{0};
-    GLenum Usage_{kDefaultUsage};
+    GLenum Usage_{DefaultBufferUsage};
 };
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ private:
         GLenum usage);
 
     GLuint Handle_ = InvalidBufferHandle;
-    GLenum Usage_ = kDefaultUsage;
+    GLenum Usage_ = DefaultBufferUsage;
     i64 Size_ = 0;
 };
 

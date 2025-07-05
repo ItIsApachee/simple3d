@@ -1,5 +1,5 @@
-// NB(apachee): 
-#include <simple3d/web/client/lib/webgl2/shader_sources/shader_sources.h>
+// NB(apachee):
+#include <simple3d/web/client/lib/graphics/shader_sources/shader_sources.h>
 
 namespace NSimple3D::NWebGL2 {
 

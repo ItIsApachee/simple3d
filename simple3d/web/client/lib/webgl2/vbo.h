@@ -21,7 +21,7 @@ public:
     explicit TVbo(
         i64 size,
 		const std::byte* data = nullptr,
-		GLenum usage = kDefaultUsage);
+		GLenum usage = DefaultBufferUsage);
 
     TVbo(TVbo&&);
     TVbo& operator=(TVbo&&);
@@ -34,7 +34,7 @@ public:
     void SetData(
         i64 size,
 		const std::byte* data = nullptr,
-		GLenum usage = kDefaultUsage);
+		GLenum usage = DefaultBufferUsage);
 
     void SubData(
         i64 offset,
@@ -51,7 +51,7 @@ public:
 
 private:
     GLuint Handle_{InvalidBufferHandle};
-    GLenum Usage_{kDefaultUsage};
+    GLenum Usage_{DefaultBufferUsage};
     i64 Size_{0};
 };
 

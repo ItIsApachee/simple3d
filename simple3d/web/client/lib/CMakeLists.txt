@@ -1,12 +1,14 @@
 add_library(
     simple3d_web_client_lib STATIC
+
     webgl2/ebo.cpp
     webgl2/helpers.cpp
-    webgl2/shader.cpp
+    webgl2/shader_program.cpp
     webgl2/vao.cpp
     webgl2/vbo.cpp
-    webgl2/vertex.cpp
-    webgl2/webgl.cpp)
+    webgl2/webgl.cpp
+
+    graphics/model_shader.cpp)
 
 target_link_libraries(simple3d_web_client_lib
     PUBLIC simple3d_core simple3d_web_client_lib_shader_sources
@@ -16,4 +18,4 @@ target_include_directories(simple3d_web_client_lib SYSTEM PUBLIC "${SIMPLE3D_SOU
 set_property(TARGET simple3d_web_client_lib  PROPERTY CXX_STANDARD 20)
 set_property(TARGET simple3d_web_client_lib PROPERTY COMPILE_FLAGS "${EM_CFLAGS}")
 
-add_subdirectory(webgl2)
+add_subdirectory(graphics)

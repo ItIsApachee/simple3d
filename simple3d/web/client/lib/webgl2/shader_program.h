@@ -20,7 +20,7 @@ namespace NSimple3D::NWebGL2 {
 class TShaderProgram
 {
 public:
-    friend TShaderBuilder;
+    friend TShaderProgramBuilder;
     friend void ResetActiveBindings();
 
     // Remove some explicit RO5 methods.
@@ -61,18 +61,18 @@ private:
 ////////////////////////////////////////////////////////////////////////////////
 
 // FIXME(apachee): (outdated) Remove GlesShaderBuilder (no reason for a builder).
-class TShaderBuilder
+class TShaderProgramBuilder
 {
 public:
-    TShaderBuilder() = default;
+    TShaderProgramBuilder() = default;
 
-    ~TShaderBuilder() = default;
+    ~TShaderProgramBuilder() = default;
 
     TErrorOr<TShaderProgram> Build() &&;
 
-    TShaderBuilder VertexShaderSource(std::string&& src) &&;
+    TShaderProgramBuilder VertexShaderSource(std::string&& src) &&;
 
-    TShaderBuilder FragmentShaderSource(std::string&& src) &&;
+    TShaderProgramBuilder FragmentShaderSource(std::string&& src) &&;
 
 private:
     std::optional<std::string> VertexShaderSource_{};

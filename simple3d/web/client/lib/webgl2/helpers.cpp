@@ -3,7 +3,7 @@
 #include "public.h"
 
 #include "vao.h"
-#include "shader.h"
+#include "shader_program.h"
 
 namespace NSimple3D::NWebGL2 {
 

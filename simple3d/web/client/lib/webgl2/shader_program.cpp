@@ -1,4 +1,4 @@
-#include "shader.h"
+#include "shader_program.h"
 
 #include <glm/gtc/type_ptr.hpp>
 #include <simple3d/core/error_code.h>
@@ -131,20 +131,20 @@ TError TShaderProgram::SetUniform1i(
 
 ////////////////////////////////////////////////////////////////////////////////
 
-TShaderBuilder TShaderBuilder::VertexShaderSource(std::string&& src) &&
+TShaderProgramBuilder TShaderProgramBuilder::VertexShaderSource(std::string&& src) &&
 {
     VertexShaderSource_ = std::forward<std::string>(src);
     return *this;
 }
 
-TShaderBuilder TShaderBuilder::FragmentShaderSource(std::string&& src) &&
+TShaderProgramBuilder TShaderProgramBuilder::FragmentShaderSource(std::string&& src) &&
 {
     FragmentShaderSource_ = std::forward<std::string>(src);
     return *this;
 }
 
 
-TErrorOr<TShaderProgram> TShaderBuilder::Build() &&
+TErrorOr<TShaderProgram> TShaderProgramBuilder::Build() &&
 {
     if (!VertexShaderSource_) {
         return TError(EErrorCode::WebGL2ShaderCompilationFailed, "Shader compilation failed: no vertex shader");

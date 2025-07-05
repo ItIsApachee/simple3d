@@ -6,7 +6,7 @@ file(READ textured/vertex.glsl SIMPLE3D_SHADER_TEXTURED_VERTEX_GLSL)
 
 configure_file(
     shader_sources.cpp.in
-    "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/include/simple3d/web/client/lib/webgl2/shader_sources/shader_sources.cpp"
+    "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/include/simple3d/web/client/lib/graphics/shader_sources/shader_sources.cpp"
 )
 
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS shader_sources.h.in)
@@ -18,7 +18,7 @@ set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS textured/vertex.g
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS textured/fragment.glsl)
 
 add_library(simple3d_web_client_lib_shader_sources STATIC
-    "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/include/simple3d/web/client/lib/webgl2/shader_sources/shader_sources.cpp")
+    "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/include/simple3d/web/client/lib/graphics/shader_sources/shader_sources.cpp")
 
 target_include_directories(simple3d_web_client_lib_shader_sources SYSTEM PUBLIC "${SIMPLE3D_SOURCE_DIR}" "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/include")
 

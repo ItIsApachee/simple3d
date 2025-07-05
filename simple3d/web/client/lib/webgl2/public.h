@@ -16,12 +16,12 @@ constexpr GLuint InvalidShaderHandle = 0;
 // shouldn't be used for any other reason whatsoever
 constexpr GLenum DefaultVaoHandle = 0;
 
-constexpr GLenum kDefaultUsage = GL_STATIC_DRAW;
+constexpr GLenum DefaultBufferUsage = GL_STATIC_DRAW;
 
 ////////////////////////////////////////////////////////////////////////////////
 
 class TShaderProgram;
-class TShaderBuilder;
+class TShaderProgramBuilder;
 class TEbo;
 class TEboBuilder;
 class TVbo;
