@@ -14,7 +14,7 @@ set(SIMPLE3D_WEB_CLIENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
 add_compile_definitions(ALLOW_BLOCKING_ON_MAIN_THREAD=0)
 
 execute_process(
-	COMMAND em++ --cflags
+	COMMAND ${CMAKE_CXX_COMPILER} --cflags
 	OUTPUT_VARIABLE EM_CFLAGS)
 
 string(STRIP "${EM_CFLAGS}" EM_CFLAGS)
@@ -63,7 +63,8 @@ simple3d_report_variables(
 	SIMPLE3D_BINARY_DIR
 	SIMPLE3D_WEB_CLIENT_SOURCES
 	SIMPLE3D_WEB_CLIENT_EMSCRIPTEN_LINK_OPTIONS
-	SIMPLE3D_WEB_CLIENT_DEBUG_INFO_TYPE)
+	SIMPLE3D_WEB_CLIENT_DEBUG_INFO_TYPE
+	EM_CFLAGS)
 
 # NB(apachee): Dirty hack to re-use GLM downloaded by main CMakeLists.txt.
 # Either way it would need to be built for native and emscripten platform, but at least
