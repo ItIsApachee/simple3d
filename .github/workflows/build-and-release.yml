@@ -1,5 +1,7 @@
 name: Build project and create release with resulting artifacts
 
+# TODO(apachee): Run tests in CI.
+
 on:
   push:
 
