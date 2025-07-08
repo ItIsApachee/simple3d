@@ -1,15 +1,15 @@
 #pragma once
 
-namespace NSimple3D::NWebGL2 {
+namespace NSimple3D::NGraphics {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// FIXME(apachee): Default?? provide better naming
-extern const char DefaultVertexShaderSource[];
-extern const char DefaultFragmentShaderSource[];
-// FIXME(apachee): Textured?? provide better naming
-extern const char TexturedVertexShaderSource[];
-extern const char TexturedFragmentShaderSource[];
+// TODO(apachee): Improve naming.
+extern const char ModelShaderVertexGlslSource[];
+extern const char ModelShaderFragmentGlslSource[];
+
+// extern const char TexturedVertexShaderSource[];
+// extern const char TexturedFragmentShaderSource[];
 
 ////////////////////////////////////////////////////////////////////////////////
 

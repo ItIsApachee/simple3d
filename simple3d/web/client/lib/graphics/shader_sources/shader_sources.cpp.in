@@ -1,14 +1,17 @@
 // NB(apachee):
 #include <simple3d/web/client/lib/graphics/shader_sources/shader_sources.h>
 
-namespace NSimple3D::NWebGL2 {
+namespace NSimple3D::NGraphics {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-constexpr char DefaultVertexShaderSource[] = R"CMAKE_RAW_STR(@SIMPLE3D_SHADER_DEFAULT_VERTEX_GLSL@)CMAKE_RAW_STR";
-constexpr char DefaultFragmentShaderSource[] = R"CMAKE_RAW_STR(@SIMPLE3D_SHADER_DEFAULT_FRAGMENT_GLSL@)CMAKE_RAW_STR";
+constexpr char ModelShaderVertexGlslSource[] = R"CMAKE_RAW_STR(@SIMPLE3D_MODEL_SHADER_VERTEX_GLSL@)CMAKE_RAW_STR";
+constexpr char ModelShaderFragmentGlslSource[] = R"CMAKE_RAW_STR(@SIMPLE3D_MODEL_SHADER_FRAGMENT_GLSL@)CMAKE_RAW_STR";
+
+/*
 constexpr char TexturedVertexShaderSource[] = R"CMAKE_RAW_STR(@SIMPLE3D_SHADER_TEXTURED_VERTEX_GLSL@)CMAKE_RAW_STR";
 constexpr char TexturedFragmentShaderSource[] = R"CMAKE_RAW_STR(@SIMPLE3D_SHADER_TEXTURED_FRAGMENT_GLSL@)CMAKE_RAW_STR";
+*/
 
 ////////////////////////////////////////////////////////////////////////////////
 

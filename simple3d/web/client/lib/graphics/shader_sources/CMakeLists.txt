@@ -1,5 +1,5 @@
-file(READ default/fragment.glsl SIMPLE3D_SHADER_DEFAULT_FRAGMENT_GLSL)
-file(READ default/vertex.glsl SIMPLE3D_SHADER_DEFAULT_VERTEX_GLSL)
+file(READ model/vertex.glsl SIMPLE3D_MODEL_SHADER_VERTEX_GLSL)
+file(READ model/fragment.glsl SIMPLE3D_MODEL_SHADER_FRAGMENT_GLSL)
 
 file(READ textured/fragment.glsl SIMPLE3D_SHADER_TEXTURED_FRAGMENT_GLSL)
 file(READ textured/vertex.glsl SIMPLE3D_SHADER_TEXTURED_VERTEX_GLSL)
@@ -11,8 +11,8 @@ configure_file(
 
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS shader_sources.h.in)
 
-set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS default/vertex.glsl)
-set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS default/fragment.glsl)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS model/vertex.glsl)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS model/fragment.glsl)
 
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS textured/vertex.glsl)
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS textured/fragment.glsl)
