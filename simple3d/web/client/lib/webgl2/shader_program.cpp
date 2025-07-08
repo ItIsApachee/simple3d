@@ -1,7 +1,10 @@
 #include "shader_program.h"
 
-#include <glm/gtc/type_ptr.hpp>
+#include <simple3d/core/assert.h>
+#include <simple3d/core/error.h>
 #include <simple3d/core/error_code.h>
+
+#include <glm/gtc/type_ptr.hpp>
 
 namespace NSimple3D::NWebGL2 {
 
@@ -30,10 +33,39 @@ GLuint CreateShader(EShaderType type)
 
 ////////////////////////////////////////////////////////////////////////////////
 
+TUniformLocationStore::TUniformLocationStore(std::unordered_map<std::string, GLint> uniformNameToLocationMapping, GLuint shaderHandle)
+    : UniformNameToLocationMapping(std::move(uniformNameToLocationMapping))
+#ifndef NDEBUG
+    , ShaderHandle(shaderHandle)
+#endif
+{
+#ifdef NDEBUG
+    S3D_UNUSED(shaderHandle);
+#endif
+}
+
+TUniformLocationStore::TUniformDescriptor TUniformLocationStore::GetUniformDescriptor(std::string uniformName) const
+{
+    auto it = UniformNameToLocationMapping.find(uniformName);
+    if (it == UniformNameToLocationMapping.end()) [[unlikely]] {
+        S3D_THROW("Unknown uniform name {}", uniformName);
+    }
+    S3D_VERIFY(it != UniformNameToLocationMapping.end());
+    return TUniformDescriptor{
+        .Location = it->second,
+#ifndef NDEBUG
+        .ShaderHandle = ShaderHandle,
+#endif
+    };
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 GLuint TShaderProgram::ActiveHandle_{InvalidShaderHandle};
 
-TShaderProgram::TShaderProgram(GLuint shader_id)
-    : Handle_(shader_id)
+TShaderProgram::TShaderProgram(GLuint shaderID, TUniformLocationStore uniformLocationStore)
+    : Handle_(shaderID)
+    , UniformLocationStore_(std::move(uniformLocationStore))
 { }
 
 TShaderProgram::TShaderProgram(TShaderProgram&& other)
@@ -91,42 +123,9 @@ void TShaderProgram::Delete() {
     }
 }
 
-// FIXME(apachee): Cache uniform locations (needed to improve WebGL2 performance)
-
-TError TShaderProgram::SetUniformMat4fv(
-    const std::string& name,
-    const glm::mat4& matrix) const
+TUniformDescriptor TShaderProgram::GetUniformDescriptor(std::string name) const
 {
-    int location = glGetUniformLocation(Handle_, name.c_str());
-    if (location == -1) {
-        return TError(EErrorCode::WebGL2UniformNotFound, "Uniform with name {} not found", name);
-    }
-    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
-    return TError();
-}
-
-TError TShaderProgram::SetUniform3fv(
-    const std::string& name,
-    const glm::vec3& vec) const
-{
-    int location = glGetUniformLocation(Handle_, name.c_str());
-    if (location == -1) {
-        return TError(EErrorCode::WebGL2UniformNotFound, "Uniform with name {} not found", name);
-    }
-    glUniform3fv(location, 1, glm::value_ptr(vec));
-    return TError();
-}
-
-TError TShaderProgram::SetUniform1i(
-    const std::string& name,
-    const GLint& val) const
-{
-    int location = glGetUniformLocation(Handle_, name.c_str());
-    if (location == -1) {
-        return TError(EErrorCode::WebGL2UniformNotFound, "Uniform with name {} not found", name);
-    }
-    glUniform1i(location, val);
-    return TError();
+    return UniformLocationStore_.GetUniformDescriptor(name);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -134,15 +133,14 @@ TError TShaderProgram::SetUniform1i(
 TShaderProgramBuilder TShaderProgramBuilder::VertexShaderSource(std::string&& src) &&
 {
     VertexShaderSource_ = std::forward<std::string>(src);
-    return *this;
+    return std::move(*this);
 }
 
 TShaderProgramBuilder TShaderProgramBuilder::FragmentShaderSource(std::string&& src) &&
 {
     FragmentShaderSource_ = std::forward<std::string>(src);
-    return *this;
+    return std::move(*this);
 }
-
 
 TErrorOr<TShaderProgram> TShaderProgramBuilder::Build() &&
 {
@@ -196,7 +194,9 @@ TErrorOr<TShaderProgram> TShaderProgramBuilder::Build() &&
     glDeleteShader(vertexShaderHandle);
     glDeleteShader(fragmentShaderHandle);
 
-    return TShaderProgram(shaderProgramHandle);
+    auto uniformLocationStore = TUniformLocationStore::Create(shaderProgramHandle, UniformNames_);
+
+    return TShaderProgram(shaderProgramHandle, uniformLocationStore);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

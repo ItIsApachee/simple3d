@@ -20,6 +20,7 @@ constexpr GLenum DefaultBufferUsage = GL_STATIC_DRAW;
 
 ////////////////////////////////////////////////////////////////////////////////
 
+class TUniformLocationStore;
 class TShaderProgram;
 class TShaderProgramBuilder;
 class TEbo;

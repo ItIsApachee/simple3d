@@ -3,27 +3,60 @@
 #include "public.h"
 
 #include <simple3d/core/error.h>
+#include <simple3d/core/types.h>
 
 #include <glm/mat4x4.hpp>
 #include <glm/vec3.hpp>
 
 #include <GLES3/gl3.h>
 
-#include <cstdint>
 #include <optional>
 #include <string>
+#include <unordered_map>
 
 namespace NSimple3D::NWebGL2 {
 
 ////////////////////////////////////////////////////////////////////////////////
 
+class TUniformLocationStore
+{
+public:
+    struct TUniformDescriptor
+    {
+        const GLint Location = -1;
+
+#ifndef NDEBUG
+        const GLuint ShaderHandle = InvalidShaderHandle;
+#endif
+    };
+
+    template <typename R>
+    static TUniformLocationStore Create(const GLuint shaderProgramHandle, const R& uniformNames);
+
+    TUniformLocationStore() = default;
+
+    TUniformDescriptor GetUniformDescriptor(std::string uniformName) const;
+
+private:
+    const std::unordered_map<std::string, GLint> UniformNameToLocationMapping;
+#ifndef NDEBUG
+    const GLuint ShaderHandle = InvalidShaderHandle;
+#endif
+
+    TUniformLocationStore(std::unordered_map<std::string, GLint> uniformNameToLocationMapping, GLuint shaderHandle);
+};
+
+using TUniformDescriptor = TUniformLocationStore::TUniformDescriptor;
+
+////////////////////////////////////////////////////////////////////////////////
+
+// TODO(apachee): Use either ID or Handle, but not both.
+
 class TShaderProgram
 {
 public:
-    friend TShaderProgramBuilder;
+    friend class TShaderProgramBuilder;
     friend void ResetActiveBindings();
-
-    // Remove some explicit RO5 methods.
 
     TShaderProgram() = default;
     TShaderProgram(const TShaderProgram&) = delete;
@@ -42,25 +75,22 @@ public:
 
     void Delete();
 
-    TError SetUniformMat4fv(
-        const std::string &name,
-        const glm::mat4 &matrix) const;
+    TUniformDescriptor GetUniformDescriptor(std::string name) const;
 
-    TError SetUniform3fv(const std::string& uniformName, const glm::vec3& value) const;
-
-    TError SetUniform1i(const std::string& uniformName, const GLint& value) const;
+    template <typename T>
+    void SetUniform(TUniformDescriptor uniformDescriptor, T&& value) const;
 
 private:
     static GLuint ActiveHandle_;
 
-    TShaderProgram(GLuint shader_id);
-
     GLuint Handle_{InvalidShaderHandle};
+    const TUniformLocationStore UniformLocationStore_;
+
+    TShaderProgram(GLuint shaderID, TUniformLocationStore uniformLocationStore);
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// FIXME(apachee): (outdated) Remove GlesShaderBuilder (no reason for a builder).
 class TShaderProgramBuilder
 {
 public:
@@ -68,17 +98,23 @@ public:
 
     ~TShaderProgramBuilder() = default;
 
+    TShaderProgramBuilder VertexShaderSource(std::string&& src) &&;
+    TShaderProgramBuilder FragmentShaderSource(std::string&& src) &&;
+    template <typename R>
+    TShaderProgramBuilder SetUniformNames(const R& uniformNames) &&;
+
     TErrorOr<TShaderProgram> Build() &&;
 
-    TShaderProgramBuilder VertexShaderSource(std::string&& src) &&;
-
-    TShaderProgramBuilder FragmentShaderSource(std::string&& src) &&;
-
-private:
+protected:
     std::optional<std::string> VertexShaderSource_{};
     std::optional<std::string> FragmentShaderSource_{};
+    std::vector<std::string> UniformNames_{};
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
 }  // namespace NSimple3D::NWebGL2
+
+#define S3D_LIB_WEBGL2_SHADER_PROGRAM_INL_H
+#include "shader_program-inl.h"
+#undef S3D_LIB_WEBGL2_SHADER_PROGRAM_INL_H
