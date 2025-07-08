@@ -28,6 +28,6 @@ void SetMainLoop(F mainLoopFunc, std::weak_ptr<T> weakThis, TArgs... funcArgs);
 
 }  // namespace NSimple3D::NGraphics
 
-#define S3D_LIB_HELPERS_INL_H_
+#define S3D_LIB_GRAPHICS_HELPERS_INL_H_
 #include "helpers-inl.h"
-#undef S3D_LIB_HELPERS_INL_H_
+#undef S3D_LIB_GRAPHICS_HELPERS_INL_H_

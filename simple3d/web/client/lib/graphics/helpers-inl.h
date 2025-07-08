@@ -1,4 +1,4 @@
-#ifndef S3D_LIB_HELPERS_INL_H_
+#ifndef S3D_LIB_GRAPHICS_HELPERS_INL_H_
 #error This file should not be included directly, use .h version
 #include "helpers.h"
 #endif
