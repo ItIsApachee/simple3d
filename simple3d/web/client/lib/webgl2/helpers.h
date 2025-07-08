@@ -1,8 +1,10 @@
 #pragma once
 
-#include <cstdint>
+#include <simple3d/core/public.h>
 
 #include <GLES3/gl3.h>
+
+#include <glm/fwd.hpp>
 
 namespace NSimple3D::NWebGL2 {
 
@@ -33,6 +35,12 @@ void CopyBuffer(
     GLsizeiptr size);
 
 void ResetActiveBindings();
+
+////////////////////////////////////////////////////////////////////////////////
+
+void SetUniform(GLint location, const GLint& value);
+void SetUniform(GLint location, const glm::vec3& value);
+void SetUniform(GLint location, const glm::mat4& matrix);
 
 ////////////////////////////////////////////////////////////////////////////////
 

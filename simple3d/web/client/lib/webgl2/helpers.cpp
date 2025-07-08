@@ -5,6 +5,8 @@
 #include "vao.h"
 #include "shader_program.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 namespace NSimple3D::NWebGL2 {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -47,6 +49,23 @@ void CopyBuffer(
 void ResetActiveBindings() {
     TShaderProgram::ActiveHandle_ = InvalidShaderHandle;
     TVao::ActiveHandle_ = InvalidBufferHandle;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+void SetUniform(GLint location, const GLint& value)
+{
+    glUniform1i(location, value);
+}
+
+void SetUniform(GLint location, const glm::vec3& value)
+{
+    glUniform3fv(location, 1, glm::value_ptr(value));
+}
+
+void SetUniform(GLint location, const glm::mat4& matrix)
+{
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
