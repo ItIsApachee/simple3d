@@ -55,7 +55,7 @@ void TShaderProgram::SetUniform(TUniformDescriptor uniformDescriptor, T&& value)
 #endif
 
     auto location = uniformDescriptor.Location;
-    SetUniform(location, std::forward<T>(value));
+    ::NSimple3D::NWebGL2::SetUniform(location, std::forward<T>(value));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
