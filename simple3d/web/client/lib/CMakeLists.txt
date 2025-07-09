@@ -4,11 +4,13 @@ add_library(
     webgl2/ebo.cpp
     webgl2/helpers.cpp
     webgl2/shader_program.cpp
+    webgl2/uniform_id.cpp
     webgl2/vao.cpp
     webgl2/vbo.cpp
     webgl2/webgl.cpp
 
-    graphics/model_shader.cpp)
+    # graphics/model_shader.cpp
+    )
 
 target_link_libraries(simple3d_web_client_lib
     PUBLIC simple3d_core simple3d_web_client_lib_shader_sources
