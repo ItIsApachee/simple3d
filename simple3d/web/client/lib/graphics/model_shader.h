@@ -2,6 +2,8 @@
 
 #include "public.h"
 
+#include <simple3d/core/types.h>
+
 #include <GLES3/gl3.h>
 
 #include <glm/glm.hpp>
@@ -26,6 +28,8 @@ struct TDirectionalLight
 struct IShader
     : public std::enable_shared_from_this<IShader>
 {
+    static const ui32 DirectionalLigthCapacity;
+
     virtual void SetView(const glm::mat4& view) = 0;
     virtual void SetProj(const glm::mat4& projection) = 0;
     virtual void SetViewPos(const glm::vec3& pos) = 0;

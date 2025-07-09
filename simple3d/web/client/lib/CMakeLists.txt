@@ -9,8 +9,7 @@ add_library(
     webgl2/vbo.cpp
     webgl2/webgl.cpp
 
-    # graphics/model_shader.cpp
-    )
+    graphics/model_shader.cpp)
 
 target_link_libraries(simple3d_web_client_lib
     PUBLIC simple3d_core simple3d_web_client_lib_shader_sources
