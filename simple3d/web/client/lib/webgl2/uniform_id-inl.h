@@ -76,6 +76,11 @@ const TItem& TArrayUID<Size, TItem>::operator[](ui32 index) const
     return Items_[index];
 }
 
+template <ui32 Size, CUniformID TItem>
+TArrayUID<Size, TItem>::TArrayUID(std::array<TItem, Size> items)
+    : Items_(std::move(items))
+{ }
+
 ////////////////////////////////////////////////////////////////////////////////
 
 template <CUniformID... TFields>
@@ -167,6 +172,14 @@ TStructUID<TFields...>::TStructUID(TPrefixTag, const std::string& prefix, TField
 
 ////////////////////////////////////////////////////////////////////////////////
 
+template <CUniformID... TFields>
+TStructUID<TFields...> CreateStructUID(TDummyArg, TFields... fields)
+{
+    return ::NSimple3D::NWebGL2::CreateStructUID(std::move(fields)...);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
 }  // namespace NDetail
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -191,6 +204,25 @@ TStructUID<TFields...> CreateStructUIDWithName(std::string name, TFields... fiel
     return TStructUID<TFields...>(
         std::move(name),
         std::move(fields)...);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+template <CUniformID... TUniformIDs>
+std::vector<std::string> MergeUIDs(const TUniformIDs&... uniformIDs)
+{
+    std::vector<std::string> result;
+
+    (
+        [&] {
+            for (auto& id : uniformIDs.GetUIDs()) {
+                result.push_back(std::move(id));
+            }
+        } (),
+        ...
+    );
+
+    return result;
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -6,6 +6,7 @@
 
 #include <string>
 #include <tuple>
+#include <type_traits>
 
 namespace NSimple3D::NWebGL2 {
 
@@ -75,6 +76,8 @@ public:
     TSimpleUID WithPrefix(const std::string& prefix) const;
 
     TUniformDescriptor GetDescriptor() const;
+
+    operator TUniformDescriptor () const;
 
 private:
     std::string Name_;
@@ -171,54 +174,26 @@ static_assert(CUniformID<
     >::TWithDescriptor
 >);
 
-// TODO(apachee): Add macro for cleaner code with structs.
-/*
+struct TDummyArg
+{ };
 
-#define FOR_EACH_FIELD(XX) \
-    XX(PascalCase, type), \
-    XX(PascalCase, type), \
-    XX(PascalCase, type), \
-    XX(PascalCase, type) \
-
-S3D_DEFINE_STRUCT_UID(FieldEnumName, FOR_EACH_FIELD);
-
-S3D_CREATE_STRUCT_UID(FOR_EACH_FIELD);
-// or
-S3D_CREATE_STRUCT_UID_WITH_NAME(StructName, FOR_EACH_FIELD);
-
-#undef FOR_EACH_FIELD
-
-////////////////////////////////////////////////////////////////////////////////
-
-#define _S3D_DEFINE_STRUCT_UID_ENUM_ENTRY(PascalCase, ...) \
-    PascalCase
-
-#define S3D_DEFINE_STRUCT_UID(FIELD_ENUM_NAME, FOR_EACH_FIELD) \
-    enum FIELD_ENUM_NAME \
-    { \
-        FOR_EACH_FIELD(_S3D_DEFINE_STRUCT_UID_ENUM_ENTRY)
-    }; \
-    static_assert(true)
-
-#define _S3D_CREATE_STRUCT_UID_FIELD(PASCAL_CASE, TYPE) \
-    TYPE
-
-#define S3D_CREATE_STRUCT_UID(FOR_EACH_FIELD) \
-    CreateStructUID( \
-    FOR_EACH_FIELD(_S3D_CREATE_STRUCT_UID_FIELD) \
-    )
-
-*/
+//! Helper for macro impl.
+template <CUniformID... TFields>
+TStructUID<TFields...> CreateStructUID(TDummyArg, TFields... fields);
 
 ////////////////////////////////////////////////////////////////////////////////
 
 }  // namespace NDetail
+
+////////////////////////////////////////////////////////////////////////////////
 
 using TSimpleUID = NDetail::TSimpleUID<>;
 
 using NDetail::TArrayUID;
 using NDetail::TStructUID;
 using NDetail::CUniformID;
+
+////////////////////////////////////////////////////////////////////////////////
 
 TSimpleUID CreateSimpleUID(std::string name);
 
@@ -231,7 +206,73 @@ TStructUID<TFields...> CreateStructUID(TFields... fields);
 template <CUniformID... TFields>
 TStructUID<TFields...> CreateStructUIDWithName(std::string name, TFields... fields);
 
+////////////////////////////////////////////////////////////////////////////////
+
 const TSimpleUID EmptySimpleUID = CreateSimpleUID("");
+
+////////////////////////////////////////////////////////////////////////////////
+
+template <CUniformID... TUniformIDs>
+std::vector<std::string> MergeUIDs(const TUniformIDs&... uniformIDs);
+
+////////////////////////////////////////////////////////////////////////////////
+
+#define _S3D_DEFINE_STRUCT_UID_FIELD_IDS_ENUM_ENTRY(PASCAL_CASE_NAME, ...) \
+    PASCAL_CASE_NAME, \
+
+#define _S3D_DEFINE_STRUCT_UID_FIELD_IDS_STRUCT_FIELD(PASCAL_CASE_NAME, ...) \
+    static constexpr auto PASCAL_CASE_NAME = static_cast<std::size_t>(_EEnum :: PASCAL_CASE_NAME);
+
+#define S3D_DEFINE_STRUCT_UID_FIELD_IDS(STRUCT_UID_FIELD_IDS_NAME, FOR_EACH_FIELD) \
+    enum struct _ ## STRUCT_UID_FIELD_IDS_NAME ## Internal : std::size_t \
+    { \
+        FOR_EACH_FIELD(_S3D_DEFINE_STRUCT_UID_FIELD_IDS_ENUM_ENTRY)\
+    }; \
+    \
+    struct STRUCT_UID_FIELD_IDS_NAME \
+    { \
+        using _EEnum = _ ## STRUCT_UID_FIELD_IDS_NAME ## Internal; \
+        \
+        FOR_EACH_FIELD(_S3D_DEFINE_STRUCT_UID_FIELD_IDS_STRUCT_FIELD)\
+    }; \
+    static_assert(true)
+
+#define _S3D_CREATE_STRUCT_UID_FIELD(_, TYPE) \
+    , TYPE
+
+#define S3D_CREATE_STRUCT_UID(FOR_EACH_FIELD) \
+    ::NSimple3D::NWebGL2::NDetail::CreateStructUID( \
+        ::NSimple3D::NWebGL2::NDetail::TDummyArg{} \
+        FOR_EACH_FIELD(_S3D_CREATE_STRUCT_UID_FIELD))
+
+#define S3D_CREATE_STRUCT_UID_WITH_NAME(name, FOR_EACH_FIELD) \
+    ::NSimple3D::NWebGL2::NDetail::CreateStructUID( \
+        name \
+        FOR_EACH_FIELD(_S3D_CREATE_STRUCT_UID_FIELD))
+
+////////////////////////////////////////////////////////////////////////////////
+
+#define _S3D_DEFINE_UNIFORM_DESCRIPTORS_STRUCT_FIELD(FIELD_NAME) \
+    decltype(TBaseStruct :: FIELD_NAME)::TWithDescriptor FIELD_NAME;
+
+#define _S3D_DEFINE_UNIFORM_DESCRIPTORS_STRUCT_FIELD_INITIALIZER(FIELD_NAME) \
+    .FIELD_NAME = std::remove_const_t<decltype(TBaseStruct :: FIELD_NAME)>(TBaseStruct :: FIELD_NAME).FillDescriptor(shaderProgram),
+
+#define S3D_DEFINE_UNIFORM_DESCRIPTORS_STRUCT(STRUCT_NAME, BASE_STRUCT_NAME, FOR_EACH_FIELD) \
+    struct STRUCT_NAME \
+    { \
+        using TBaseStruct = BASE_STRUCT_NAME; \
+        \
+        static STRUCT_NAME Create(const TShaderProgram& shaderProgram) \
+        { \
+            return STRUCT_NAME{ \
+                FOR_EACH_FIELD(_S3D_DEFINE_UNIFORM_DESCRIPTORS_STRUCT_FIELD_INITIALIZER) \
+            }; \
+        } \
+        \
+        FOR_EACH_FIELD(_S3D_DEFINE_UNIFORM_DESCRIPTORS_STRUCT_FIELD) \
+    }; \
+    static_assert(true)
 
 ////////////////////////////////////////////////////////////////////////////////
 

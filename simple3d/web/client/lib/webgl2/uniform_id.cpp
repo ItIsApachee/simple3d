@@ -58,6 +58,11 @@ TUniformDescriptor TSimpleUID<true>::GetDescriptor() const
     return Descriptor_;
 }
 
+TSimpleUID<true>::operator TUniformDescriptor () const
+{
+    return GetDescriptor();
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 }  // namespace NDetail
