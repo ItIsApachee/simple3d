@@ -13,9 +13,6 @@ include(ExternalProject)
 
 # Flag for determining how the library is built.
 # If IS_MAIN_PROJECT is false, web client part should be downloaded instead of being built.
-# TODO(apachee): Download release using link pattern from
-# FIXME(apachee): Get info about release using github API in cmake
-# https://docs.github.com/en/repositories/releasing-projects-on-github/linking-to-releases.
 set(IS_MAIN_PROJECT OFF)
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
@@ -68,5 +65,5 @@ add_subdirectory(simple3d)
 
 # TODO(apachee): Make install steps that puts html files where they belong
 # TODO(apachee): Maybe use distinct build directories for different build types and create compile_commands.json symlink in project root.
-# This way CMake can change symlink according to build type selected (this way you can potentially look at clangd errors for differnet configurations). Another benefit is that you can build different configurations 
+# This way CMake can change symlink according to build type selected (this way you can potentially look at clangd errors for differnet configurations). Another benefit is that you can build different configurations
 # without affecting one another, thus preserving caches.
