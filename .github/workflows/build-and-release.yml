@@ -69,3 +69,5 @@ jobs:
           name: "[CI] Automatic pre-release (Commit: ${{ github.sha }})"
           tag_name: prerelease
           body: ""  # Generate release notes?
+          target_commitish: ${{ github.sha }}
+          overwrite_files: true
