@@ -10,6 +10,8 @@ S3D_DECLARE_REFCOUNTED_STRUCT(TBootstrapConfig);
 S3D_DECLARE_REFCOUNTED_STRUCT(IRendererAgent);
 S3D_DECLARE_REFCOUNTED_STRUCT(TRendererAgentConfig);
 
+S3D_DECLARE_REFCOUNTED_STRUCT(IRenderDataFetcher);
+
 ////////////////////////////////////////////////////////////////////////////////
 
 }  // namespace NSimple3D::NWebClient
