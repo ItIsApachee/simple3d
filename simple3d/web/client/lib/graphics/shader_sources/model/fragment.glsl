@@ -23,7 +23,7 @@ uniform int directional_light_count;
 #define DIRECTIONAL_LIGHTS 8
 uniform DirectionalLight directional_light[DIRECTIONAL_LIGHTS];
 
-// should I include normal & view_pos here?
+// // should I include normal & view_pos here?
 vec3 calc_dir_light(DirectionalLight light, vec3 normal_, vec3 view_dir) {
   vec3 diffuse = light.diffuse * max(dot(normal_, -light.direction), 0.0) * diffuse_color;
 
@@ -40,12 +40,20 @@ void main() {
   vec3 cum_frag_color = vec3(0.0);
   cum_frag_color += ambient;
 
-  vec3 view_dir = normalize(view_pos - pos);
-  vec3 normal_ = normalize(normal);
-  int directional_light_count_ = min(directional_light_count, DIRECTIONAL_LIGHTS);
-  for (int i = 0; i < directional_light_count_; i++) {
-    cum_frag_color += calc_dir_light(directional_light[i], normal_, view_dir);
+  if (directional_light_count > 0) {
+    cum_frag_color.x += view_pos.x + ambient_light.x;
+    for (int i = 0; i < directional_light_count; i++) {
+      DirectionalLight light = directional_light[i];
+      cum_frag_color.x += light.specular.x + light.diffuse.x + light.direction.x;
+    }
   }
+
+  // vec3 view_dir = normalize(view_pos - pos);
+  // vec3 normal_ = normalize(normal);
+  // int directional_light_count_ = min(directional_light_count, DIRECTIONAL_LIGHTS);
+  // for (int i = 0; i < directional_light_count_; i++) {
+  //   cum_frag_color += calc_dir_light(directional_light[i], normal_, view_dir);
+  // }
 
   frag_color = vec4(cum_frag_color, 1.0);
 }
