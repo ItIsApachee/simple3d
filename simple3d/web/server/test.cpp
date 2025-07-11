@@ -25,6 +25,9 @@ int main() {
         res->end("");
     };
 
+    struct TPerSocketData
+    { };
+
     auto webApp = uWS::App()
         .get("/", indexHtmlHandler)
         .get("/index.html", indexHtmlHandler)
@@ -49,6 +52,15 @@ int main() {
             AddHeadersForThreads(res);
             res->write(index_wasm_str.str());
             res->end("");
+        })
+        .ws<TPerSocketData>("/ws", {
+            .open = [] (auto* /*ws*/) {
+                std::cout << "websocket open" << std::endl;
+            },
+            .message = [] (auto* ws, std::string_view msg, uWS::OpCode /*opCode*/) {
+                std::cout << "message: " << msg << std::endl;
+                ws->send("abcde");
+            }
         })
         .listen(8080, [] (auto* /*sock*/) {
             std::cout << "listening on http://localhost:8080/" << std::endl;
