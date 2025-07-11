@@ -72,6 +72,7 @@ TShaderProgram::TShaderProgram(TShaderProgram&& other)
     : TShaderProgram()
 {
     std::swap(Handle_, other.Handle_);
+    std::swap(UniformLocationStore_, other.UniformLocationStore_);
 }
 
 TShaderProgram& TShaderProgram::operator=(TShaderProgram&& other)
@@ -87,6 +88,7 @@ TShaderProgram& TShaderProgram::operator=(TShaderProgram&& other)
 
     // Swap with cleared state
     std::swap(Handle_, other.Handle_);
+    std::swap(UniformLocationStore_, other.UniformLocationStore_);
 
     return *this;
 }
@@ -98,12 +100,14 @@ TShaderProgram::~TShaderProgram()
     }
 }
 
-void TShaderProgram::Use() const
+bool TShaderProgram::Use() const
 {
     if (ActiveHandle_ != Handle_) {
         glUseProgram(Handle_);
         ActiveHandle_ = Handle_;
+        return true;
     }
+    return false;
 }
 
 unsigned int TShaderProgram::GetID() const
