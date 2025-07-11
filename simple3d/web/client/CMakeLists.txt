@@ -56,7 +56,6 @@ add_link_options(
 	"SHELL:-sPROXY_TO_PTHREAD")
 
 # Enable offscreen canvas
-
 add_link_options(
 	"SHELL:-sOFFSCREENCANVAS_SUPPORT"
 	"SHELL:-sOFFSCREEN_FRAMEBUFFER"
@@ -97,3 +96,5 @@ set_property(TARGET simple3d_web_client PROPERTY OUTPUT_NAME index)
 set_property(TARGET simple3d_web_client PROPERTY SUFFIX .html)
 
 target_link_options(simple3d_web_client PUBLIC ${SIMPLE3D_WEB_CLIENT_EMSCRIPTEN_LINK_OPTIONS})
+
+set_target_properties(simple3d_web_client PROPERTIES LINK_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/templates/index.html)
