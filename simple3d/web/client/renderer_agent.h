@@ -2,11 +2,18 @@
 
 #include "public.h"
 
+#include <simple3d/web/client/lib/graphics/model_shader.h>
+
 #include <emscripten.h>
 
 #include <memory>
+#include <vector>
 
 namespace NSimple3D::NWebClient {
+
+////////////////////////////////////////////////////////////////////////////////
+
+using TRenderData = std::vector<NGraphics::TTriangle>;
 
 ////////////////////////////////////////////////////////////////////////////////
 
