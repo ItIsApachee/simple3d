@@ -3,8 +3,8 @@ set(SIMPLE3D_EMSCRIPTEN_CMAKE_TOOLCHAIN_FILE "" CACHE FILEPATH "")
 # Report first.
 simple3d_report_variables(
     "simple3d/simple3d/web"
-        SIMPLE3D_EMSCRIPTEN_CMAKE_TOOLCHAIN_FILE 
-        SIMPLE3D_WEB_CLIENT_SOURCE_DIR 
+        SIMPLE3D_EMSCRIPTEN_CMAKE_TOOLCHAIN_FILE
+        SIMPLE3D_WEB_CLIENT_SOURCE_DIR
         SIMPLE3D_WEB_CLIENT_BINARY_DIR)
 
 # And then check invariants.
@@ -54,6 +54,9 @@ else()
             STAMP_DIR "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/simple3d-stamp"
             INSTALL_DIR "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/simple3d-install"
             DOWNLOAD_DIR "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/simple3d-download" # should be empty
+
+            BUILD_ALWAYS 1
+            EXCLUDE_FROM_ALL FALSE
 
             URL "${SIMPLE3D_WEB_CLIENT_DOWNLOAD_URL}"
 
