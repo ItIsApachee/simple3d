@@ -12,7 +12,6 @@
 
 #include <optional>
 #include <string>
-#include <memory>
 #include <unordered_map>
 
 namespace NSimple3D::NWebGL2 {
@@ -104,9 +103,9 @@ public:
     TUniformDescriptor GetUniformDescriptor(std::string uniformName) const;
 
 private:
-    const std::unordered_map<std::string, GLint> UniformNameToLocationMapping;
+    std::unordered_map<std::string, GLint> UniformNameToLocationMapping;
 #ifndef NDEBUG
-    const GLuint ShaderHandle = InvalidShaderHandle;
+    GLuint ShaderHandle = InvalidShaderHandle;
 #endif
 
     TUniformLocationStore(std::unordered_map<std::string, GLint> uniformNameToLocationMapping, GLuint shaderHandle);
@@ -133,7 +132,8 @@ public:
 
     ~TShaderProgram();
 
-    void Use() const;
+    //! Returns true if shader program was not already active.
+    bool Use() const;
 
     unsigned int GetID() const;
 
@@ -150,7 +150,7 @@ private:
     static GLuint ActiveHandle_;
 
     GLuint Handle_{InvalidShaderHandle};
-    const TUniformLocationStore UniformLocationStore_;
+    TUniformLocationStore UniformLocationStore_;
 
     TShaderProgram(GLuint shaderID, TUniformLocationStore uniformLocationStore);
 };
