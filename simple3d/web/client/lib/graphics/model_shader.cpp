@@ -155,25 +155,98 @@ IShaderPtr CreateModelShader()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void TVertex::BindAttributes()
+void TTriangle::BindAttributes()
 {
-    glVertexAttribPointer(
-        0,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		sizeof(TVertex),
-		reinterpret_cast<void*>(offsetof(TVertex, Pos)));
-    glEnableVertexAttribArray(0);
+	static constexpr GLuint ModelIndex = 0;
+	static constexpr int ModelRowCount = 4;
+	static constexpr int ModelRowSize = sizeof(glm::vec4);
+	static constexpr int ModelRowComponentCount = 4;
 
-    glVertexAttribPointer(
-        1,
-		3,
+	static constexpr GLuint PosIndex = 4;
+	static constexpr int PosComonentCount = 3;
+	static constexpr GLuint DiffuseIndex = 7;
+	static constexpr int DiffuseComonentCount = 3;
+	static constexpr GLuint SpecularIndex = 10;
+	static constexpr int SpecularComonentCount = 3;
+	static constexpr int VertexCount = 3;
+	static constexpr GLuint ShininessIndex = 13;
+	static constexpr int ShininessComponentCount = 3;
+	static constexpr int VertexSize = sizeof(TVertex);
+
+	static constexpr GLuint NormalIndex = 14;
+	static constexpr int NormalComponentCount = 3;
+
+	static constexpr auto Stride = sizeof(TTriangle);
+
+	for (int i = 0; i < ModelRowCount; i++) {
+		glVertexAttribPointer(
+			ModelIndex + i,
+			ModelRowComponentCount,
+			GL_FLOAT,
+			GL_FALSE,
+			Stride,
+			reinterpret_cast<void*>(
+				offsetof(TTriangle, Model) + ModelRowSize * i));
+		glEnableVertexAttribArray(ModelIndex + i);
+		glVertexAttribDivisor(ModelIndex + i, 1);
+	}
+
+	for (int i = 0; i < VertexCount; i++) {
+		// XXX(apachee): Is behavior here well-defined regardless of the alignment?
+
+		glVertexAttribPointer(
+			PosIndex + i,
+			PosComonentCount,
+			GL_FLOAT,
+			GL_FALSE,
+			Stride,
+			reinterpret_cast<void*>(
+				offsetof(TTriangle, Vertices) + VertexSize * i + offsetof(TVertex, Pos)));
+		glEnableVertexAttribArray(PosIndex + i);
+		glVertexAttribDivisor(PosIndex + i, 1);
+
+		glVertexAttribPointer(
+			DiffuseIndex + i,
+			DiffuseComonentCount,
+			GL_FLOAT,
+			GL_FALSE,
+			Stride,
+			reinterpret_cast<void*>(
+				offsetof(TTriangle, Vertices) + VertexSize * i + offsetof(TVertex, Diffuse)));
+		glEnableVertexAttribArray(DiffuseIndex + i);
+		glVertexAttribDivisor(DiffuseIndex + i, 1);
+
+		glVertexAttribPointer(
+			SpecularIndex + i,
+			SpecularComonentCount,
+			GL_FLOAT,
+			GL_FALSE,
+			Stride,
+			reinterpret_cast<void*>(
+				offsetof(TTriangle, Vertices) + VertexSize * i + offsetof(TVertex, Specular)));
+		glEnableVertexAttribArray(SpecularIndex + i);
+		glVertexAttribDivisor(SpecularIndex + i, 1);
+	}
+
+	glVertexAttribPointer(
+		ShininessIndex,
+		ShininessComponentCount,
 		GL_FLOAT,
 		GL_FALSE,
-		sizeof(TVertex),
-		reinterpret_cast<void*>(offsetof(TVertex, Normal)));
-    glEnableVertexAttribArray(1);
+		Stride,
+		reinterpret_cast<void*>(offsetof(TTriangle, Shininess)));
+	glEnableVertexAttribArray(ShininessIndex);
+	glVertexAttribDivisor(ShininessIndex, 1);
+
+	glVertexAttribPointer(
+		NormalIndex,
+		NormalComponentCount,
+		GL_FLOAT,
+		GL_FALSE,
+		Stride,
+		reinterpret_cast<void*>(offsetof(TTriangle, Normal)));
+	glEnableVertexAttribArray(NormalIndex);
+	glVertexAttribDivisor(NormalIndex, 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
