@@ -26,7 +26,7 @@ private:
 	struct TUniforms
 	{
 		inline static const auto ViewPos = CreateSimpleUID("view_pos");
-		inline static const auto AmbientLight = CreateSimpleUID("ambient_light_uid");
+		inline static const auto AmbientLight = CreateSimpleUID("ambient_light");
 
 #define	FOR_EACH_FIELD(XX) \
 	XX(Direction, CreateSimpleUID("direction")) \
