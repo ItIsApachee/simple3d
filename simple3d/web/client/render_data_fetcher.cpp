@@ -110,7 +110,7 @@ private:
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-        static const std::string hello = "abcde";
+        static const std::string hello = "aboba";
         auto data = std::span{reinterpret_cast<const std::byte*>(hello.data()), hello.size()};
         WebSocket_->SendBinary(data);
         auto dataCopy = WebSocket_->ReadExactlyN(data.size_bytes());
@@ -118,17 +118,7 @@ private:
         auto dataStr = std::string((char*)data.data(), (char*)(data.data() + data.size()));
         auto dataCopyStr = std::string((char*)dataCopy.data(), (char*)(dataCopy.data() + dataCopy.size()));
 
-        std::string dataCopyVStr;
-        {
-            for (auto i : dataCopy) {
-                dataCopyVStr += std::format("{}, ", int(i));
-            }
-        }
-
-        std::cout << std::format("ws dbg {} {}", dataStr, dataCopyVStr) << std::endl;
-        while (dataCopyStr != dataStr) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        }
+        std::cout << std::format("ws dbg {} {}", dataStr, dataCopyStr) << std::endl;
     }
 
     std::mutex FetcherThreadMutex_;

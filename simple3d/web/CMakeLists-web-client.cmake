@@ -68,3 +68,8 @@ else()
     )
 
 endif()
+
+install(
+    DIRECTORY "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/out"
+    DESTINATION .
+)

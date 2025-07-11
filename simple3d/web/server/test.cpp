@@ -15,7 +15,7 @@ void AddHeadersForThreads(auto* res)
 
 int main() {
     auto indexHtmlHandler = [](auto* res, uWS::HttpRequest* /*req*/) {
-        std::ifstream index_html_stream("/Users/apachee/projects/simple3d/build/simple3d/web/client/out/index.html");
+        std::ifstream index_html_stream("out/index.html");
         std::stringstream index_html_str;
         index_html_str << index_html_stream.rdbuf();
         res->writeHeader("Content-Type", "text/html; charset=utf-8");
@@ -32,7 +32,7 @@ int main() {
         .get("/", indexHtmlHandler)
         .get("/index.html", indexHtmlHandler)
         .get("/index.js", [](auto* res, uWS::HttpRequest* /*req*/) {
-            std::ifstream index_js_stream("/Users/apachee/projects/simple3d/build/simple3d/web/client/out/index.js");
+            std::ifstream index_js_stream("out/index.js");
             std::stringstream index_js_str;
             index_js_str << index_js_stream.rdbuf();
 
@@ -43,7 +43,7 @@ int main() {
             res->end("");
         })
         .get("/index.wasm", [](auto* res, uWS::HttpRequest* /*req*/) {
-            std::ifstream index_wasm_stream("/Users/apachee/projects/simple3d/build/simple3d/web/client/out/index.wasm");
+            std::ifstream index_wasm_stream("out/index.wasm");
             std::stringstream index_wasm_str;
             index_wasm_str << index_wasm_stream.rdbuf();
 
