@@ -130,9 +130,9 @@ public:
 		SetUniform(UniformDescriptors_.AmbientLight, color);
 	}
 
-    void Use() const override
+    bool Use() const override
 	{
-
+		return ShaderProgram_.Use();
 	}
 
 private:

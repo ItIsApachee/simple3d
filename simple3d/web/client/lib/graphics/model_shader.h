@@ -36,7 +36,8 @@ struct IShader
     virtual void SetDirectionalLights(
         const std::unordered_set<std::shared_ptr<TDirectionalLight>>& lights) = 0;
     virtual void SetAmbientLight(const glm::vec3& color) = 0;
-    virtual void Use() const = 0;
+    //! Returns true if shader was not already active.
+    virtual bool Use() const = 0;
 
     virtual ~IShader() = default;
 };
@@ -71,7 +72,6 @@ struct TTriangle
 using TVertex = TTriangle::TVertex;
 
 static_assert(std::is_standard_layout_v<TTriangle>);
-
 
 ////////////////////////////////////////////////////////////////////////////////
 
