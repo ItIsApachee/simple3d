@@ -155,7 +155,7 @@ IShaderPtr CreateModelShader()
 
 ////////////////////////////////////////////////////////////////////////////////
 
-void TTriangle::BindAttributes()
+void BindTriangleAttributes()
 {
 	static constexpr GLuint ModelIndex = 0;
 	static constexpr int ModelRowCount = 4;
