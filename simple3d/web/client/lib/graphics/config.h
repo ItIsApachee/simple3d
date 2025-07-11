@@ -1,0 +1,17 @@
+#pragma once
+
+namespace NSimple3D::NGraphics {
+
+////////////////////////////////////////////////////////////////////////////////
+
+struct TFpsCameraConfig
+{
+    float MouseSensitivity{1.0F};
+    float MovementSpeed{15.0F};
+    float AspectRatio{16.0f / 9.0f};
+    float Fov{45.0f};
+};
+
+////////////////////////////////////////////////////////////////////////////////
+
+}  // namespace NSimple3D::NGraphics
