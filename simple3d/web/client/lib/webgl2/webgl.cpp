@@ -58,9 +58,11 @@ void InitializeOrCrash()
     // TODO(apachee): Check that chosen config satisfies bare minimum requirements? Like having depth buffer and so on.
 
     EmscriptenWebGLContextAttributes webGLContextAttributes;
-    webGLContextAttributes.explicitSwapControl = true;
     emscripten_webgl_init_context_attributes(&webGLContextAttributes);
+    webGLContextAttributes.explicitSwapControl = true;
     webGLContextAttributes.majorVersion = 2;
+    webGLContextAttributes.powerPreference = EM_WEBGL_POWER_PREFERENCE_HIGH_PERFORMANCE;
+    webGLContextAttributes.depth = true;
 
     auto context = emscripten_webgl_create_context("#canvas", &webGLContextAttributes);
     S3D_VERIFY(context != 0);
@@ -88,7 +90,7 @@ void Terminate()
         S3D_ALERT(errorMessage);
     }
     eglState.Context.reset();
-    
+
     eglState.Initialized = false;
 
     eglState.CheckInvariants(lock);
