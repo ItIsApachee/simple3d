@@ -17,6 +17,12 @@ execute_process(
 	COMMAND ${CMAKE_CXX_COMPILER} --cflags
 	OUTPUT_VARIABLE EM_CFLAGS)
 
+# Some magic to enable exceptions.
+string(REPLACE "-enable-emscripten-sjlj" "" EM_CFLAGS "${EM_CFLAGS}")
+string(REPLACE "-disable-lsr" "" EM_CFLAGS "${EM_CFLAGS}")
+string(REPLACE "-mllvm" "" EM_CFLAGS "${EM_CFLAGS}")
+string(REPLACE "-combiner-global-alias-analysis=false" "" EM_CFLAGS "${EM_CFLAGS}")
+
 string(STRIP "${EM_CFLAGS}" EM_CFLAGS)
 
 # file(GLOB_RECURSE SIMPLE3D_WEB_CLIENT_SOURCES *.cpp)
@@ -55,6 +61,10 @@ add_link_options(
 	"SHELL:-sOFFSCREENCANVAS_SUPPORT"
 	"SHELL:-sOFFSCREEN_FRAMEBUFFER"
 	"SHELL:-sOFFSCREENCANVASES_TO_PTHREAD=#canvas")
+
+# Enable exceptions
+add_compile_options("SHELL:-fwasm-exceptions")
+add_link_options("SHELL:-fwasm-exceptions")
 
 simple3d_report_variables(
     "simple3d/simple3d/web/client"
