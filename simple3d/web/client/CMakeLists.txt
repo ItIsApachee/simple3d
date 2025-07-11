@@ -30,7 +30,8 @@ set(
 	SIMPLE3D_WEB_CLIENT_SOURCES
 	bootstrap.cpp
 	program.cpp
-	renderer_agent.cpp)
+	renderer_agent.cpp
+	render_data_fetcher.cpp)
 
 set(SIMPLE3D_WEB_CLIENT_EMSCRIPTEN_LINK_OPTIONS "SHELL:--shell-file ${CMAKE_CURRENT_SOURCE_DIR}/templates/index.html" "SHELL:-sMIN_WEBGL_VERSION=2" "SHELL:-sMAX_WEBGL_VERSION=2")
 

@@ -3,11 +3,14 @@
 #include "config.h"
 
 #include <GLES3/gl3.h>
+#include <chrono>
 #include <emscripten/html5.h>
 #include <exception>
 #include <simple3d/core/assert.h>
 #include <simple3d/core/compiler.h>
 
+#include <simple3d/web/client/lib/graphics/config.h>
+#include <simple3d/web/client/lib/graphics/fps_camera.h>
 #include <simple3d/web/client/lib/graphics/model_shader.h>
 #include <simple3d/web/client/lib/graphics/helpers.h>
 
@@ -16,6 +19,7 @@
 #include <simple3d/web/client/lib/webgl2/webgl.h>
 
 #include <iostream>
+#include <simple3d/web/client/render_data_fetcher.h>
 
 namespace NSimple3D::NWebClient {
 
@@ -38,6 +42,7 @@ public:
         TRendererAgentConfigPtr config, TPrivateTag)
         : Config_(std::move(config))
         , BackgroundColor_(Config_->InitialBackgroundColor)
+        , RenderDataFetcher_(CreateRenderDataFetcher())
     { }
 
     static TRendererAgentPtr Create(TRendererAgentConfigPtr config)
@@ -100,55 +105,26 @@ private:
         CanvasWidth = static_cast<int>(width);
         CanvasHeight = static_cast<int>(height);
         emscripten_set_canvas_element_size("#canvas", CanvasWidth, CanvasHeight);
-    }
 
-    static constexpr int InstanceCount = 2;
+        FpsCamera_ = TFpsCamera::Create(TFpsCameraConfig{
+            .AspectRatio = static_cast<float>(CanvasWidth) / static_cast<float>(CanvasHeight),
+        });
+    }
 
     void InitializeRenderData()
     {
-        constexpr std::array<TTriangle, InstanceCount> triangles = {
-            TTriangle{
-                .Model = glm::mat4(1.0f),
-                .Vertices = {
-                    TVertex{
-                        .Pos = glm::vec3(-0.5f, -0.5f, 0.0f),
-                    },
-                    TVertex{
-                        .Pos = glm::vec3(-0.5f, 0.5f, 0.0f),
-                    },
-                    TVertex{
-                        .Pos = glm::vec3(0.5f, -0.5f, 0.0f),
-                    },
-                },
-            },
-            TTriangle{
-                .Model = glm::mat4(1.0f),
-                .Vertices = {
-                    TVertex{
-                        .Pos = glm::vec3(0.5f, 0.5f, 0.0f),
-                    },
-                    TVertex{
-                        .Pos = glm::vec3(-0.5f, 0.5f, 0.0f),
-                    },
-                    TVertex{
-                        .Pos = glm::vec3(0.5f, -0.5f, 0.0f),
-                    },
-                },
-            },
-        };
-
         Vao_ = TVao::Generate();
-        Vbo_ = TVbo(sizeof(TTriangle) * triangles.size(), const_cast<std::byte*>(reinterpret_cast<const std::byte*>(triangles.data())));
+        Vbo_ = TVbo(4096, nullptr);
 
         Vao_.Bind();
         Vbo_.Bind();
-        TTriangle::BindAttributes();
+        BindTriangleAttributes();
     }
 
     void InitializeVP()
     {
-        ModelShader_->SetView(glm::mat4(1.0f));
-        ModelShader_->SetProj(glm::mat4(1.0f));
+        // ModelShader_->SetView(glm::mat4(1.0f));
+        // ModelShader_->SetProj(glm::mat4(1.0f));
     }
 
     void MainLoop()
@@ -164,11 +140,22 @@ private:
 
     void GuardedMainLoop()
     {
+        auto renderData = RenderDataFetcher_->Fetch();
+        Vbo_.SubData(0, sizeof(TTriangle) * renderData->size(), reinterpret_cast<std::byte*>(renderData->data()));
+
+        auto now = std::chrono::steady_clock::now();
+        auto delta = now - LastFrame_;
+        LastFrame_ = now;
+        FpsCamera_.Update(std::chrono::duration_cast<std::chrono::milliseconds>(delta));
+
         // TODO(apachee): Update viewport according to canvas size
         glViewport(0, 0, CanvasWidth, CanvasHeight);
 
-        static int i = 0;
-        i++;
+        ModelShader_->SetView(FpsCamera_.GetView());
+        ModelShader_->SetProj(FpsCamera_.GetProj());
+
+        // static int i = 0;
+        // i++;
 
         // std::cerr << std::format("i: {}\n", i);
 
@@ -178,13 +165,13 @@ private:
 
         Vao_.Bind();
         // glDrawArrays(GL_TRIANGLES, 0, 3);
-        glDrawArraysInstanced(GL_TRIANGLES, 0, 3, InstanceCount);
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 3, renderData->size());
 
         glFlush();
 
-        if (i % 100 == 1) {
-            std::cout << i << std::endl;
-        }
+        // if (i % 400 == 1) {
+        //     std::cout << i << std::endl;
+        // }
 
         NWebGL2::CommitFrame();
     }
@@ -204,6 +191,11 @@ private:
 
     int CanvasWidth;
     int CanvasHeight;
+
+    TFpsCamera FpsCamera_;
+    std::chrono::time_point<std::chrono::steady_clock> LastFrame_ = std::chrono::steady_clock::now();
+
+    IRenderDataFetcherPtr RenderDataFetcher_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////

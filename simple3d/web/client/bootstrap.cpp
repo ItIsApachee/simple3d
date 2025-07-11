@@ -3,6 +3,10 @@
 #include "config.h"
 #include "renderer_agent.h"
 
+#include <simple3d/web/client/lib/io.h>
+
+#include <emscripten/html5.h>
+
 namespace NSimple3D::NWebClient {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -35,6 +39,10 @@ public:
     void Start() override
     {
         RendererAgent->Start();
+
+        emscripten_set_keydown_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, false, &KeyCallback);
+        emscripten_set_keyup_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, false, &KeyCallback);
+        emscripten_set_mousemove_callback("#canvas", 0, false, &MouseMoveCallback);
     }
 
 private:
