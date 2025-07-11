@@ -3,21 +3,8 @@
 #include "bootstrap.h"
 #include "config.h"
 
+#include <iostream>
 #include <memory>
-
-// #include <simple3d/web/client/lib/webgl2/webgl.h>
-
-// #include <simple3d/core/assert.h>
-
-// #include <emscripten.h>
-// #include <emscripten/html5.h>
-
-// #include <GLES3/gl3.h>
-
-// #include <exception>
-// #include <iostream>
-// #include <format>
-// #include <cassert>
 
 #ifndef __EMSCRIPTEN_PTHREADS__
 #error Support for pthread must be enabled
@@ -33,6 +20,17 @@ public:
     TProgram() = default;
 
     void Run() {
+        try {
+            GuardedRun();
+        } catch (const std::exception& ex) {
+            std::cerr << std::format("Unhandled exception: {}", ex.what()) << std::endl;
+        } catch (...) {
+            std::cerr << std::format("Unhandled exception of unknown type") << std::endl;
+        }
+    }
+
+    void GuardedRun()
+    {
         Bootstrap_ = CreateBootstrap(GetConfig());
 
         Bootstrap_->Start();
