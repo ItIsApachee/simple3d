@@ -17,6 +17,10 @@
         height: 800px;
       }
 
+      #output {
+        height: 1000px !important;
+      }
+
       .spinner {
         height: 50px;
         width: 50px;
@@ -141,6 +145,16 @@
         };
       };
     </script>
+
+    <!-- Prevent space bar scroll -->
+    <script>
+      window.addEventListener('keydown', function(e) {
+        if(e.keyCode == 32) {
+          e.preventDefault();
+        }
+      });
+    </script>
+
     {{{ SCRIPT }}}
   </body>
 </html>
