@@ -13,9 +13,15 @@ GLuint TVao::ActiveHandle_{DefaultVaoHandle};
 
 ////////////////////////////////////////////////////////////////////////////////
 
+TVao TVao::Generate()
+{
+    TVao vao;
+    glGenVertexArrays(1, &vao.Handle_);
+    return vao;
+}
+
 TVao::TVao()
 {
-    glGenVertexArrays(1, &Handle_);
 }
 
 TVao::TVao(TVao&& other)

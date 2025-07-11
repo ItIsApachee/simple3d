@@ -15,7 +15,7 @@ class TVao
 public:
     friend void ResetActiveBindings();
 
-    // FIXME(apachee): Remove some explicit RO5 methods
+    static TVao Generate();
 
     TVao();
     TVao(TVao&&);
