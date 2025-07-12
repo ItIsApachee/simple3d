@@ -14,6 +14,7 @@ add_library(
     graphics/fps_camera.cpp
     graphics/model_shader.cpp
 
+    interop.cpp
     io.cpp)
 
 target_link_libraries(simple3d_web_client_lib
@@ -21,7 +22,7 @@ target_link_libraries(simple3d_web_client_lib
     PUBLIC glm::glm)
 target_include_directories(simple3d_web_client_lib SYSTEM PUBLIC "${SIMPLE3D_SOURCE_DIR}" "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/include")
 
-target_link_options(simple3d_web_client_lib PUBLIC "SHELL:-lwebsocket.js")
+target_link_options(simple3d_web_client_lib PUBLIC "SHELL:-lwebsocket.js" "SHELL:-lembind")
 
 set_property(TARGET simple3d_web_client_lib  PROPERTY CXX_STANDARD 20)
 set_property(TARGET simple3d_web_client_lib PROPERTY COMPILE_FLAGS "${EM_CFLAGS}")
