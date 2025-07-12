@@ -11,6 +11,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <format>
 
 // TODO(apachee): Fix this mess: weird code for static files, random headers without proper understanding,
 // which can potentially lead to some problems.
