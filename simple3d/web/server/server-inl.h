@@ -1,4 +1,3 @@
-#include <build/_deps/uwebsockets_content-src/src/AsyncSocketData.h>
 #ifndef S3D_SERVER_INL_H_
 #error This file should not be included directly, use .h version
 #include "server.h"
