@@ -1,3 +1,0 @@
-void Simple3DTestFunc() {
-
-}

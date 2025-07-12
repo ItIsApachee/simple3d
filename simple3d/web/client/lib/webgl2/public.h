@@ -6,14 +6,12 @@ namespace NSimple3D::NWebGL2 {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// FIXME(apachee): Fix consts naming.
-
 constexpr GLuint InvalidBufferHandle = 0;
 
 constexpr GLuint InvalidShaderHandle = 0;
 
-// only used as default value for VAO field, and
-// shouldn't be used for any other reason whatsoever
+// NB(apachee): Only used as default value for VAO field
+// and shouldn't be used for any other reason whatsoever
 constexpr GLenum DefaultVaoHandle = 0;
 
 constexpr GLenum DefaultBufferUsage = GL_STATIC_DRAW;

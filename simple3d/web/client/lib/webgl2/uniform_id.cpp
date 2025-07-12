@@ -1,6 +1,8 @@
 #include "uniform_id.h"
-#include <simple3d/core/compiler.h>
+
 #include <simple3d/web/client/lib/webgl2/shader_program.h>
+
+#include <simple3d/core/compiler.h>
 
 namespace NSimple3D::NWebGL2 {
 

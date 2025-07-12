@@ -1,4 +1,5 @@
 #include "error.h"
+
 #include <simple3d/core/error_code.h>
 
 namespace NSimple3D {

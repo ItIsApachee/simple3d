@@ -6,6 +6,9 @@
 
 namespace NSimple3D::NGraphics {
 
+// TODO(apachee): The following helper functions are applicable in the many
+// of emscripten functions, so it'd be good to generalize them.
+
 ////////////////////////////////////////////////////////////////////////////////
 
 template <typename F, typename... TArgs>

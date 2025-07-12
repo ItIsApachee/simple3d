@@ -1,8 +1,7 @@
-#include <simple3d/core/assert.h>
+#include "assert.h"
 
 #include <iostream>
 #include <format>
-#include <utility>
 
 namespace NSimple3D::NDetail {
 

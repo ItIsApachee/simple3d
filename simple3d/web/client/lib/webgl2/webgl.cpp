@@ -1,11 +1,10 @@
 #include "webgl.h"
 
-#include <emscripten/em_types.h>
 #include <simple3d/core/assert.h>
 
 #include <emscripten/html5_webgl.h>
 
-#include <iostream>
+#include <format>
 #include <mutex>
 #include <optional>
 

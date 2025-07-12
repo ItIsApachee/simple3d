@@ -7,7 +7,6 @@
 #include <simple3d/core/types.h>
 
 #include <cstddef>
-#include <cstdint>
 
 namespace NSimple3D::NWebGL2 {
 

@@ -1,7 +1,12 @@
 #include "server.h"
 
-#include <mutex>
 #include <simple3d/core/graphics/primitive.h>
+
+#include <simple3d/core/assert.h>
+#include <simple3d/core/types.h>
+
+#include <fstream>
+#include <mutex>
 #include <string_view>
 
 namespace NSimple3D::NWebServer {

@@ -4,8 +4,6 @@
 
 #include <GLES3/gl3.h>
 
-#include <cstdint>
-
 namespace NSimple3D::NWebGL2 {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -31,7 +29,7 @@ public:
     static void Unbind();
 
 private:
-    // NB(apachee): Currently active VAO.
+    //! Currently active VAO.
     static GLuint ActiveHandle_;
 
     GLuint Handle_{DefaultVaoHandle};

@@ -40,8 +40,8 @@ public:
     {
         RendererAgent->Start();
 
-        emscripten_set_keydown_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, false, &KeyCallback);
-        emscripten_set_keyup_callback(EMSCRIPTEN_EVENT_TARGET_DOCUMENT, 0, false, &KeyCallback);
+        emscripten_set_keydown_callback("#canvas", 0, false, &KeyCallback);
+        emscripten_set_keyup_callback("#canvas", 0, false, &KeyCallback);
         emscripten_set_mousemove_callback("#canvas", 0, false, &MouseMoveCallback);
     }
 

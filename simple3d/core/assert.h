@@ -1,8 +1,7 @@
 #pragma once
 
-#include <exception>
-#include <string_view>
 #include <source_location>
+#include <string_view>
 
 namespace NSimple3D {
 

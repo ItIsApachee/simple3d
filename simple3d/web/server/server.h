@@ -6,6 +6,9 @@
 
 #include <uWebSockets/App.h>
 
+// FIXME(apachee): It should not be an app, but rather web server, which is used by the actual app
+// or whatever it is going to be called in the future.
+
 namespace NSimple3D::NWebServer {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -43,34 +46,4 @@ protected:
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// template <typename TWSApp = uWS::App>
-// class TApp
-//     : public TWSApp
-//     , public TAppBase
-// {
-// public:
-//     using TWSApp::TWSApp;
-
-//     TApp();
-//     TApp(TWSApp wsApp);
-
-//     TApp RegisterEndpoints();
-//     TApp RegisterWebSocket();
-
-//     void ListenAndRunInThread(int port = 8080);
-
-// private:
-//     std::thread ListenThread_;
-// };
-
-////////////////////////////////////////////////////////////////////////////////
-
-// std::thread RunAppInThread();
-
-////////////////////////////////////////////////////////////////////////////////
-
 }  // namespace NSimple3D::NWebServer
-
-#define S3D_SERVER_INL_H_
-#include "server-inl.h"
-#undef S3D_SERVER_INL_H_

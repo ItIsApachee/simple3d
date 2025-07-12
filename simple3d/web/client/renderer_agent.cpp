@@ -1,25 +1,28 @@
 #include "renderer_agent.h"
 
-#include "config.h"
+#include "render_data_fetcher.h"
 
-#include <GLES3/gl3.h>
-#include <chrono>
-#include <emscripten/html5.h>
-#include <exception>
-#include <simple3d/core/assert.h>
-#include <simple3d/core/compiler.h>
+#include "config.h"
 
 #include <simple3d/web/client/lib/graphics/config.h>
 #include <simple3d/web/client/lib/graphics/fps_camera.h>
-#include <simple3d/web/client/lib/graphics/model_shader.h>
 #include <simple3d/web/client/lib/graphics/helpers.h>
+#include <simple3d/web/client/lib/graphics/model_shader.h>
 
 #include <simple3d/web/client/lib/webgl2/vao.h>
 #include <simple3d/web/client/lib/webgl2/vbo.h>
 #include <simple3d/web/client/lib/webgl2/webgl.h>
 
+#include <simple3d/core/assert.h>
+#include <simple3d/core/compiler.h>
+
+#include <GLES3/gl3.h>
+
+#include <emscripten/html5.h>
+
+#include <chrono>
+#include <exception>
 #include <iostream>
-#include <simple3d/web/client/render_data_fetcher.h>
 
 namespace NSimple3D::NWebClient {
 
@@ -58,8 +61,6 @@ public:
     }
 
 private:
-    // XXX(apachee): The fact than initalization runs at creation time seems fine right now,
-    // but there might be some undiscovered problems.
     void Initialize()
     {
         NWebGL2::InitializeOrCrash();
@@ -70,8 +71,6 @@ private:
         InitializeLights();
 
         InitializeRenderData();
-
-        InitializeVP();
     }
 
     void InitializeLights()
@@ -119,12 +118,6 @@ private:
         Vao_.Bind();
         Vbo_.Bind();
         BindTriangleAttributes();
-    }
-
-    void InitializeVP()
-    {
-        // ModelShader_->SetView(glm::mat4(1.0f));
-        // ModelShader_->SetProj(glm::mat4(1.0f));
     }
 
     void MainLoop()

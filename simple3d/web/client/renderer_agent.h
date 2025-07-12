@@ -7,7 +7,6 @@
 #include <emscripten.h>
 
 #include <memory>
-#include <vector>
 
 namespace NSimple3D::NWebClient {
 

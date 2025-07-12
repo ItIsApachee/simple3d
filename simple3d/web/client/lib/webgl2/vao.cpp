@@ -3,6 +3,7 @@
 #include "ebo.h"
 
 #include <simple3d/web/client/lib/webgl2/helpers.h>
+
 #include <utility>
 
 namespace NSimple3D::NWebGL2 {

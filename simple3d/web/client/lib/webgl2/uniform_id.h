@@ -6,7 +6,6 @@
 
 #include <string>
 #include <tuple>
-#include <type_traits>
 
 namespace NSimple3D::NWebGL2 {
 

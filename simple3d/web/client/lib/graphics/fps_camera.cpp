@@ -11,9 +11,6 @@
 #include <glm/vec3.hpp>
 #include <glm/vec4.hpp>
 
-#include <iostream>
-#include <format>
-
 namespace NSimple3D::NGraphics {
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -216,6 +213,7 @@ TFpsCamera::TKeyStates TFpsCamera::GetKeyStates()
 {
     TKeyStates keyStates{};
 
+    // TODO(apachee): Add key customization.
     keyStates.Forward = CheckKey("KeyW");
     keyStates.Backward = CheckKey("KeyS");
     keyStates.Left = CheckKey("KeyA");

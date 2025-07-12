@@ -18,8 +18,8 @@ void BindBuffer(EBufferType type, GLuint handle)
 
 void UnbindBuffer(EBufferType type)
 {
-    // NB(apachee): It is a waste to do that in WebGL,
-    // so skip unbinding in release.
+    // NB(apachee): Taking WebGL limitations into account it is best to
+    // ignore unbind operation for better performance.
 #ifndef NDEBUG
     glBindBuffer(static_cast<GLenum>(type), InvalidBufferHandle);
 #else

@@ -11,8 +11,6 @@ namespace NSimple3D::NWebGL2 {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// constexpr auto kVboTarget = GL_ARRAY_BUFFER;
-
 // FIXME(apachee): Batch glGenBuffers calls.
 // Allocate like 1000 buffers and use them when needed.
 // Allocate more if needed.

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <emscripten/bind.h>
+#include <string>
 
 namespace NSimple3D::NWebClient {
 

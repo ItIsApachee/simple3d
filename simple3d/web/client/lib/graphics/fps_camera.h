@@ -30,6 +30,8 @@ public:
 
     void Initialize();
 
+    // // TODO(apachee): Add a way to change internal camera state
+    // // or manipulate it in some way.
     // TCameraState3D GetCameraState();
 
     glm::mat4 GetView() const;
@@ -41,7 +43,6 @@ public:
 private:
     class TMouseMoveHandler;
 
-    // class TKeyHandler;
     struct TKeyStates {
         char Forward{0};
         char Backward{0};

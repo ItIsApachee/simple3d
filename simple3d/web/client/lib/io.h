@@ -14,6 +14,9 @@
 #include <vector>
 #include <thread>
 
+// TODO(apachee): Works for now, but maybe
+// there is a better way to implement IO.
+
 namespace NSimple3D {
 
 ////////////////////////////////////////////////////////////////////////////////

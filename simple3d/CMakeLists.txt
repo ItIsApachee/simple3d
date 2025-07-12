@@ -1,13 +1,6 @@
 add_subdirectory(core)
 add_subdirectory(web)
 
-add_library(simple3d STATIC test.cpp)
-
-target_include_directories(simple3d SYSTEM PUBLIC ${SIMPLE3D_SOURCE_DIR})
-target_link_libraries(simple3d PUBLIC simple3d_core)
-
-set_property(TARGET simple3d PROPERTY CXX_STANDARD 20)
-
 if (IS_MAIN_PROJECT AND CMAKE_EXPORT_COMPILE_COMMANDS AND NOT SIMPLE3D_FORCE_DOWNLOAD_WEB_CLIENT)
 	block(SCOPE_FOR VARIABLES)
 		include(FindPython)

@@ -1,14 +1,13 @@
 #include "server.h"
 
-#include <simple3d/core/compiler.h>
 #include <simple3d/core/graphics/primitive.h>
+
+#include <simple3d/core/compiler.h>
+
+#include <uWebSockets/App.h>
 
 #include <chrono>
 #include <thread>
-#include <uWebSockets/App.h>
-
-#include <fstream>
-#include <sstream>
 
 namespace NSimple3D::NWebServer {
 
@@ -52,7 +51,6 @@ int Main()
                 },
             },
         });
-        // S3D_UNUSED(renderData);
         app.UpdateRenderData(renderData);
     }
 

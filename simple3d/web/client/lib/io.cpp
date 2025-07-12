@@ -1,15 +1,16 @@
 #include "io.h"
 
-#include <emscripten/html5.h>
-#include <emscripten/websocket.h>
-#include <memory>
 #include <simple3d/core/assert.h>
-
-#include <iostream>
-#include <format>
-#include <mutex>
 #include <simple3d/core/error.h>
 #include <simple3d/core/shared_ptr.h>
+
+#include <emscripten/html5.h>
+#include <emscripten/websocket.h>
+
+#include <format>
+#include <iostream>
+#include <mutex>
+#include <memory>
 #include <thread>
 #include <unordered_set>
 
@@ -31,8 +32,6 @@ bool KeyCallback(int eventType, const EmscriptenKeyboardEvent* keyEvent, void*)
         std::lock_guard<std::mutex> guard(KeyToStateMutex);
         KeyToState[keyCode] = isDown;
     }
-
-    // std::cout << std::format("dbg io keyCode {}, state {}\n", keyCode, isDown) << std::flush;
 
     return true;
 }
@@ -82,11 +81,6 @@ bool IsPointerLockActive()
 static auto& WebSockets = *(new std::unordered_map<EMSCRIPTEN_WEBSOCKET_T, std::weak_ptr<TWebSocket>>());
 
 ////////////////////////////////////////////////////////////////////////////////
-
-// typedef bool (*em_websocket_open_callback_func)(int eventType, const EmscriptenWebSocketOpenEvent *websocketEvent __attribute__((nonnull)), void *userData);
-// typedef bool (*em_websocket_message_callback_func)(int eventType, const EmscriptenWebSocketMessageEvent *websocketEvent __attribute__((nonnull)), void *userData);
-// typedef bool (*em_websocket_error_callback_func)(int eventType, const EmscriptenWebSocketErrorEvent *websocketEvent __attribute__((nonnull)), void *userData);
-// typedef bool (*em_websocket_close_callback_func)(int eventType, const EmscriptenWebSocketCloseEvent *websocketEvent __attribute__((nonnull)), void *userData);
 
 bool TWebSocket::OnOpen(int /*eventType*/, const EmscriptenWebSocketOpenEvent* websocketEvent __attribute__((nonnull)), void*)
 {
@@ -177,10 +171,8 @@ void TWebSocket::Initialize(std::thread& wsThreadStd)
     }
 
     while (static_cast<int>(State_.load()) < static_cast<int>(EWebSocketState::Open)) {
-        // XXX(apachee): Is that enough?
-        // std::this_thread::yield();
         std::cout << "waiting on open websocket" << std::endl;
-        // emscripten_sleep(500);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
         std::this_thread::yield();
     }
 }

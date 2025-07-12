@@ -1,5 +1,7 @@
 #include "interop.h"
 
+#include <emscripten/bind.h>
+
 #include <condition_variable>
 #include <iostream>
 

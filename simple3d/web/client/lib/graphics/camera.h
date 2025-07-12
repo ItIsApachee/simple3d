@@ -7,6 +7,9 @@
 
 namespace NSimple3D::NGraphics {
 
+// TODO(apachee): Add more flexibility in terms of the variety of cams
+// and their configurations, e.g. cam for 2D rendering.
+
 ////////////////////////////////////////////////////////////////////////////////
 
 struct TCameraState3D

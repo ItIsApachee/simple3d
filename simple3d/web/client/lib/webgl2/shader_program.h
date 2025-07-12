@@ -18,74 +18,9 @@ namespace NSimple3D::NWebGL2 {
 
 ////////////////////////////////////////////////////////////////////////////////
 
-// // TODO(apachee): Add TUniformID for generating list of all uniform names in more complex cases,
-// // such as structs and arrays.
-
-// class TSimpleUniformID
-// {
-//     std::string_view GetID() const;
-// };
-
-// ////////////////////////////////////////////////////////////////////////////////
-
-// template <typename TKey, typename TValue>
-// class TUniformIDMapKeyTraits
-// { };
-
-// template <typename TValue>
-// class TUniformIDMapKeyTraits<ui32, TValue>
-// {
-//     using TContainer = std::vector<TValue>;
-// };
-
-// template <typename TValue>
-// class TUniformIDMapKeyTraits<std::string, TValue>
-// {
-//     using TContainer = std::unordered_map<std::string, TValue>;
-// };
-
-// ////////////////////////////////////////////////////////////////////////////////
-
-// //! Holder of all UniformIDs for some complex uniform.
-// //! Owns all the IDs of a uniform.
-// class TUniformIDHolder
-//     : public std::enable_shared_from_this<TUniformIDHolder>
-// {
-// public:
-//     TUniformIDHolder() = default;
-
-//     void RegisterID(std::string id);
-
-// private:
-//     std::vector<std::string> UniformIDs;
-// };
-
-// ////////////////////////////////////////////////////////////////////////////////
-
-// template <typename TKey, typename TValue, typename TContainer = TUniformIDMapKeyTraits<TKey, TValue>>
-// class TUniformIDMap
-// {
-// public:
-//     TUniformIDMap(TContainer keyToValueMapping, TUniformIDHolder uniformIDHolder = {});
-
-//     virtual ~TUniformIDMap() = default;
-
-//     std::vector<std::string_view> GetIDs() const;
-
-//     TValue operator[]
-
-// protected:
-//     TContainer KeyToValueMapping_;
-
-//     TUniformIDHolderPtr UniformIDHolder_;
-// };
-
-////////////////////////////////////////////////////////////////////////////////
-
 class TUniformLocationStore
 {
 public:
-    // FIXME(apachee): Had to remove const, but maybe it can be kept somehow?
     struct TUniformDescriptor
     {
         GLint Location = -1;
