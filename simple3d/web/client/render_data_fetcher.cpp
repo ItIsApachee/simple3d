@@ -2,13 +2,14 @@
 
 #include "renderer_agent.h"
 
-#include <chrono>
 #include <simple3d/web/client/lib/graphics/model_shader.h>
 
+#include <simple3d/web/client/lib/interop.h>
 #include <simple3d/web/client/lib/io.h>
 
 #include <simple3d/core/shared_ptr.h>
 
+#include <chrono>
 #include <iostream>
 #include <memory>
 #include <mutex>
@@ -103,7 +104,9 @@ private:
 
     void LoopInitialize()
     {
-        WebSocket_ = TWebSocket::Create("ws://localhost:8080/ws", "simple3d", FetcherThread_);
+        auto url = GetInitWebSocketOptions();
+        std::cout << std::format("Recieved init websocket options url = {}", url) << std::endl;
+        WebSocket_ = TWebSocket::Create(url, "simple3d", FetcherThread_);
     }
 
     void LoopIteration()
