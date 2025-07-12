@@ -77,6 +77,14 @@
     <hr/>
     <textarea class="emscripten" id="output" rows="8"></textarea>
     <hr>
+    <script text="text/javascript">
+      const initWebSocket = () => {
+        const webSocketAddress = prompt("WebSocket URL:", "ws://localhost:8080/ws");
+        Module.print(`used websocket address ${webSocketAddress}`);
+        Module.Simple3DInitWebSocket(webSocketAddress);
+      };
+    </script>
+
     <script type='text/javascript'>
       var statusElement = document.getElementById('status');
       var progressElement = document.getElementById('progress');
@@ -106,6 +114,9 @@
             outputElement.value += text + "\n";
             outputElement.scrollTop = outputElement.scrollHeight; // focus on bottom
           }
+        },
+        onRuntimeInitialized: () => {
+          initWebSocket();
         },
         canvas: canvasElement,
         setStatus(text) {
