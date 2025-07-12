@@ -2,6 +2,7 @@
 
 #include "renderer_agent.h"
 
+#include <simple3d/core/graphics/primitive.h>
 #include <simple3d/web/client/lib/graphics/model_shader.h>
 
 #include <simple3d/web/client/lib/interop.h>
@@ -111,17 +112,48 @@ private:
 
     void LoopIteration()
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-        static const std::string hello = "aboba";
-        auto data = std::span{reinterpret_cast<const std::byte*>(hello.data()), hello.size()};
-        WebSocket_->SendBinary(data);
-        auto dataCopy = WebSocket_->ReadExactlyN(data.size_bytes());
+        using namespace std::literals::string_view_literals;
+        static auto ReadyMesasge = "ready"sv;
 
-        auto dataStr = std::string((char*)data.data(), (char*)(data.data() + data.size()));
-        auto dataCopyStr = std::string((char*)dataCopy.data(), (char*)(dataCopy.data() + dataCopy.size()));
+        WebSocket_->SendBinary(std::span<const std::byte>((std::byte*)ReadyMesasge.data(), (std::byte*)(ReadyMesasge.data() + ReadyMesasge.size())));
+        auto header = WebSocket_->ReadExactlyN(16);
+        auto headerSV = std::string_view((const char*)header.data(), (const char*)(header.data() + header.size()));
+        // std::cout << std::format("got header : \"{}\"", headerSV) << std::endl;
+        i64 dataSize = 0;
+        {
+            std::istringstream istrm;
+            istrm.str(std::string(headerSV));
+            {
+                std::string v;
+                istrm >> v;
+            }
+            istrm >> dataSize;
+        }
+        // std::cout << "data size : " << dataSize << std::endl;
 
-        std::cout << std::format("ws dbg {} {}", dataStr, dataCopyStr) << std::endl;
+        auto newRenderDataRaw = WebSocket_->ReadExactlyN(dataSize);
+        S3D_VERIFY(newRenderDataRaw.size() % sizeof(TTriangle) == 0);
+
+        std::shared_ptr<TRenderData> newRenderData = std::make_shared<TRenderData>(newRenderDataRaw.size() / sizeof(TTriangle));
+        std::memcpy(newRenderData->data(), newRenderDataRaw.data(), newRenderDataRaw.size());
+        {
+            std::lock_guard guard(RenderDataMutex_);
+            LastRenderData_ = std::move(newRenderData);
+        }
+
+        std::this_thread::yield();
+
+        // static const std::string hello = "aboba";
+        // auto data = std::span{reinterpret_cast<const std::byte*>(hello.data()), hello.size()};
+        // WebSocket_->SendBinary(data);
+        // auto dataCopy = WebSocket_->ReadExactlyN(data.size_bytes());
+
+        // auto dataStr = std::string((char*)data.data(), (char*)(data.data() + data.size()));
+        // auto dataCopyStr = std::string((char*)dataCopy.data(), (char*)(dataCopy.data() + dataCopy.size()));
+
+        // std::cout << std::format("ws dbg {} {}", dataStr, dataCopyStr) << std::endl;
     }
 
     std::mutex FetcherThreadMutex_;

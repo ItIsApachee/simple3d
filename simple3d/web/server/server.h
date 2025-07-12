@@ -1,5 +1,7 @@
 #pragma once
 
+#include <simple3d/core/graphics/primitive.h>
+
 #include <thread>
 
 #include <uWebSockets/App.h>
@@ -10,31 +12,60 @@ namespace NSimple3D::NWebServer {
 
 struct IApp
 {
-   
+    virtual void Run() = 0;
+
+    virtual void UpdateRenderData(std::shared_ptr<NGraphics::TRenderData> renderData) = 0;
 
     virtual ~IApp() = default;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-template <typename TWSApp = uWS::App>
-struct TApp
-    : public TWSApp
+class TApp
+    : public IApp
 {
-    using TWSApp::TWSApp;
+public:
+    TApp() = default;
 
-    TApp();
-    TApp(TWSApp wsApp);
+    void Run() override;
 
-    TApp RegisterEndpoints();
-    TApp RegisterWebSocket();
+    //! Thread-Affinity: any.
+    void UpdateRenderData(std::shared_ptr<NGraphics::TRenderData> renderData) override;
 
-    TApp ListenAndRun(int port = 8080);
+protected:
+    std::shared_ptr<NGraphics::TRenderData> GetRenderData();
+
+    mutable std::mutex RenderDataMutex_;
+    std::shared_ptr<NGraphics::TRenderData> RenderData_;
+
+    std::thread RunThread_;
 };
 
 ////////////////////////////////////////////////////////////////////////////////
 
-std::thread RunAppInThread();
+// template <typename TWSApp = uWS::App>
+// class TApp
+//     : public TWSApp
+//     , public TAppBase
+// {
+// public:
+//     using TWSApp::TWSApp;
+
+//     TApp();
+//     TApp(TWSApp wsApp);
+
+//     TApp RegisterEndpoints();
+//     TApp RegisterWebSocket();
+
+//     void ListenAndRunInThread(int port = 8080);
+
+// private:
+//     std::thread ListenThread_;
+// };
+
+////////////////////////////////////////////////////////////////////////////////
+
+// std::thread RunAppInThread();
 
 ////////////////////////////////////////////////////////////////////////////////
 

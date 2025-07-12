@@ -4,6 +4,8 @@
 add_library(simple3d_core STATIC
     assert.cpp error.cpp)
 
+target_link_libraries(simple3d_core PUBLIC glm::glm)
+
 target_include_directories(simple3d_core SYSTEM PUBLIC ${SIMPLE3D_SOURCE_DIR})
 
 set_property(TARGET simple3d_core PROPERTY CXX_STANDARD 20)
