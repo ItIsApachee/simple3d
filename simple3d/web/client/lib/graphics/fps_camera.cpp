@@ -194,19 +194,19 @@ void TFpsCamera::Update(const std::chrono::milliseconds& delta)
     }
 
 
-    // // FIXME(apachee): Disabled for hackathon.
-    // const double pixels_to_radians = glm::radians(0.25f);
+    // FIXME(apachee): Disabled for hackathon.
+    const double pixels_to_radians = glm::radians(0.25f);
 
-    // Diff.X *= pixels_to_radians;
-    // using yaw_t = decltype(State_.Yaw);
-    // State_.Yaw += Config_.MouseSensitivity * Diff.X;
-    // State_.Yaw = std::fmod(State_.Yaw, glm::two_pi<yaw_t>());
+    Diff.X *= pixels_to_radians;
+    using yaw_t = decltype(State_.Yaw);
+    State_.Yaw += Config_.MouseSensitivity * Diff.X;
+    State_.Yaw = std::fmod(State_.Yaw, glm::two_pi<yaw_t>());
 
-    // Diff.Y *= pixels_to_radians;
-    // using pitch_t = decltype(State_.Pitch);
-    // State_.Pitch += Config_.MouseSensitivity * Diff.Y;
-    // State_.Pitch = std::clamp<pitch_t>(
-    //     State_.Pitch, -glm::half_pi<pitch_t>(), glm::half_pi<pitch_t>());
+    Diff.Y *= pixels_to_radians;
+    using pitch_t = decltype(State_.Pitch);
+    State_.Pitch += Config_.MouseSensitivity * Diff.Y;
+    State_.Pitch = std::clamp<pitch_t>(
+        State_.Pitch, -glm::half_pi<pitch_t>(), glm::half_pi<pitch_t>());
 
     // std::cout << "Fps cam update this: " << this << std::endl;
     // std::cout << std::format("pos {} {} {}", State_.Pos.x, State_.Pos.y, State_.Pos.z) << std::endl;
