@@ -4,6 +4,7 @@
 #include <glm/mat4x4.hpp>
 
 #include <array>
+#include <vector>
 
 // FIXME(apachee): Fix the mess with namespaces.
 
@@ -32,6 +33,9 @@ struct TTriangle
 
 using TVertex = TTriangle::TVertex;
 
+////////////////////////////////////////////////////////////////////////////////
+
+using TRenderData = std::vector<NGraphics::TTriangle>;
 
 ////////////////////////////////////////////////////////////////////////////////
 
