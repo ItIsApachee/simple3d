@@ -86,7 +86,14 @@ add_subdirectory(lib)
 
 add_executable(simple3d_web_client ${SIMPLE3D_WEB_CLIENT_SOURCES})
 
-target_link_libraries(simple3d_web_client PUBLIC simple3d_core simple3d_web_client_lib)
+# FIXME(apachee): Maybe not the best idea to really link the whole library, since it contains something other than bindings.
+target_link_libraries(
+	simple3d_web_client
+	PUBLIC
+		simple3d_core
+		# simple3d_web_client_lib
+		"$<LINK_LIBRARY:WHOLE_ARCHIVE,simple3d_web_client_lib>"
+)
 
 target_include_directories(simple3d_web_client SYSTEM PUBLIC "${SIMPLE3D_SOURCE_DIR}" "${SIMPLE3D_WEB_CLIENT_BINARY_DIR}/include")
 
